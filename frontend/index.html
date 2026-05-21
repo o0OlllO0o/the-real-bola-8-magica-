@@ -90,52 +90,67 @@
             font-family: 'Impact', 'Arial Black', sans-serif;
         }
 
+        /* Cara trasera: fondo NEGRO puro */
         .cara.back {
-            background: radial-gradient(circle at 35% 35%, #1a2a2a, #0a0a1a);
+            background: radial-gradient(circle at 35% 35%, #0a0a0a, #000000);
             transform: rotateY(180deg);
-            padding: 8%;
+            padding: 12%;
             pointer-events: auto;
         }
 
-        .triangulo {
+        /* Contenedor del triángulo (dentro de la bola, sin sobresalir) */
+        .triangulo-container {
             width: 100%;
             height: 100%;
-            background: linear-gradient(145deg, #0a1a2a, #051015);
-            clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Triángulo con vértice ABAJO, completamente dentro del círculo */
+        .triangulo {
+            width: 90%;
+            height: 80%;
+            background: linear-gradient(145deg, #0a1520, #03080f);
+            clip-path: polygon(50% 5%, 5% 95%, 95% 95%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 15% 10% 20% 10%;
-            border: 1px solid rgba(80, 180, 255, 0.4);
-            box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
+            padding: 15% 8% 18% 8%;
+            border: 1px solid rgba(80, 180, 255, 0.3);
+            border-radius: 8px;
+            box-shadow: inset 0 0 20px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
         }
 
+        /* Área de texto multifuncional */
         .texto-multifuncional {
             width: 100%;
-            background: rgba(10, 25, 35, 0.95);
-            border: 1px solid rgba(80, 180, 255, 0.6);
-            border-radius: 20px;
-            padding: 16px 14px;
+            background: rgba(10, 20, 30, 0.95);
+            border: 1px solid rgba(80, 180, 255, 0.5);
+            border-radius: 16px;
+            padding: 14px 12px;
             color: #d4eaff;
-            font-size: clamp(0.75rem, 3.8vw, 0.95rem);
+            font-size: clamp(0.7rem, 3.5vw, 0.9rem);
             font-family: inherit;
             text-align: center;
             resize: none;
             outline: none;
             backdrop-filter: blur(4px);
             word-break: break-word;
-            min-height: 140px;
-            max-height: 200px;
+            min-height: 120px;
+            max-height: 180px;
             overflow-y: auto;
             line-height: 1.4;
         }
 
         .texto-multifuncional:focus {
             border-color: #6cf;
-            box-shadow: 0 0 10px rgba(100, 200, 255, 0.3);
+            box-shadow: 0 0 8px rgba(100, 200, 255, 0.3);
         }
 
+        /* Botones externos */
         .botones-externos {
             position: fixed;
             bottom: 70px;
@@ -143,7 +158,7 @@
             right: 0;
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             padding: 10px;
             z-index: 150;
             flex-wrap: wrap;
@@ -153,13 +168,12 @@
             background: #2a4a6a;
             border: none;
             color: #cceeff;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 40px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             font-weight: bold;
             backdrop-filter: blur(8px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
         .btn-externo:active { transform: scale(0.96); }
@@ -185,11 +199,11 @@
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 70%);
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 70%);
             pointer-events: none;
         }
 
-        /* CALL TO ACTION - NUEVO ESTILO: SIN ICONOS, MAYÚSCULAS, GRANDE, CONTRASTE */
+        /* CTA */
         .cta {
             position: fixed;
             top: 50%;
@@ -208,8 +222,7 @@
             z-index: 200;
             pointer-events: none;
             animation: fadeInOut 3s ease-out forwards;
-            border: 1px solid rgba(255,255,255,0.4);
-            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.3);
             font-family: 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
         }
 
@@ -220,13 +233,13 @@
             100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05); visibility: hidden; }
         }
 
-        /* Panel de estadísticas */
+        /* Panel estadísticas */
         .stats-panel {
             position: fixed;
             bottom: 120px;
             left: 10px;
             right: 10px;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 12px;
@@ -254,6 +267,14 @@
             font-size: 1.2rem;
             cursor: pointer;
         }
+        .stats-resumen {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #1a3a4a;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            color: #aaf;
+        }
         .stats-lista {
             font-size: 0.7rem;
             color: #aaf;
@@ -263,20 +284,11 @@
         .stats-item {
             padding: 5px;
             border-bottom: 1px solid #2a4a6a;
-            font-family: monospace;
-        }
-        .stats-resumen {
-            margin-bottom: 10px;
-            padding: 8px;
-            background: #1a3a4a;
-            border-radius: 12px;
-            font-size: 0.7rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <!-- CALL TO ACTION: SOLO TEXTO, MAYÚSCULAS, GRANDE, CONTRASTE -->
     <div class="cta" id="cta">¿QUÉ QUIERES HOY?</div>
 
     <div class="scene" id="scene">
@@ -286,8 +298,10 @@
                 <div class="brillo"></div>
             </div>
             <div class="cara back" id="caraBack">
-                <div class="triangulo">
-                    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
+                <div class="triangulo-container">
+                    <div class="triangulo">
+                        <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
+                    </div>
                 </div>
                 <div class="brillo"></div>
             </div>
@@ -304,7 +318,6 @@
 
 <div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | El texto se lee automáticamente</div>
 
-<!-- Panel de estadísticas -->
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header">
         <span>📊 ESTADÍSTICAS DE TU SESIÓN</span>
@@ -316,11 +329,11 @@
 
 <script>
     // ============================================================
-    // FRASES
+    // FRASES (misma base de datos)
     // ============================================================
     const frasesNormales = {
         amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es una locura que solo cura el amor.» — Lope de Vega"],
-        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica, pero el descanso también.»"],
+        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
         futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»"],
         dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
         familia: ["«La familia no es cuestión de sangre, sino de respeto y alegría.» — Bach","«La familia te quiere sin preguntar.»","«La familia es donde aprendemos a amar.» — Papa Francisco"],
@@ -328,32 +341,25 @@
         exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es obtener lo que deseas; la felicidad, disfrutarlo.» — Emerson"],
         vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta: para mantener el equilibrio, sigue adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi"]
     };
-
     const frasesExtranas = [
-        "«Los pingüinos usan esmoquin porque no tienen armario para chaquetas.» — Anónimo",
-        "«Si un libro se aburre, cámbiale la pila.» — Alicia",
-        "«El tiempo vuela como un coche sin ruedas.» — Proverbio marciano",
+        "«Los pingüinos usan esmoquin porque no tienen armario para chaquetas.»",
+        "«Si un libro se aburre, cámbiale la pila.»",
+        "«El tiempo vuela como un coche sin ruedas.»",
         "«La Luna es un queso que nunca se acaba porque los ratones son astronautas.»",
-        "«Las nubes no lloran, sudan emociones.» — Meteoro loco",
+        "«Las nubes no lloran, sudan emociones.»",
         "«El silencio tiene eco si gritas muy fuerte hacia adentro.»",
         "«Los árboles bailan cumbia cuando nadie mira.»",
         "«El agua hierve al revés en el país de los espejos.»",
-        "«Un tren puede silbar una canción de cuna si le cantas primero.»",
-        "«El arcoíris es solo el bigote del sol.»",
-        "«Los calcetines desaparecen porque viajan al futuro a buscarse a sí mismos.»"
+        "«Los calcetines desaparecen porque viajan al futuro.»"
     ];
-
     const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes"];
 
-    // ============================================================
-    // SISTEMA DE LOG Y MEMORIA
-    // ============================================================
+    // Sistema de memoria
     let sesionId = localStorage.getItem('bola8_sesion_id');
     if (!sesionId) {
         sesionId = 'sesion_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
         localStorage.setItem('bola8_sesion_id', sesionId);
     }
-
     let historial = JSON.parse(localStorage.getItem('bola8_historial_' + sesionId)) || [];
     let frasesUsadas = new Set(historial.map(h => h.respuesta));
     let contadorCategorias = JSON.parse(localStorage.getItem('bola8_categorias_' + sesionId)) || {};
@@ -362,112 +368,52 @@
         localStorage.setItem('bola8_historial_' + sesionId, JSON.stringify(historial));
         localStorage.setItem('bola8_categorias_' + sesionId, JSON.stringify(contadorCategorias));
     }
-
-    function registrarInteraccion(pregunta, respuesta, categoria = 'general') {
-        historial.unshift({
-            timestamp: new Date().toISOString(),
-            pregunta: pregunta,
-            respuesta: respuesta,
-            categoria: categoria
-        });
+    function registrarInteraccion(pregunta, respuesta, categoria) {
+        historial.unshift({ timestamp: new Date().toISOString(), pregunta, respuesta, categoria });
         if (historial.length > 50) historial.pop();
         frasesUsadas.add(respuesta);
         contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1;
         guardarHistorial();
         actualizarStatsUI();
     }
-
     function obtenerRespuestaSinRepetir(pool) {
-        if (pool.length === 0) return null;
+        if (!pool.length) return null;
         let candidatas = pool.filter(f => !frasesUsadas.has(f));
-        if (candidatas.length === 0) candidatas = pool;
+        if (!candidatas.length) candidatas = pool;
         return candidatas[Math.floor(Math.random() * candidatas.length)];
     }
-
     function obtenerRespuestaNormal() {
         let pool = [];
-        for (let tema of temasActivos) {
-            if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
-        }
-        if (pool.length === 0) pool = frasesGenerales;
+        for (let tema of temasActivos) if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
+        if (!pool.length) pool = frasesGenerales;
         return obtenerRespuestaSinRepetir(pool);
     }
-
-    function obtenerRespuestaExtrana() {
-        return obtenerRespuestaSinRepetir(frasesExtranas);
+    function obtenerRespuestaExtrana() { return obtenerRespuestaSinRepetir(frasesExtranas); }
+    function obtenerCategoria(respuesta) {
+        for (let [cat, frases] of Object.entries(frasesNormales)) if (frases.includes(respuesta)) return cat;
+        return frasesExtranas.includes(respuesta) ? 'extrana' : 'general';
     }
 
-    function obtenerCategoriaDeRespuesta(respuesta) {
-        for (let [cat, frases] of Object.entries(frasesNormales)) {
-            if (frases.includes(respuesta)) return cat;
-        }
-        if (frasesExtranas.includes(respuesta)) return 'extrana';
-        return 'general';
-    }
-
-    // ============================================================
-    // UI ESTADÍSTICAS
-    // ============================================================
     function actualizarStatsUI() {
-        const statsResumen = document.getElementById('statsResumen');
-        const statsLista = document.getElementById('statsLista');
-        statsResumen.innerHTML = `
-            <strong>📊 RESUMEN</strong><br>
-            🎱 PREGUNTAS: ${historial.length}<br>
-            💬 FRASES ÚNICAS: ${frasesUsadas.size}<br>
-            📁 SESIÓN: ${sesionId.substr(0, 16)}...
-        `;
-        if (historial.length > 0) {
-            statsLista.innerHTML = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>';
-            historial.slice(0, 10).forEach((item, idx) => {
-                const fecha = new Date(item.timestamp).toLocaleTimeString();
-                statsLista.innerHTML += `<div class="stats-item">${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>→ ${item.respuesta.substring(0, 60)}...</div>`;
-            });
-        } else {
-            statsLista.innerHTML = 'AÚN NO HAY INTERACCIONES.';
-        }
+        document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 FRASES ÚNICAS: ${frasesUsadas.size}`;
+        let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>';
+        historial.slice(0, 10).forEach((item, i) => {
+            html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`;
+        });
+        document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.';
     }
+    function toggleStats() { document.getElementById('statsPanel').classList.toggle('visible'); actualizarStatsUI(); }
 
-    function toggleStats() {
-        const panel = document.getElementById('statsPanel');
-        panel.classList.toggle('visible');
-        actualizarStatsUI();
-    }
-
-    // ============================================================
-    // FUNCIONALIDAD PRINCIPAL
-    // ============================================================
+    // Funcionalidad principal
     let temasActivos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
-    let reconocimiento = null;
-    let grabando = false;
-    let girada = false;
-    let ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
-    let synth = window.speechSynthesis;
-    let vozSeleccionada = null;
-
-    function cargarVoz() {
-        if (!synth) return;
-        const voces = synth.getVoices();
-        vozSeleccionada = voces.find(v => v.lang.startsWith('es')) || voces[0];
-    }
-    if (synth) {
-        synth.onvoiceschanged = cargarVoz;
-        cargarVoz();
-    }
-
-    function hablar(texto) {
-        if (!synth) return;
-        if (synth.speaking) synth.cancel();
-        const utterance = new SpeechSynthesisUtterance(texto);
-        if (vozSeleccionada) utterance.voice = vozSeleccionada;
-        utterance.lang = 'es-ES';
-        utterance.rate = 0.9;
-        utterance.pitch = 0.9;
-        synth.speak(utterance);
-    }
+    let reconocimiento = null, grabando = false, girada = false, ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
+    let synth = window.speechSynthesis, vozSeleccionada = null;
+    function cargarVoz() { if (synth) { vozSeleccionada = synth.getVoices().find(v => v.lang.startsWith('es')) || null; } }
+    if (synth) { synth.onvoiceschanged = cargarVoz; cargarVoz(); }
+    function hablar(texto) { if (!synth) return; if (synth.speaking) synth.cancel(); let u = new SpeechSynthesisUtterance(texto); if (vozSeleccionada) u.voice = vozSeleccionada; u.lang = 'es-ES'; u.rate = 0.9; synth.speak(u); }
 
     const bola = document.getElementById('bola');
-    const scene = document.getElementById('scene');
+    const sceneEl = document.getElementById('scene');
     const caraBack = document.getElementById('caraBack');
     const chatTexto = document.getElementById('chatTexto');
     const preguntarBtn = document.getElementById('preguntarBtn');
@@ -477,120 +423,63 @@
     const statsCerrar = document.getElementById('statsCerrar');
     const cta = document.getElementById('cta');
 
-    function ocultarCta() {
-        if (cta && cta.style.visibility !== 'hidden') {
-            cta.style.opacity = '0';
-            cta.style.visibility = 'hidden';
-        }
-    }
-
+    function ocultarCta() { if (cta && cta.style.visibility !== 'hidden') { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; } }
     function girarBola() { bola.style.transform = 'rotateY(180deg)'; girada = true; }
     function regresarBola() { bola.style.transform = 'rotateY(0deg)'; girada = false; }
     function toggleBola() { girada ? regresarBola() : girarBola(); }
-
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
     function mostrarRespuesta(respuesta, pregunta, leer = true) {
         chatTexto.innerText = respuesta;
-        const categoria = obtenerCategoriaDeRespuesta(respuesta);
-        registrarInteraccion(pregunta, respuesta, categoria);
+        registrarInteraccion(pregunta, respuesta, obtenerCategoria(respuesta));
         if (leer) hablar(respuesta);
     }
-
-    function procesarPregunta(texto, leerRespuesta = true) {
+    function procesarPregunta(texto, leer = true) {
         ocultarCta();
-        if (!texto || !texto.trim()) {
-            const respuesta = obtenerRespuestaExtrana() || frasesExtranas[0];
-            mostrarRespuesta(respuesta, "[pregunta vacía]", leerRespuesta);
-            if (!girada) girarBola();
-            setTimeout(() => regresarBola(), 3500);
-            return;
-        }
-        const respuesta = obtenerRespuestaNormal() || frasesGenerales[0];
-        mostrarRespuesta(respuesta, texto, leerRespuesta);
+        if (!texto || !texto.trim()) { let r = obtenerRespuestaExtrana() || frasesExtranas[0]; mostrarRespuesta(r, "[vacío]", leer); if (!girada) girarBola(); setTimeout(() => regresarBola(), 3500); return; }
+        let r = obtenerRespuestaNormal() || frasesGenerales[0];
+        mostrarRespuesta(r, texto, leer);
         if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3500);
     }
-
-    function respuestaAleatoria() {
-        ocultarCta();
-        const esExtrana = Math.random() < 0.5;
-        const respuesta = esExtrana ? (obtenerRespuestaExtrana() || frasesExtranas[0]) : (obtenerRespuestaNormal() || frasesGenerales[0]);
-        mostrarRespuesta(respuesta, "[aleatorio: agitado]", true);
-        if (!girada) girarBola();
-        setTimeout(() => regresarBola(), 3500);
-    }
-
-    function leerTextoActual() {
-        const texto = chatTexto.innerText;
-        if (texto && texto.trim()) {
-            hablar(texto);
-        } else {
-            const saludo = "ESCRIBE O PREGUNTA ALGO PRIMERO.";
-            chatTexto.innerText = saludo;
-            hablar(saludo);
-        }
-    }
+    function respuestaAleatoria() { ocultarCta(); let r = Math.random() < 0.5 ? (obtenerRespuestaExtrana() || frasesExtranas[0]) : (obtenerRespuestaNormal() || frasesGenerales[0]); mostrarRespuesta(r, "[aleatorio]", true); if (!girada) girarBola(); setTimeout(() => regresarBola(), 3500); }
+    function leerTextoActual() { let t = chatTexto.innerText; if (t && t.trim()) hablar(t); else { let s = "ESCRIBE UNA PREGUNTA PRIMERO"; chatTexto.innerText = s; hablar(s); } }
 
     // Micrófono
     function iniciarMicrofono() {
-        if (!('webkitSpeechRecognition' in window)) {
-            chatTexto.innerText = "❌ VOZ NO SOPORTADA";
-            return;
-        }
+        if (!('webkitSpeechRecognition' in window)) { chatTexto.innerText = "❌ VOZ NO SOPORTADA"; return; }
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         reconocimiento = new SpeechRecognition();
         reconocimiento.lang = 'es-ES';
-        reconocimiento.onstart = () => {
-            grabando = true;
-            microBtn.textContent = '🔴...';
-            chatTexto.innerText = "🎤 ESCUCHANDO...";
-        };
-        reconocimiento.onresult = (event) => {
-            const texto = event.results[0][0].transcript;
-            chatTexto.innerText = texto;
-            procesarPregunta(texto, true);
-            detenerMicrofono();
-        };
-        reconocimiento.onerror = () => { detenerMicrofono(); };
+        reconocimiento.onstart = () => { grabando = true; microBtn.textContent = '🔴...'; chatTexto.innerText = "🎤 ESCUCHANDO..."; };
+        reconocimiento.onresult = (e) => { let texto = e.results[0][0].transcript; chatTexto.innerText = texto; procesarPregunta(texto, true); detenerMicrofono(); };
+        reconocimiento.onerror = () => detenerMicrofono();
         reconocimiento.onend = () => detenerMicrofono();
         reconocimiento.start();
     }
-
-    function detenerMicrofono() {
-        if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
-        grabando = false;
-        microBtn.textContent = '🎤 HABLAR';
-        if (chatTexto.innerText === "🎤 ESCUCHANDO...") chatTexto.innerText = "";
-    }
+    function detenerMicrofono() { if (reconocimiento) try { reconocimiento.stop(); } catch(e) {} grabando = false; microBtn.textContent = '🎤 HABLAR'; if (chatTexto.innerText === "🎤 ESCUCHANDO...") chatTexto.innerText = ""; }
     function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
 
     // Movimiento
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', (e) => {
-                const ahora = Date.now();
+                let ahora = Date.now();
                 if (ahora - ultimoAgite < 800) return;
-                const acc = e.accelerationIncludingGravity;
+                let acc = e.accelerationIncludingGravity;
                 if (!acc) return;
-                const fuerza = Math.abs((acc.x||0)-ultimaX) + Math.abs((acc.y||0)-ultimaY) + Math.abs((acc.z||0)-ultimaZ);
+                let fuerza = Math.abs((acc.x||0)-ultimaX) + Math.abs((acc.y||0)-ultimaY) + Math.abs((acc.z||0)-ultimaZ);
                 if (fuerza > 25) { ultimoAgite = ahora; respuestaAleatoria(); }
                 ultimaX = acc.x||0; ultimaY = acc.y||0; ultimaZ = acc.z||0;
             });
         }
     }
     function solicitarPermisoMovimiento() {
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-            DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') iniciarDeteccionMovimiento(); });
-        } else iniciarDeteccionMovimiento();
+        if (typeof DeviceMotionEvent.requestPermission === 'function') { DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') iniciarDeteccionMovimiento(); }); }
+        else iniciarDeteccionMovimiento();
     }
 
-    // Eventos
-    scene.addEventListener('click', (e) => {
-        if (e.target === caraBack || caraBack.contains(e.target)) {
-            if (girada) chatTexto.focus();
-        } else { toggleBola(); }
-    });
+    sceneEl.addEventListener('click', (e) => { if (e.target === caraBack || caraBack.contains(e.target)) { if (girada) chatTexto.focus(); } else { toggleBola(); } });
     preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText, true));
     microBtn.addEventListener('click', toggleMicrofono);
     speakerBtn.addEventListener('click', leerTextoActual);
@@ -601,18 +490,15 @@
     document.body.addEventListener('click', ocultarCta);
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-        const btnPermiso = document.createElement('div');
-        btnPermiso.innerText = '🎯 ACTIVAR AGITADO';
-        btnPermiso.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#2a4a6a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer';
-        btnPermiso.onclick = solicitarPermisoMovimiento;
-        document.body.appendChild(btnPermiso);
+        let btn = document.createElement('div');
+        btn.innerText = '🎯 ACTIVAR AGITADO';
+        btn.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#2a4a6a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer';
+        btn.onclick = solicitarPermisoMovimiento;
+        document.body.appendChild(btn);
     } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
 
-    // Bienvenida
     chatTexto.innerText = "ESCRIBE TU PREGUNTA...";
-    setTimeout(() => {
-        if (chatTexto.innerText === "ESCRIBE TU PREGUNTA...") chatTexto.innerText = "";
-    }, 2500);
+    setTimeout(() => { if (chatTexto.innerText === "ESCRIBE TU PREGUNTA...") chatTexto.innerText = ""; }, 2500);
 </script>
 </body>
 </html>
