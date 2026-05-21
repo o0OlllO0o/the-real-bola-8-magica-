@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <title>🎱 Bola Mágica 8 - Amplia Sabiduría</title>
+    <title>🎱 Bola Mágica 8 - Sabiduría Ancestral</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;}
@@ -15,11 +15,11 @@
         .scene::after{content:'';position:absolute;bottom:-20px;left:15%;width:70%;height:20px;background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent);border-radius:50%;filter:blur(6px);z-index:-1;}
         .bola{width:100%;height:100%;position:relative;transition:transform 0.6s cubic-bezier(0.4,0.2,0.2,1);transform-style:preserve-3d;border-radius:50%;animation:rotateIn 1s ease-out;}
         @keyframes rotateIn{0%{transform:rotateY(0deg);}100%{transform:rotateY(360deg);}}
-        .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5), inset 0 25px 30px rgba(255,255,255,0.08), 0 25px 35px rgba(0,0,0,0.6);}
-        .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);}
+        .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;}
+        .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5), inset 0 25px 30px rgba(255,255,255,0.08), 0 25px 35px rgba(0,0,0,0.6);}
+        .cara.back{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(180deg);padding:12%;pointer-events:auto;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5), inset 0 25px 30px rgba(255,255,255,0.08), 0 25px 35px rgba(0,0,0,0.6);}
         .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
         .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
-        .cara.back{background:#000000;transform:rotateY(180deg);padding:12%;pointer-events:auto;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.8), inset 0 25px 30px rgba(0,0,0,0.2), 0 25px 35px rgba(0,0,0,0.6);}
         .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
         .triangulo-shape{width:85%;height:75%;background:#0a0a0a;clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(80,180,255,0.3);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.08), 0 5px 15px rgba(0,0,0,0.3);transition:all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
         .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
@@ -31,21 +31,27 @@
         .botones-principales{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
         .btn-principal{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 20px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
         .btn-principal:active{transform:scale(0.96);background:#2a2a2a;}
-        .btn-modo{position:fixed;top:16px;left:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.7rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;gap:6px;}
-        .btn-modo:active{transform:scale(0.96);background:#2a2a2a;}
+        
+        /* Selector de modos - solo iconos, responsive */
+        .btn-modo{position:fixed;top:16px;left:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;font-size:1.3rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+        .btn-modo:active{transform:scale(0.95);background:#2a2a2a;}
+        
+        .modo-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;display:flex;flex-wrap:wrap;gap:10px;max-width:280px;}
+        .modo-panel.visible{transform:translateX(0);}
+        .modo-opcion{background:#1a2a3a;border:1px solid #3a5a7a;border-radius:40px;padding:8px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;font-size:0.7rem;color:#cceeff;}
+        .modo-opcion:hover{background:#2a4a6a;transform:scale(1.02);}
+        .modo-opcion.activo{background:#3a5a7a;border-color:#8cf;}
+        .modo-opcion span:first-child{font-size:1rem;}
+        
         .btn-stats{position:fixed;top:16px;right:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);transition:all 0.2s;}
         .btn-stats:active{transform:scale(0.95);background:#2a2a2a;}
-        .modo-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;min-width:200px;max-height:70vh;overflow-y:auto;}
-        .modo-panel.visible{transform:translateX(0);}
-        .modo-seccion{margin-bottom:12px;}
-        .modo-titulo-seccion{color:#8cf;font-size:0.65rem;padding:5px 8px;margin-top:8px;border-bottom:1px solid #3a5a7a;}
-        .modo-opcion{padding:10px 12px;margin:4px 0;border-radius:12px;cursor:pointer;color:#cceeff;font-size:0.75rem;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
-        .modo-opcion:hover{background:#2a4a6a;}
-        .modo-opcion.activo{background:#3a5a7a;border-left:3px solid #8cf;}
+        
         .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
-        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 70%);pointer-events:none;}
-        .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
+        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), transparent 70%);pointer-events:none;}
+        
+        .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.2rem,8vw,2rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
         @keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.9);}15%{opacity:1;transform:translate(-50%,-50%) scale(1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.05);visibility:hidden;}}
+        
         .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
         .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
         .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
@@ -57,7 +63,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="cta" id="cta">¿QUÉ QUIERES HOY?</div>
+    <div class="cta" id="cta">✨ DESVELA TU SABIDURÍA ✨</div>
     <div class="scene" id="scene">
         <div class="bola" id="bola">
             <div class="cara front">
@@ -79,22 +85,17 @@
     </div>
 </div>
 
-<div class="btn-modo" id="btnModo">🎭 CAMBIAR MODO</div>
+<!-- Botón modo - solo icono -->
+<div class="btn-modo" id="btnModo">🎭</div>
 <div class="modo-panel" id="modoPanel">
-    <div class="modo-seccion">
-        <div class="modo-titulo-seccion">📜 TEMÁTICAS CLÁSICAS</div>
-        <div class="modo-opcion" data-modo="clasico">🔮 Clásico (Sabios universales)</div>
-        <div class="modo-opcion" data-modo="feminista">🚺 Feminista (Mujeres inspiradoras)</div>
-        <div class="modo-opcion" data-modo="humor">😂 Humor (Agudeza y sarcasmo)</div>
-        <div class="modo-opcion" data-modo="sabiduria">🌿 Sabiduría (Filósofos estoicos)</div>
-    </div>
-    <div class="modo-seccion">
-        <div class="modo-titulo-seccion">😊 ESTADOS DE ÁNIMO</div>
-        <div class="modo-opcion" data-modo="feliz">😊 Feliz (Optimismo y alegría)</div>
-        <div class="modo-opcion" data-modo="melancolico">😢 Melancólico (Nostalgia y reflexión)</div>
-        <div class="modo-opcion" data-modo="motivacion">💪 Motivación (Fuerza y coraje)</div>
-        <div class="modo-opcion" data-modo="calma">🧘 Calma (Paz y serenidad)</div>
-    </div>
+    <div class="modo-opcion" data-modo="clasico"><span>🔮</span> Clásico</div>
+    <div class="modo-opcion" data-modo="feminista"><span>🚺</span> Feminista</div>
+    <div class="modo-opcion" data-modo="humor"><span>😂</span> Humor</div>
+    <div class="modo-opcion" data-modo="sabiduria"><span>🌿</span> Estoico</div>
+    <div class="modo-opcion" data-modo="feliz"><span>😊</span> Feliz</div>
+    <div class="modo-opcion" data-modo="melancolico"><span>😢</span> Melancólico</div>
+    <div class="modo-opcion" data-modo="motivacion"><span>💪</span> Motivación</div>
+    <div class="modo-opcion" data-modo="calma"><span>🧘</span> Calma</div>
 </div>
 
 <div class="btn-stats" id="statsBtn">📊</div>
@@ -104,7 +105,7 @@
     <button class="btn-principal" id="microBtn">🎤 HABLAR</button>
 </div>
 
-<div class="info-externa">📱 Toca la bola | 🎭 Cambia modo según tu estado de ánimo | +250 citas verificadas</div>
+<div class="info-externa">📱 Toca la bola | 🎭 Icono izquierdo = cambiar modo | 🔊 Repite la cita</div>
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
     <div class="stats-resumen" id="statsResumen"></div>
@@ -113,287 +114,110 @@
 
 <script>
     // ============================================================
-    // BASES DE DATOS AMPLIADAS (más de 250 citas en total)
+    // MODOS Y CITAS
     // ============================================================
-
-    // MODO CLÁSICO - Ampliado (40+ citas)
     const modoClasico = {
         nombre: "Clásico",
         citas: {
-            amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es la poesía de los sentidos.» — Honoré de Balzac","«Amar es despertar al lado de alguien y sonreír sin razón.» — Anónimo"],
-            trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica.» — Proverbio italiano","«El éxito en el trabajo no es cuestión de suerte, sino de perseverancia.» — Edison","«El trabajo es el refugio de los que no tienen nada mejor que hacer.» — Oscar Wilde","«El 90% del éxito es simplemente presentarse.» — Woody Allen"],
-            futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo","«El futuro no está escrito, no hay destino.» — Robert Zemeckis","«El mañana es un misterio, el hoy es un regalo.» — Proverbio","«No te preocupes por el futuro, ocúpate del presente.» — Lao Tsé"],
-            dinero: ["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«No es rico el que más tiene, sino el que menos necesita.» — Proverbio","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett","«El dinero es como el estiércol: si no se esparce, no sirve para nada.» — Francis Bacon","«La riqueza consiste no en tener grandes posesiones, sino en tener pocas necesidades.» — Epicteto"],
-            familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«La familia es como la rama, los hijos como frutos.» — Proverbio chino","«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II","«La familia es el termómetro del alma.» — Proverbio","«Donde hay familia, hay hogar.» — Proverbio"],
-            amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller","«La amistad es un alma que habita en dos cuerpos.» — Aristóteles","«Un amigo fiel es un escudo poderoso.» — Proverbio"],
-            exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutar lo que se obtiene.» — Emerson","«El éxito es la suma de pequeños esfuerzos repetidos día tras día.» — Robert Collier","«No midas tu éxito por lo que has logrado, sino por lo que has superado.» — Proverbio"],
-            vida: ["«La vida es lo que pasa mientras estás haciendo otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi","«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou","«La vida es una obra de teatro que no permite ensayos.» — George Bernard Shaw","«La vida es aquello que te va sucediendo mientras te empeñas en hacer otros planes.» — John Lennon"],
-            sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«La paciencia es amarga, pero sus frutos son dulces.» — Rousseau","«El sentido común es el menos común de los sentidos.» — Voltaire","«La verdadera sabiduría está en reconocer la propia ignorancia.» — Sócrates","«El primer paso hacia la sabiduría es el silencio.» — Proverbio"]
-        }
-    };
-
-    // MODO FEMINISTA - Ampliado (35+ citas)
-    const modoFeminista = {
-        nombre: "Feminista",
-        citas: {
-            amor: ["«El amor no tiene que ver con poseer, sino con respetar.» — Simone de Beauvoir","«Amar a alguien es aprender a decir adiós.» — Virginia Woolf","«El amor verdadero no exige, solo ofrece.» — Madre Teresa","«El amor propio es el primer amor que debemos cultivar.» — Anónimo","«Amarse a una misma es el inicio de un romance para toda la vida.» — Oscar Wilde"],
-            trabajo: ["«Nadie hace carrera sin sacrificios. Tú decides cuáles.» — Coco Chanel","«El éxito no es casualidad, es trabajo duro y perseverancia.» — Serena Williams","«El trabajo bien hecho es el mejor homenaje a una misma.» — Frida Kahlo","«No hay atajos para el éxito, solo trabajo duro.» — Michelle Obama","«El talento es importante, pero la disciplina es esencial.» — Anónimo"],
-            futuro: ["«El futuro depende de lo que hagamos hoy.» — Rosa Parks","«Soñar es necesario para construir el mañana.» — Rigoberta Menchú","«El cambio vendrá cuando las mujeres alcemos la voz.» — Malala Yousafzai","«Nunca es tarde para ser quien quieres ser.» — George Eliot","«El futuro es femenino.» — Gloria Steinem"],
-            dinero: ["«La independencia económica es la base de la libertad.» — Simone de Beauvoir","«El dinero es un medio, no un fin.» — Oprah Winfrey","«No hay riqueza mayor que la libertad de decidir sobre tu vida.» — Isabel Allende","«El dinero puede comprar cosas, pero no la felicidad.» — Anónimo","«La verdadera riqueza está en el alma.» — Proverbio"],
-            familia: ["«La familia no es solo la que te da la sangre, sino la que te da amor.» — Maya Angelou","«El hogar es donde te quieren sin condiciones.» — Madre Teresa","«Familia es quien te sostiene cuando caes.» — Michelle Obama","«La familia es el primer lugar donde aprendemos a ser libres.» — Anónimo","«Una familia fuerte construye una sociedad fuerte.» — Proverbio"],
-            amigos: ["«La amistad entre mujeres es un pacto de sororidad.» — Elena Poniatowska","«Una amiga es la que te dice la verdad aunque duela.» — Gloria Steinem","«Las amigas son el sostén del alma.» — Frida Kahlo","«La amistad femenina es un refugio.» — Anónimo","«Con amigas, la vida es más ligera.» — Proverbio"],
-            exito: ["«El éxito es hacer lo que amas y amar lo que haces.» — Marie Curie","«Triunfar es levantarse una vez más de lo que caes.» — Eleanor Roosevelt","«El éxito femenino es inspirar a otras a ser libres.» — Chimamanda Ngozi Adichie","«No hay límites para lo que una mujer puede lograr.» — Anónimo","«El éxito de una mujer es su libertad.» — Proverbio"],
-            vida: ["«Vivir es la cosa más rara del mundo porque la mayoría solo existe.» — Oscar Wilde","«La vida es un desafío, acéptalo.» — Madre Teresa","«La vida te da sorpresas, pero tú decides cómo recibirlas.» — Frida Kahlo","«La vida es corta, pero ancha.» — Proverbio","«Vive tu vida como solo tú sabes hacerlo.» — Anónimo"],
-            sabiduria: ["«La sabiduría comienza con la valentía de ser uno mismo.» — Virginia Woolf","«Sabia es la que aprende de sus errores.» — Coco Chanel","«La inteligencia sin humildad no es sabiduría.» — Simone de Beauvoir","«La sabiduría femenina es ancestral.» — Proverbio","«Conócete a ti misma, ese es el principio de la sabiduría.» — Sócrates adaptado"]
-        }
-    };
-
-    // MODO HUMOR - Ampliado (35+ citas)
-    const modoHumor = {
-        nombre: "Humor",
-        citas: {
-            amor: ["«El amor es una idiotez que se comete a dos.» — Groucho Marx","«El matrimonio es una aventura, como ir a la guerra.» — G.K. Chesterton","«Antes del amor, éramos más felices. Después, tenemos algo de qué hablar.» — Woody Allen","«El amor es temporal, pero la risa es eterna.» — Anónimo","«El amor es como el viento, no lo ves pero lo sientes... y a veces te resfrías.» — Anónimo"],
-            trabajo: ["«Me encanta el trabajo. Puedo estar horas mirándolo.» — Jerome K. Jerome","«La mejor manera de hacer algo es no hacerlo.» — Anónimo","«El trabajo nunca mata a nadie, pero ¿para qué arriesgarse?» — Anónimo","«El trabajo es el refugio de los que no tienen nada mejor que hacer.» — Oscar Wilde","«Si crees que eres demasiado pequeño para marcar la diferencia, intenta dormir con un mosquito.» — Dalai Lama"],
-            futuro: ["«Predigo el futuro, pero solo después de que ocurra.» — Anónimo","«El futuro es como el horizonte: siempre se aleja.» — Groucho Marx","«Mañana será otro día, pero con los mismos problemas.» — Mafalda","«El futuro llegó hace rato y nadie me avisó.» — Anónimo","«No me preocupo por el futuro, llegará demasiado pronto.» — Albert Einstein"],
-            dinero: ["«El dinero no da la felicidad, pero compra un helado y casi es lo mismo.» — Anónimo","«He sido pobre y he sido rico. Rico es mejor.» — Sophie Tucker","«El dinero no puede comprar la felicidad, pero alquila una muy parecida.» — Woody Allen","«El dinero es como el abono: hay que esparcirlo para que sirva.» — Anónimo","«Si el dinero hablara, me diría 'adiós'.» — Anónimo"],
-            familia: ["«La familia es una tiranía doméstica.» — George Bernard Shaw","«Tu familia te conoce mejor que nadie. Y aun así te quieren.» — Anónimo","«Las familias felices se parecen; las infelices lo son cada una a su manera.» — Tolstói","«La familia es como una caja de bombones: nunca sabes lo que te va a tocar.» — Anónimo","«En familia se ríe más, pero también se discute más.» — Proverbio"],
-            amigos: ["«Un amigo es alguien que te conoce y te quiere a pesar de ello.» — Anónimo","«Los amigos son como los pañuelos: cuantos más, mejor, pero se pierden.» — Groucho Marx","«Amigo es el que llega cuando todos se han ido.» — Proverbio","«Un amigo te ayuda a mover el sofá; un buen amigo te ayuda a mover el cuerpo.» — Anónimo","«Los amigos son la familia que eliges, aunque a veces te pregunten por qué.» — Anónimo"],
-            exito: ["«El 90% del éxito es simplemente presentarse.» — Woody Allen","«El éxito es relativo. Cuanto más éxito, más familiares te reclaman.» — Anónimo","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es tener lo que quieres; la felicidad es querer lo que tienes.» — Anónimo","«El éxito es como un banquete: mejor compartirlo.» — Proverbio"],
-            vida: ["«La vida es una obra de teatro que no permite ensayos.» — George Bernard Shaw","«La vida es una bicicleta con los frenos rotos.» — Charles Bukowski","«La vida es muy dura... sobre todo si eres tonto.» — Anónimo","«La vida es como una cámara: enfoca lo que es importante, captura los buenos momentos y revela lo que realmente importa.» — Anónimo","«La vida es corta. Sonríe mientras tengas dientes.» — Anónimo"],
-            sabiduria: ["«No me he equivocado, solo he encontrado 1000 formas de no hacerlo.» — Edison","«Cuanto más sé, menos entiendo.» — Anónimo","«La sabiduría llega con los años, pero a veces llega sola.» — Anónimo","«El que mucho abarca, poco aprieta.» — Proverbio","«Más vale pájaro en mano que ciento volando.» — Proverbio"]
-        }
-    };
-
-    // MODO SABIDURÍA ESTOICA - Ampliado (35+ citas)
-    const modoSabiduria = {
-        nombre: "Sabiduría",
-        citas: {
-            amor: ["«El amor es la fuerza más poderosa para transformar el alma.» — Séneca","«Amar es desear que el otro sea feliz, incluso sin ti.» — Epicteto","«El amor verdadero es aquel que acepta la imperfección.» — Marco Aurelio","«Donde hay amor, no hay preguntas.» — Proverbio","«El amor es la respuesta, pero mientras tanto, ten paciencia.» — Anónimo"],
-            trabajo: ["«El trabajo bien hecho es su propia recompensa.» — Marco Aurelio","«La excelencia no es un acto, sino un hábito.» — Aristóteles","«Haz cada cosa como si fuera la última de tu vida.» — Marco Aurelio","«El trabajo constante vence lo que la suerte no logra.» — Séneca","«No hay grandeza sin trabajo.» — Proverbio"],
-            futuro: ["«No sufras por lo que aún no ha ocurrido.» — Epicteto","«El futuro no está en tus manos, solo el presente.» — Séneca","«Vive cada día como si fuera el último.» — Marco Aurelio","«El que controla su presente, controla su futuro.» — Proverbio","«El futuro es una promesa, el presente es un hecho.» — Anónimo"],
-            dinero: ["«La riqueza no consiste en tener muchas posesiones, sino en tener pocas necesidades.» — Séneca","«El dinero no es malo, pero amar el dinero es la raíz de todos los males.» — Séneca","«No es pobre el que poco tiene, sino el que mucho desea.» — Séneca","«El dinero es un buen sirviente pero un mal amo.» — Francis Bacon","«La verdadera riqueza está en la mente.» — Proverbio"],
-            familia: ["«La familia es el primer lugar donde se aprende la virtud.» — Aristóteles","«El amor familiar es la base de toda sociedad justa.» — Séneca","«Honra a tus padres, es el mayor deber.» — Epicteto","«La familia es la escuela del alma.» — Proverbio","«En la familia se forja el carácter.» — Anónimo"],
-            amigos: ["«El amigo es otro yo.» — Aristóteles","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Epicteto","«La amistad verdadera es un alma en dos cuerpos.» — Aristóteles","«Un amigo fiel es un tesoro.» — Proverbio","«La amistad es el refugio de los sabios.» — Anónimo"],
-            exito: ["«El éxito es hacer lo correcto en el momento correcto.» — Marco Aurelio","«La verdadera victoria es vencerse a sí mismo.» — Platón","«El éxito está en la virtud, no en la riqueza.» — Séneca","«La constancia es la hermana del éxito.» — Proverbio","«El éxito no es definitivo, el fracaso no es fatal.» — Winston Churchill"],
-            vida: ["«La vida es breve, el arte es largo.» — Hipócrates","«No es que tengamos poco tiempo, es que perdemos mucho.» — Séneca","«Vive conforme a la naturaleza.» — Marco Aurelio","«La vida es un instante entre dos eternidades.» — Proverbio","«La vida es lo que haces de ella.» — Anónimo"],
-            sabiduria: ["«La sabiduría comienza con el asombro.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«La verdadera sabiduría está en reconocer la propia ignorancia.» — Sócrates","«El sabio no dice todo lo que sabe, pero sabe todo lo que dice.» — Proverbio","«La sabid
-cd ~/the-real-bola-8-magica && cat > frontend/index.html << 'EOF'
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#000000">
-    <title>🎱 Bola Mágica 8 - Amplia Sabiduría</title>
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-        body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;}
-        body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%, rgba(80,100,150,0.12) 0%, transparent 60%);pointer-events:none;z-index:0;}
-        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;}
-        .scene{width:min(85vw,85vh,420px);height:min(85vw,85vh,420px);position:relative;cursor:pointer;perspective:1200px;}
-        .scene::after{content:'';position:absolute;bottom:-20px;left:15%;width:70%;height:20px;background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent);border-radius:50%;filter:blur(6px);z-index:-1;}
-        .bola{width:100%;height:100%;position:relative;transition:transform 0.6s cubic-bezier(0.4,0.2,0.2,1);transform-style:preserve-3d;border-radius:50%;animation:rotateIn 1s ease-out;}
-        @keyframes rotateIn{0%{transform:rotateY(0deg);}100%{transform:rotateY(360deg);}}
-        .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5), inset 0 25px 30px rgba(255,255,255,0.08), 0 25px 35px rgba(0,0,0,0.6);}
-        .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);}
-        .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
-        .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
-        .cara.back{background:#000000;transform:rotateY(180deg);padding:12%;pointer-events:auto;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.8), inset 0 25px 30px rgba(0,0,0,0.2), 0 25px 35px rgba(0,0,0,0.6);}
-        .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
-        .triangulo-shape{width:85%;height:75%;background:#0a0a0a;clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(80,180,255,0.3);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.08), 0 5px 15px rgba(0,0,0,0.3);transition:all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
-        .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
-        .texto-container{width:100%;position:relative;}
-        .texto-multifuncional{width:100%;background:#0a0a0a;border:1px solid rgba(80,180,255,0.4);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:100%;height:auto;line-height:1.4;transition:all 0.3s ease;padding-right:40px;}
-        .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.3);}
-        .reproducir-btn{position:absolute;bottom:12px;right:12px;background:#1a2a3a;border:1px solid #3a5a7a;color:#cceeff;width:32px;height:32px;border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;cursor:pointer;transition:all 0.2s;z-index:10;}
-        .reproducir-btn:active{transform:scale(0.95);background:#2a4a6a;}
-        .botones-principales{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
-        .btn-principal{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 20px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
-        .btn-principal:active{transform:scale(0.96);background:#2a2a2a;}
-        .btn-modo{position:fixed;top:16px;left:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.7rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;gap:6px;}
-        .btn-modo:active{transform:scale(0.96);background:#2a2a2a;}
-        .btn-stats{position:fixed;top:16px;right:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);transition:all 0.2s;}
-        .btn-stats:active{transform:scale(0.95);background:#2a2a2a;}
-        .modo-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;min-width:200px;max-height:70vh;overflow-y:auto;}
-        .modo-panel.visible{transform:translateX(0);}
-        .modo-seccion{margin-bottom:12px;}
-        .modo-titulo-seccion{color:#8cf;font-size:0.65rem;padding:5px 8px;margin-top:8px;border-bottom:1px solid #3a5a7a;}
-        .modo-opcion{padding:10px 12px;margin:4px 0;border-radius:12px;cursor:pointer;color:#cceeff;font-size:0.75rem;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
-        .modo-opcion:hover{background:#2a4a6a;}
-        .modo-opcion.activo{background:#3a5a7a;border-left:3px solid #8cf;}
-        .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
-        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 70%);pointer-events:none;}
-        .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
-        @keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.9);}15%{opacity:1;transform:translate(-50%,-50%) scale(1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.05);visibility:hidden;}}
-        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
-        .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
-        .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
-        .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;padding:0 8px;}
-        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a0a0a;border-radius:12px;font-size:0.7rem;color:#aaf;}
-        .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;}
-        .stats-item{padding:5px;border-bottom:1px solid #1a3a4a;}
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="cta" id="cta">¿QUÉ QUIERES HOY?</div>
-    <div class="scene" id="scene">
-        <div class="bola" id="bola">
-            <div class="cara front">
-                <div class="numero-8"><span>8</span></div>
-                <div class="brillo"></div>
-            </div>
-            <div class="cara back" id="caraBack">
-                <div class="transformable-container">
-                    <div class="triangulo-shape" id="shapeElement">
-                        <div class="texto-container">
-                            <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
-                            <div class="reproducir-btn" id="reproducirBtn">🔊</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="brillo"></div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="btn-modo" id="btnModo">🎭 CAMBIAR MODO</div>
-<div class="modo-panel" id="modoPanel">
-    <div class="modo-seccion">
-        <div class="modo-titulo-seccion">📜 TEMÁTICAS CLÁSICAS</div>
-        <div class="modo-opcion" data-modo="clasico">🔮 Clásico (Sabios universales)</div>
-        <div class="modo-opcion" data-modo="feminista">🚺 Feminista (Mujeres inspiradoras)</div>
-        <div class="modo-opcion" data-modo="humor">😂 Humor (Agudeza y sarcasmo)</div>
-        <div class="modo-opcion" data-modo="sabiduria">🌿 Sabiduría (Filósofos estoicos)</div>
-    </div>
-    <div class="modo-seccion">
-        <div class="modo-titulo-seccion">😊 ESTADOS DE ÁNIMO</div>
-        <div class="modo-opcion" data-modo="feliz">😊 Feliz (Optimismo y alegría)</div>
-        <div class="modo-opcion" data-modo="melancolico">😢 Melancólico (Nostalgia y reflexión)</div>
-        <div class="modo-opcion" data-modo="motivacion">💪 Motivación (Fuerza y coraje)</div>
-        <div class="modo-opcion" data-modo="calma">🧘 Calma (Paz y serenidad)</div>
-    </div>
-</div>
-
-<div class="btn-stats" id="statsBtn">📊</div>
-
-<div class="botones-principales">
-    <button class="btn-principal" id="preguntarBtn">🔮 PREGUNTAR</button>
-    <button class="btn-principal" id="microBtn">🎤 HABLAR</button>
-</div>
-
-<div class="info-externa">📱 Toca la bola | 🎭 Cambia modo según tu estado de ánimo | +250 citas verificadas</div>
-<div class="stats-panel" id="statsPanel">
-    <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
-    <div class="stats-resumen" id="statsResumen"></div>
-    <div class="stats-lista" id="statsLista"></div>
-</div>
-
-<script>
-    const modoClasico = {
-        nombre: "Clásico",
-        citas: {
-            amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es la poesía de los sentidos.» — Balzac"],
-            trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica.» — Proverbio","«El éxito no es cuestión de suerte, sino de perseverancia.» — Edison","«El 90% del éxito es presentarse.» — Woody Allen"],
-            futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro tiene muchos nombres: oportunidad para los valientes.» — Victor Hugo","«No te preocupes por el futuro, ocúpate del presente.» — Lao Tsé"],
-            dinero: ["«El dinero no da la felicidad, pero se le parece mucho.» — Woody Allen","«No es rico el que más tiene, sino el que menos necesita.» — Proverbio","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«La riqueza está en tener pocas necesidades.» — Epicteto"],
-            familia: ["«La familia no es cuestión de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«La familia es como la rama, los hijos como frutos.» — Proverbio chino","«Donde hay familia, hay hogar.» — Proverbio"],
-            amigos: ["«Un amigo es quien lo sabe todo de ti y aún así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«La amistad es un alma en dos cuerpos.» — Aristóteles"],
-            exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es la suma de pequeños esfuerzos repetidos.» — Robert Collier"],
-            vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta: para mantener el equilibrio, sigue adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi","«La vida es una obra de teatro sin ensayos.» — George Bernard Shaw"],
-            sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«La paciencia es amarga, pero sus frutos son dulces.» — Rousseau","«El sentido común es el menos común de los sentidos.» — Voltaire"]
+            amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi"],
+            trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
+            futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker"],
+            dinero: ["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon"],
+            familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco"],
+            amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon"],
+            exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill"],
+            vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein"],
+            sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"]
         }
     };
 
     const modoFeminista = {
         nombre: "Feminista",
         citas: {
-            amor: ["«El amor no tiene que ver con poseer, sino con respetar.» — Simone de Beauvoir","«Amar a alguien es aprender a decir adiós.» — Virginia Woolf","«El amor verdadero no exige, solo ofrece.» — Madre Teresa","«El amor propio es el primer amor que debemos cultivar.» — Anónimo"],
-            trabajo: ["«Nadie hace carrera sin sacrificios. Tú decides cuáles.» — Coco Chanel","«El éxito no es casualidad, es trabajo duro.» — Serena Williams","«El trabajo bien hecho es el mejor homenaje.» — Frida Kahlo","«No hay atajos para el éxito, solo trabajo duro.» — Michelle Obama"],
-            futuro: ["«El futuro depende de lo que hagamos hoy.» — Rosa Parks","«Soñar es necesario para construir el mañana.» — Rigoberta Menchú","«El cambio vendrá cuando alcemos la voz.» — Malala Yousafzai","«Nunca es tarde para ser quien quieres ser.» — George Eliot"],
-            dinero: ["«La independencia económica es la base de la libertad.» — Simone de Beauvoir","«El dinero es un medio, no un fin.» — Oprah Winfrey","«No hay riqueza mayor que la libertad.» — Isabel Allende","«La verdadera riqueza está en el alma.» — Proverbio"],
-            familia: ["«La familia no es solo la que te da la sangre, sino la que te da amor.» — Maya Angelou","«El hogar es donde te quieren sin condiciones.» — Madre Teresa","«Familia es quien te sostiene cuando caes.» — Michelle Obama"],
-            amigos: ["«La amistad entre mujeres es un pacto de sororidad.» — Elena Poniatowska","«Una amiga es la que te dice la verdad aunque duela.» — Gloria Steinem","«Las amigas son el sostén del alma.» — Frida Kahlo"],
-            exito: ["«El éxito es hacer lo que amas.» — Marie Curie","«Triunfar es levantarse una vez más de lo que caes.» — Eleanor Roosevelt","«El éxito femenino es inspirar a otras a ser libres.» — Chimamanda Ngozi Adichie"],
-            vida: ["«La vida es un desafío, acéptalo.» — Madre Teresa","«La vida te da sorpresas, tú decides cómo recibirlas.» — Frida Kahlo","«Vive tu vida como solo tú sabes hacerlo.» — Anónimo"],
-            sabiduria: ["«La sabiduría comienza con la valentía de ser uno mismo.» — Virginia Woolf","«Sabia es la que aprende de sus errores.» — Coco Chanel","«Conócete a ti misma, ese es el principio de la sabiduría.» — Sócrates adaptado"]
+            amor: ["«El amor no tiene que ver con poseer, sino con respetar.» — Simone de Beauvoir","«Amar a alguien es aprender a decir adiós.» — Virginia Woolf"],
+            trabajo: ["«Nadie hace carrera sin sacrificios. Tú decides cuáles.» — Coco Chanel","«El éxito no es casualidad, es trabajo duro.» — Serena Williams"],
+            futuro: ["«El futuro depende de lo que hagamos hoy.» — Rosa Parks","«Soñar es necesario para construir el mañana.» — Rigoberta Menchú"],
+            dinero: ["«La independencia económica es la base de la libertad.» — Simone de Beauvoir","«El dinero es un medio, no un fin.» — Oprah Winfrey"],
+            familia: ["«La familia no es solo la que te da la sangre, sino la que te da amor.» — Maya Angelou","«El hogar es donde te quieren sin condiciones.» — Madre Teresa"],
+            amigos: ["«La amistad entre mujeres es un pacto de sororidad.» — Elena Poniatowska","«Una amiga es la que te dice la verdad aunque duela.» — Gloria Steinem"],
+            exito: ["«El éxito es hacer lo que amas.» — Marie Curie","«Triunfar es levantarse una vez más de lo que caes.» — Eleanor Roosevelt"],
+            vida: ["«La vida es un desafío, acéptalo.» — Madre Teresa","«La vida te da sorpresas, tú decides cómo recibirlas.» — Frida Kahlo"],
+            sabiduria: ["«La sabiduría comienza con la valentía de ser uno mismo.» — Virginia Woolf","«Sabia es la que aprende de sus errores.» — Coco Chanel"]
         }
     };
 
     const modoHumor = {
         nombre: "Humor",
         citas: {
-            amor: ["«El amor es una idiotez que se comete a dos.» — Groucho Marx","«El matrimonio es una aventura, como ir a la guerra.» — G.K. Chesterton","«El amor es como el viento: no lo ves pero lo sientes... y a veces te resfrías.» — Anónimo"],
-            trabajo: ["«Me encanta el trabajo. Puedo estar horas mirándolo.» — Jerome K. Jerome","«La mejor manera de hacer algo es no hacerlo.» — Anónimo","«El trabajo nunca mata a nadie, pero ¿para qué arriesgarse?» — Anónimo"],
-            futuro: ["«Predigo el futuro, pero solo después de que ocurra.» — Anónimo","«El futuro es como el horizonte: siempre se aleja.» — Groucho Marx","«Mañana será otro día, pero con los mismos problemas.» — Mafalda"],
-            dinero: ["«El dinero no da la felicidad, pero compra un helado y casi es lo mismo.» — Anónimo","«He sido pobre y he sido rico. Rico es mejor.» — Sophie Tucker","«El dinero no compra la felicidad, pero alquila una muy parecida.» — Woody Allen"],
-            familia: ["«La familia es una tiranía doméstica.» — George Bernard Shaw","«Tu familia te conoce mejor que nadie. Y aun así te quieren.» — Anónimo","«La familia es como una caja de bombones: nunca sabes lo que te va a tocar.» — Anónimo"],
-            amigos: ["«Un amigo es alguien que te conoce y te quiere a pesar de ello.» — Anónimo","«Los amigos son como los pañuelos: cuantos más, mejor, pero se pierden.» — Groucho Marx","«Amigo es el que llega cuando todos se han ido.» — Proverbio"],
-            exito: ["«El 90% del éxito es simplemente presentarse.» — Woody Allen","«El éxito es relativo. Cuanto más éxito, más familiares te reclaman.» — Anónimo","«El éxito es tener lo que quieres; la felicidad es querer lo que tienes.» — Anónimo"],
-            vida: ["«La vida es una obra de teatro que no permite ensayos.» — George Bernard Shaw","«La vida es una bicicleta con los frenos rotos.» — Charles Bukowski","«La vida es corta. Sonríe mientras tengas dientes.» — Anónimo"],
-            sabiduria: ["«No me he equivocado, solo he encontrado 1000 formas de no hacerlo.» — Edison","«Cuanto más sé, menos entiendo.» — Anónimo","«Más vale pájaro en mano que ciento volando.» — Proverbio"]
+            amor: ["«El amor es una idiotez que se comete a dos.» — Groucho Marx","«El matrimonio es una aventura, como ir a la guerra.» — G.K. Chesterton"],
+            trabajo: ["«Me encanta el trabajo. Puedo estar horas mirándolo.» — Jerome K. Jerome","«La mejor manera de hacer algo es no hacerlo.» — Anónimo"],
+            futuro: ["«Predigo el futuro, pero solo después de que ocurra.» — Anónimo","«El futuro es como el horizonte: siempre se aleja.» — Groucho Marx"],
+            dinero: ["«El dinero no da la felicidad, pero compra un helado y casi es lo mismo.» — Anónimo","«He sido pobre y he sido rico. Rico es mejor.» — Sophie Tucker"],
+            familia: ["«La familia es una tiranía doméstica.» — George Bernard Shaw","«Tu familia te conoce mejor que nadie. Y aun así te quieren.» — Anónimo"],
+            amigos: ["«Un amigo es alguien que te conoce y te quiere a pesar de ello.» — Anónimo","«Los amigos son como los pañuelos: cuantos más, mejor, pero se pierden.» — Groucho Marx"],
+            exito: ["«El 90% del éxito es simplemente presentarse.» — Woody Allen","«El éxito es relativo. Cuanto más éxito, más familiares te reclaman.» — Anónimo"],
+            vida: ["«La vida es una obra de teatro que no permite ensayos.» — George Bernard Shaw","«La vida es una bicicleta con los frenos rotos.» — Charles Bukowski"],
+            sabiduria: ["«No me he equivocado, solo he encontrado 1000 formas de no hacerlo.» — Edison","«Cuanto más sé, menos entiendo.» — Anónimo"]
         }
     };
 
     const modoSabiduria = {
         nombre: "Sabiduría",
         citas: {
-            amor: ["«El amor es la fuerza más poderosa para transformar el alma.» — Séneca","«Amar es desear que el otro sea feliz, incluso sin ti.» — Epicteto","«El amor verdadero acepta la imperfección.» — Marco Aurelio"],
-            trabajo: ["«El trabajo bien hecho es su propia recompensa.» — Marco Aurelio","«La excelencia no es un acto, sino un hábito.» — Aristóteles","«Haz cada cosa como si fuera la última de tu vida.» — Marco Aurelio"],
-            futuro: ["«No sufras por lo que aún no ha ocurrido.» — Epicteto","«El futuro no está en tus manos, solo el presente.» — Séneca","«Vive cada día como si fuera el último.» — Marco Aurelio"],
-            dinero: ["«La riqueza no es tener muchas posesiones, sino tener pocas necesidades.» — Séneca","«No es pobre el que poco tiene, sino el que mucho desea.» — Séneca","«La verdadera riqueza está en la mente.» — Proverbio"],
-            familia: ["«La familia es el primer lugar donde se aprende la virtud.» — Aristóteles","«Honra a tus padres, es el mayor deber.» — Epicteto","«En la familia se forja el carácter.» — Anónimo"],
-            amigos: ["«El amigo es otro yo.» — Aristóteles","«Caminar con un amigo en la oscuridad es mejor que solo.» — Epicteto","«La amistad verdadera es un alma en dos cuerpos.» — Aristóteles"],
-            exito: ["«El éxito es hacer lo correcto en el momento correcto.» — Marco Aurelio","«La verdadera victoria es vencerse a sí mismo.» — Platón","«El éxito está en la virtud, no en la riqueza.» — Séneca"],
-            vida: ["«La vida es breve, el arte es largo.» — Hipócrates","«No es que tengamos poco tiempo, es que perdemos mucho.» — Séneca","«Vive conforme a la naturaleza.» — Marco Aurelio"],
-            sabiduria: ["«La sabiduría comienza con el asombro.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«El sabio no dice todo lo que sabe, pero sabe todo lo que dice.» — Proverbio"]
+            amor: ["«El amor es la fuerza más poderosa para transformar el alma.» — Séneca","«Amar es desear que el otro sea feliz, incluso sin ti.» — Epicteto"],
+            trabajo: ["«El trabajo bien hecho es su propia recompensa.» — Marco Aurelio","«La excelencia no es un acto, sino un hábito.» — Aristóteles"],
+            futuro: ["«No sufras por lo que aún no ha ocurrido.» — Epicteto","«El futuro no está en tus manos, solo el presente.» — Séneca"],
+            dinero: ["«La riqueza no consiste en tener muchas posesiones, sino en tener pocas necesidades.» — Séneca","«No es pobre el que poco tiene, sino el que mucho desea.» — Séneca"],
+            familia: ["«La familia es el primer lugar donde se aprende la virtud.» — Aristóteles","«Honra a tus padres, es el mayor deber.» — Epicteto"],
+            amigos: ["«El amigo es otro yo.» — Aristóteles","«La amistad verdadera es un alma en dos cuerpos.» — Aristóteles"],
+            exito: ["«El éxito es hacer lo correcto en el momento correcto.» — Marco Aurelio","«La verdadera victoria es vencerse a sí mismo.» — Platón"],
+            vida: ["«La vida es breve, el arte es largo.» — Hipócrates","«No es que tengamos poco tiempo, es que perdemos mucho.» — Séneca"],
+            sabiduria: ["«La sabiduría comienza con el asombro.» — Sócrates","«La verdadera sabiduría está en reconocer la propia ignorancia.» — Sócrates"]
         }
     };
 
     const modoFeliz = {
         nombre: "Feliz",
         citas: {
-            amor: ["«El amor es la alegría de compartir la vida.» — Anónimo","«El amor verdadero te hace más feliz de lo que imaginas.» — Proverbio","«Amar es sonreír sin razón.» — Anónimo"],
-            trabajo: ["«Haz lo que amas y nunca trabajarás.» — Confucio","«El trabajo alegre es el mejor remedio.» — Anónimo","«La felicidad en el trabajo es la clave del éxito.» — Proverbio"],
-            futuro: ["«El futuro es brillante para quien tiene esperanza.» — Proverbio","«Cada día es una nueva oportunidad para ser feliz.» — Anónimo","«El sol siempre sale después de la tormenta.» — Proverbio"],
-            dinero: ["«La verdadera riqueza es disfrutar lo que tienes.» — Proverbio","«La felicidad no cuesta dinero, pero a veces ayuda.» — Anónimo"],
-            familia: ["«La familia es el mayor tesoro.» — Proverbio","«Un hogar feliz es el mejor lugar del mundo.» — Anónimo","«La sonrisa de tu familia es la mejor riqueza.» — Proverbio"],
-            amigos: ["«Los amigos son la familia que elige el corazón.» — Proverbio","«La amistad es el ingrediente secreto de la felicidad.» — Anónimo"],
-            exito: ["«El éxito es sonreír al final del día.» — Proverbio","«La mejor medida del éxito es la felicidad que compartes.» — Anónimo"],
-            vida: ["«La vida es bella si decides verla así.» — Proverbio","«Sonríe, la vida merece la pena.» — Anónimo","«La felicidad es querer lo que tienes.» — Proverbio"],
-            sabiduria: ["«La alegría está en el viaje, no en el destino.» — Anónimo","«La sabiduría feliz sabe reírse de sí misma.» — Proverbio"]
+            amor: ["«El amor es la alegría de compartir la vida.» — Anónimo","«El amor verdadero te hace más feliz.» — Proverbio"],
+            trabajo: ["«Haz lo que amas y nunca trabajarás.» — Confucio","«El trabajo alegre es el mejor remedio.» — Anónimo"],
+            futuro: ["«El futuro es brillante para quien tiene esperanza.» — Proverbio","«Cada día es una nueva oportunidad.» — Anónimo"],
+            dinero: ["«La verdadera riqueza es disfrutar lo que tienes.» — Proverbio","«La felicidad no cuesta dinero.» — Anónimo"],
+            familia: ["«La familia es el mayor tesoro.» — Proverbio","«Un hogar feliz es el mejor lugar.» — Anónimo"],
+            amigos: ["«Los amigos son la familia que elige el corazón.» — Proverbio","«La amistad es el secreto de la felicidad.» — Anónimo"],
+            exito: ["«El éxito es sonreír al final del día.» — Proverbio","«La mejor medida del éxito es la felicidad.» — Anónimo"],
+            vida: ["«La vida es bella si decides verla así.» — Proverbio","«Sonríe, la vida merece la pena.» — Anónimo"],
+            sabiduria: ["«La alegría está en el viaje, no en el destino.» — Anónimo","«La felicidad es querer lo que tienes.» — Proverbio"]
         }
     };
 
     const modoMelancolico = {
         nombre: "Melancólico",
         citas: {
-            amor: ["«El amor que se fue deja un vacío.» — Anónimo","«Recordar es volver a vivir lo que ya no está.» — Proverbio","«A veces el amor duele, pero duele más no haberlo vivido.» — Anónimo"],
+            amor: ["«El amor que se fue deja un vacío.» — Anónimo","«Recordar es volver a vivir lo que ya no está.» — Proverbio"],
             trabajo: ["«El trabajo nos distrae del vacío existencial.» — Anónimo","«A veces el cansancio es solo nostalgia.» — Proverbio"],
             futuro: ["«El futuro es incierto y eso asusta.» — Anónimo","«Mañana será otro día, pero con los mismos recuerdos.» — Proverbio"],
             dinero: ["«El dinero no compra la felicidad, solo la alquila.» — Anónimo","«A veces lo más valioso no tiene precio.» — Proverbio"],
-            familia: ["«La familia es el refugio donde puedes llorar en paz.» — Anónimo","«Los recuerdos familiares son el tesoro del alma.» — Proverbio"],
-            amigos: ["«Un amigo es quien te escucha cuando el mundo se ha ido.» — Anónimo","«La amistad verdadera sobrevive al silencio.» — Proverbio"],
-            exito: ["«El éxito sin alguien con quien compartirlo es vacío.» — Anónimo","«El fracaso es solo una oportunidad para empezar de nuevo.» — Proverbio"],
+            familia: ["«La familia es el refugio donde puedes llorar.» — Anónimo","«Los recuerdos familiares son un tesoro.» — Proverbio"],
+            amigos: ["«Un amigo es quien te escucha cuando todos se han ido.» — Anónimo","«La amistad sobrevive al silencio.» — Proverbio"],
+            exito: ["«El éxito sin alguien con quien compartirlo es vacío.» — Anónimo","«El fracaso es una oportunidad para empezar de nuevo.» — Proverbio"],
             vida: ["«La vida es un suspiro entre dos eternidades.» — Proverbio","«La melancolía es la tristeza que ha perdido su memoria.» — Anónimo"],
-            sabiduria: ["«La tristeza también enseña, si sabemos escucharla.» — Proverbio","«En la quietud de la melancolía encontramos respuestas.» — Anónimo"]
+            sabiduria: ["«La tristeza también enseña, si sabemos escucharla.» — Proverbio","«En la quietud encontramos respuestas.» — Anónimo"]
         }
     };
 
     const modoMotivacion = {
         nombre: "Motivación",
         citas: {
-            amor: ["«Amar con valentía es el mayor acto de fortaleza.» — Proverbio","«El amor te da alas cuando todo te arrastra abajo.» — Anónimo"],
+            amor: ["«Amar con valentía es el mayor acto de fortaleza.» — Proverbio","«El amor te da alas cuando todo te arrastra.» — Anónimo"],
             trabajo: ["«El trabajo duro vence al talento cuando el talento no trabaja.» — Anónimo","«Cada día es una batalla, cada batalla una oportunidad.» — Proverbio"],
             futuro: ["«El futuro te pertenece si luchas por él.» — Proverbio","«Mañana es el primer día del resto de tu vida.» — Anónimo"],
-            dinero: ["«El dinero no es el objetivo, es una herramienta para alcanzar tus sueños.» — Proverbio","«La riqueza comienza en la mente.» — Anónimo"],
-            familia: ["«La familia es tu ejército, siempre lucha contigo.» — Proverbio","«Por ellos vale la pena levantarse cada día.» — Anónimo"],
-            amigos: ["«Un amigo es quien te levanta cuando tropiezas.» — Proverbio","«Los amigos son el combustible que enciende tu motor.» — Anónimo"],
-            exito: ["«El éxito es la suma de pequeños esfuerzos repetidos día tras día.» — Robert Collier","«No te rindas, el principio es lo más difícil.» — Proverbio"],
-            vida: ["«La vida no espera, así que levántate y lucha.» — Anónimo","«Cada amanecer es una nueva oportunidad para ser mejor.» — Proverbio"],
-            sabiduria: ["«La sabiduría te da fuerzas para seguir cuando todo parece perdido.» — Proverbio","«El conocimiento es poder, la acción es victoria.» — Anónimo"]
+            dinero: ["«El dinero es una herramienta para alcanzar tus sueños.» — Proverbio","«La riqueza comienza en la mente.» — Anónimo"],
+            familia: ["«La familia es tu ejército, lucha contigo.» — Proverbio","«Por ellos vale la pena levantarse cada día.» — Anónimo"],
+            amigos: ["«Un amigo es quien te levanta cuando tropiezas.» — Proverbio","«Los amigos son el combustible de tu motor.» — Anónimo"],
+            exito: ["«El éxito es la suma de pequeños esfuerzos repetidos.» — Robert Collier","«No te rindas, el principio es lo más difícil.» — Proverbio"],
+            vida: ["«La vida no espera, levántate y lucha.» — Anónimo","«Cada amanecer es una nueva oportunidad.» — Proverbio"],
+            sabiduria: ["«La sabiduría te da fuerzas para seguir.» — Proverbio","«El conocimiento es poder, la acción es victoria.» — Anónimo"]
         }
     };
 
@@ -407,7 +231,7 @@ cd ~/the-real-bola-8-magica && cat > frontend/index.html << 'EOF'
             familia: ["«La paz empieza en casa, en la calma de la familia.» — Proverbio","«Un hogar en paz es el mejor refugio.» — Anónimo"],
             amigos: ["«Un amigo calmado es un bálsamo para el alma.» — Proverbio","«La amistad en calma es la más sincera.» — Anónimo"],
             exito: ["«El éxito sin paz interior no es verdadero éxito.» — Proverbio","«La verdadera victoria es estar en paz contigo mismo.» — Anónimo"],
-            vida: ["«La vida es un río, fluye con él, no luches contra la corriente.» — Proverbio","«La calma es la fuerza silenciosa que todo lo puede.» — Anónimo"],
+            vida: ["«La vida es un río, fluye con él, no luches.» — Proverbio","«La calma es la fuerza silenciosa que todo lo puede.» — Anónimo"],
             sabiduria: ["«La sabiduría está en saber cuándo actuar y cuándo callar.» — Proverbio","«En el silencio encontramos las respuestas.» — Anónimo"]
         }
     };
@@ -416,7 +240,6 @@ cd ~/the-real-bola-8-magica && cat > frontend/index.html << 'EOF'
     
     let modoActual = 'clasico';
     let modoActivo = modos[modoActual];
-
     const respuestasSurrealistas = ["«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.»","«Si un libro te aburre, cámbiale el final. Tú eres el lector.»","«El tiempo vuela. Tú eres el piloto.»"];
 
     const palabrasClave = {
@@ -470,8 +293,8 @@ cd ~/the-real-bola-8-magica && cat > frontend/index.html << 'EOF'
             if (el.dataset.modo === modoId) el.classList.add('activo');
             else el.classList.remove('activo');
         });
-        chatTexto.innerText = `🔮 Modo ${modoActivo.nombre} activado`;
-        setTimeout(() => { if (chatTexto.innerText === `🔮 Modo ${modoActivo.nombre} activado`) chatTexto.innerText = ""; }, 2000);
+        chatTexto.innerText = `🎭 Modo ${modoActivo.nombre}`;
+        setTimeout(() => { if (chatTexto.innerText === `🎭 Modo ${modoActivo.nombre}`) chatTexto.innerText = ""; }, 2000);
         document.getElementById('modoPanel').classList.remove('visible');
     }
 
@@ -546,7 +369,7 @@ cd ~/the-real-bola-8-magica && cat > frontend/index.html << 'EOF'
     reproducirBtn.addEventListener('click', leerTextoActual);
     statsBtn.addEventListener('click', toggleStats);
     statsCerrar.addEventListener('click', toggleStats);
-    btnModo.addEventListener('click', () => modoPanel.classList.toggle('visible'));
+    btnModo.addEventListener('click', (e) => { e.stopPropagation(); modoPanel.classList.toggle('visible'); });
     document.querySelectorAll('.modo-opcion').forEach(btn => { btn.addEventListener('click', () => cambiarModo(btn.dataset.modo)); });
     chatTexto.addEventListener('focus', ocultarCta);
     document.body.addEventListener('touchstart', ocultarCta);
