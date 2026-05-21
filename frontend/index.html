@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#111111">
-    <title>🎱 Bola Mágica 8 - Con Voz</title>
+    <title>🎱 Bola Mágica 8 - Con Memoria</title>
     <style>
         * {
             margin: 0;
@@ -22,7 +22,6 @@
             align-items: center;
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             padding: 16px;
-            position: relative;
         }
 
         .container {
@@ -30,38 +29,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-        }
-
-        /* Call to action flotante */
-        .cta {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: transparent;
-            backdrop-filter: blur(8px);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: clamp(1rem, 5vw, 1.5rem);
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
-            white-space: nowrap;
-            z-index: 200;
-            pointer-events: none;
-            animation: fadeInOut 3s ease-out forwards;
-            font-family: inherit;
-            letter-spacing: 1px;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
-            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); visibility: hidden; }
+            flex-direction: column;
         }
 
         .scene {
@@ -148,7 +116,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            transition: all 0.3s ease;
         }
 
         .texto-unificado {
@@ -168,23 +135,6 @@
             min-height: 100px;
             max-height: 160px;
             overflow-y: auto;
-            transition: all 0.3s ease;
-        }
-
-        .texto-unificado.expandido {
-            min-height: 180px;
-            max-height: 250px;
-            font-size: clamp(0.8rem, 4vw, 1rem);
-            padding: 18px 14px;
-        }
-
-        .triangulo.expandido {
-            padding: 10% 8% 18% 8%;
-        }
-
-        .texto-unificado:focus {
-            border-color: #6cf;
-            box-shadow: 0 0 8px rgba(100, 200, 255, 0.3);
         }
 
         .botones-triangulo {
@@ -204,23 +154,66 @@
             font-size: clamp(0.6rem, 2.8vw, 0.7rem);
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.2s;
         }
 
-        .btn:active { transform: scale(0.96); }
+        .micro-btn.grabando { background: #a33; animation: pulse 1s infinite; }
+        .speaker-btn { background: #4a6a8a; }
+        .stats-btn { background: #3a5a3a; }
 
-        .micro-btn.grabando {
-            background: #a33;
-            animation: pulse 1s infinite;
+        @keyframes pulse { 0% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        /* Panel de estadísticas */
+        .stats-panel {
+            position: fixed;
+            bottom: 60px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 12px;
+            margin: 10px;
+            border: 1px solid #4af;
+            z-index: 150;
+            transform: translateY(calc(100% + 10px));
+            transition: transform 0.3s ease;
+            max-height: 70vh;
+            overflow-y: auto;
         }
-
-        .speaker-btn {
-            background: #4a6a8a;
+        .stats-panel.visible { transform: translateY(0); }
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ccf;
+            border-bottom: 1px solid #4af;
+            padding-bottom: 8px;
         }
-
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            100% { opacity: 1; }
+        .stats-cerrar {
+            background: none;
+            border: none;
+            color: #f88;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .stats-lista {
+            font-size: 0.7rem;
+            color: #aaf;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .stats-item {
+            padding: 5px;
+            border-bottom: 1px solid #2a4a6a;
+            font-family: monospace;
+        }
+        .stats-resumen {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #1a3a4a;
+            border-radius: 12px;
+            font-size: 0.7rem;
         }
 
         .info-externa {
@@ -251,8 +244,6 @@
 </head>
 <body>
 <div class="container">
-    <div class="cta" id="cta">✨ ¿Qué quieres hoy? ✨</div>
-
     <div class="scene" id="scene">
         <div class="bola" id="bola">
             <div class="cara front">
@@ -267,6 +258,7 @@
                             <button class="btn" id="preguntarBtn">🔮 Preguntar</button>
                             <button class="btn micro-btn" id="microBtn">🎤 Hablar</button>
                             <button class="btn speaker-btn" id="speakerBtn">🔊 Leer</button>
+                            <button class="btn stats-btn" id="statsBtn">📊 Stats</button>
                         </div>
                     </div>
                 </div>
@@ -275,17 +267,27 @@
         </div>
     </div>
 </div>
-<div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | 🔊 La bola lee las respuestas</div>
+<div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | 🔊 Lee respuestas | 📊 Estadísticas de sesión</div>
+
+<!-- Panel de estadísticas -->
+<div class="stats-panel" id="statsPanel">
+    <div class="stats-header">
+        <span>📊 Estadísticas de tu sesión</span>
+        <button class="stats-cerrar" id="statsCerrar">✕</button>
+    </div>
+    <div class="stats-resumen" id="statsResumen"></div>
+    <div class="stats-lista" id="statsLista"></div>
+</div>
 
 <script>
     // ============================================================
-    // FRASES
+    // BASE DE DATOS DE FRASES
     // ============================================================
     const frasesNormales = {
-        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
-        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
-        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»"],
-        dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
+        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es una locura que solo cura el amor.» — Lope de Vega","«Amar es desear lo que se tiene.» — San Agustín"],
+        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica, pero el descanso también.»","«No trabajes por dinero, haz que el dinero trabaje para ti.» — Kiyosaki"],
+        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo"],
+        dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett","«El dinero es un buen sirviente pero un mal amo.» — Bacon"],
         familia: ["«La familia no es cuestión de sangre, sino de respeto y alegría.» — Bach","«La familia te quiere sin preguntar.»","«La familia es donde aprendemos a amar.» — Papa Francisco"],
         amigos: ["«Un amigo es quien lo sabe todo de ti y aún así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Scott","«La amistad duplica las alegrías y divide las angustias.» — Bacon"],
         exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es obtener lo que deseas; la felicidad, disfrutarlo.» — Emerson"],
@@ -306,8 +308,121 @@
         "«Los calcetines desaparecen porque viajan al futuro a buscarse a sí mismos.» — Teoría del caos textil"
     ];
 
-    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes"];
+    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"];
 
+    // ============================================================
+    // SISTEMA DE LOG Y MEMORIA (localStorage)
+    // ============================================================
+    let sesionId = localStorage.getItem('bola8_sesion_id');
+    if (!sesionId) {
+        sesionId = 'sesion_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8);
+        localStorage.setItem('bola8_sesion_id', sesionId);
+    }
+
+    // Cargar o crear historial
+    let historial = JSON.parse(localStorage.getItem('bola8_historial_' + sesionId)) || [];
+    let frasesUsadas = new Set(historial.map(h => h.respuesta));
+    
+    // Contador de frases por categoría
+    let contadorCategorias = JSON.parse(localStorage.getItem('bola8_categorias_' + sesionId)) || {};
+
+    function guardarHistorial() {
+        localStorage.setItem('bola8_historial_' + sesionId, JSON.stringify(historial));
+        localStorage.setItem('bola8_categorias_' + sesionId, JSON.stringify(contadorCategorias));
+    }
+
+    function registrarInteraccion(pregunta, respuesta, categoria = 'general') {
+        historial.unshift({
+            timestamp: new Date().toISOString(),
+            pregunta: pregunta,
+            respuesta: respuesta,
+            categoria: categoria
+        });
+        // Mantener solo últimas 50 interacciones
+        if (historial.length > 50) historial.pop();
+        
+        frasesUsadas.add(respuesta);
+        contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1;
+        
+        guardarHistorial();
+        actualizarStatsUI();
+    }
+
+    // Obtener respuesta sin repetir recientes (evitar repetir en las últimas 5)
+    function obtenerRespuestaSinRepetir(pool, evitarRepetir = true) {
+        if (!evitarRepetir || pool.length === 0) return pool[Math.floor(Math.random() * pool.length)];
+        
+        // Filtrar frases no usadas recientemente (últimas 5)
+        let candidatas = pool.filter(f => !frasesUsadas.has(f));
+        if (candidatas.length === 0) candidatas = pool; // Si todas están usadas, reiniciar
+        
+        const elegida = candidatas[Math.floor(Math.random() * candidatas.length)];
+        return elegida;
+    }
+
+    function obtenerRespuestaNormal() {
+        let pool = [];
+        for (let tema of temasActivos) {
+            if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
+        }
+        if (pool.length === 0) pool = frasesGenerales;
+        return obtenerRespuestaSinRepetir(pool, true);
+    }
+
+    function obtenerRespuestaExtrana() {
+        return obtenerRespuestaSinRepetir(frasesExtranas, true);
+    }
+
+    function obtenerCategoriaDeRespuesta(respuesta) {
+        for (let [cat, frases] of Object.entries(frasesNormales)) {
+            if (frases.includes(respuesta)) return cat;
+        }
+        if (frasesExtranas.includes(respuesta)) return 'extrana';
+        return 'general';
+    }
+
+    // ============================================================
+    // UI DE ESTADÍSTICAS
+    // ============================================================
+    function actualizarStatsUI() {
+        const statsResumen = document.getElementById('statsResumen');
+        const statsLista = document.getElementById('statsLista');
+        
+        const totalPreguntas = historial.length;
+        const frasesUnicas = frasesUsadas.size;
+        
+        statsResumen.innerHTML = `
+            <strong>📊 Resumen de sesión</strong><br>
+            🎱 Preguntas realizadas: ${totalPreguntas}<br>
+            💬 Frases únicas dichas: ${frasesUnicas}<br>
+            📁 Sesión ID: ${sesionId.substr(0, 16)}...<br>
+        `;
+        
+        if (totalPreguntas > 0) {
+            statsLista.innerHTML = '<strong>📜 Últimas preguntas:</strong><br>';
+            historial.slice(0, 10).forEach((item, idx) => {
+                const fecha = new Date(item.timestamp).toLocaleTimeString();
+                statsLista.innerHTML += `
+                    <div class="stats-item">
+                        ${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>
+                        → ${item.respuesta.substring(0, 60)}...
+                    </div>
+                `;
+            });
+        } else {
+            statsLista.innerHTML = 'Aún no hay interacciones. ¡Haz una pregunta!';
+        }
+    }
+
+    function toggleStats() {
+        const panel = document.getElementById('statsPanel');
+        panel.classList.toggle('visible');
+        actualizarStatsUI();
+    }
+
+    // ============================================================
+    // RESTO DE FUNCIONALIDAD (bola, voz, micrófono, etc.)
+    // ============================================================
     let temasActivos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
     let reconocimiento = null;
     let grabando = false;
@@ -316,7 +431,6 @@
     let synth = window.speechSynthesis;
     let vozSeleccionada = null;
 
-    // Cargar voz en español
     function cargarVoz() {
         if (!synth) return;
         const voces = synth.getVoices();
@@ -346,67 +460,43 @@
     const preguntarBtn = document.getElementById('preguntarBtn');
     const microBtn = document.getElementById('microBtn');
     const speakerBtn = document.getElementById('speakerBtn');
-    const cta = document.getElementById('cta');
-
-    function ocultarCta() {
-        if (cta && cta.style.visibility !== 'hidden') {
-            cta.style.opacity = '0';
-            cta.style.visibility = 'hidden';
-        }
-    }
+    const statsBtn = document.getElementById('statsBtn');
+    const statsCerrar = document.getElementById('statsCerrar');
 
     function girarBola() { bola.style.transform = 'rotateY(180deg)'; girada = true; }
     function regresarBola() { bola.style.transform = 'rotateY(0deg)'; girada = false; }
     function toggleBola() { girada ? regresarBola() : girarBola(); }
-
-    function expandirChat() {
-        if (girada) {
-            chatTexto.classList.toggle('expandido');
-            triangulo.classList.toggle('expandido');
-            chatTexto.focus();
-        }
-    }
+    function expandirChat() { if (girada) { chatTexto.focus(); } }
 
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
-    function obtenerRespuestaNormal() {
-        let pool = [];
-        for (let tema of temasActivos) if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
-        if (pool.length === 0) pool = frasesGenerales;
-        return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    function obtenerRespuestaExtrana() { return frasesExtranas[Math.floor(Math.random() * frasesExtranas.length)]; }
-
-    function mostrarRespuesta(respuesta, leer = true) {
+    function mostrarRespuesta(respuesta, pregunta, leer = true) {
         chatTexto.innerText = respuesta;
-        chatTexto.classList.remove('expandido');
-        triangulo.classList.remove('expandido');
+        const categoria = obtenerCategoriaDeRespuesta(respuesta);
+        registrarInteraccion(pregunta, respuesta, categoria);
         if (leer) hablar(respuesta);
     }
 
     function procesarPregunta(texto, leerRespuesta = true) {
-        ocultarCta();
         if (!texto || !texto.trim()) {
             const respuesta = obtenerRespuestaExtrana();
-            mostrarRespuesta(respuesta, leerRespuesta);
+            mostrarRespuesta(respuesta, "[pregunta vacía]", leerRespuesta);
             if (!girada) girarBola();
-            setTimeout(() => regresarBola(), 3800);
+            setTimeout(() => regresarBola(), 3500);
             return;
         }
         const respuesta = obtenerRespuestaNormal();
-        mostrarRespuesta(respuesta, leerRespuesta);
+        mostrarRespuesta(respuesta, texto, leerRespuesta);
         if (!girada) girarBola();
-        setTimeout(() => regresarBola(), 3800);
+        setTimeout(() => regresarBola(), 3500);
     }
 
     function respuestaAleatoria() {
-        ocultarCta();
         const esExtrana = Math.random() < 0.5;
         const respuesta = esExtrana ? obtenerRespuestaExtrana() : obtenerRespuestaNormal();
-        mostrarRespuesta(respuesta, true);
+        mostrarRespuesta(respuesta, "[aleatorio: agitado]", true);
         if (!girada) girarBola();
-        setTimeout(() => regresarBola(), 3800);
+        setTimeout(() => regresarBola(), 3500);
     }
 
     function leerTextoActual() {
@@ -414,7 +504,7 @@
         if (texto && texto.trim()) {
             hablar(texto);
         } else {
-            const saludo = "Escribe o pregunta algo, y te lo leeré.";
+            const saludo = "Escribe o pregunta algo primero.";
             chatTexto.innerText = saludo;
             hablar(saludo);
         }
@@ -441,10 +531,7 @@
             procesarPregunta(texto, true);
             detenerMicrofono();
         };
-        reconocimiento.onerror = () => {
-            chatTexto.innerText = "❌ Error";
-            detenerMicrofono();
-        };
+        reconocimiento.onerror = () => { detenerMicrofono(); };
         reconocimiento.onend = () => detenerMicrofono();
         reconocimiento.start();
     }
@@ -456,7 +543,6 @@
         microBtn.textContent = '🎤 Hablar';
         if (chatTexto.innerText === "🎤 Escuchando...") chatTexto.innerText = "";
     }
-
     function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
 
     // Movimiento
@@ -473,7 +559,6 @@
             });
         }
     }
-
     function solicitarPermisoMovimiento() {
         if (typeof DeviceMotionEvent.requestPermission === 'function') {
             DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') iniciarDeteccionMovimiento(); });
@@ -484,17 +569,14 @@
     scene.addEventListener('click', (e) => {
         if (e.target === caraBack || caraBack.contains(e.target)) {
             if (girada) expandirChat();
-        } else {
-            toggleBola();
-        }
+        } else { toggleBola(); }
     });
-
     preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText, true));
     microBtn.addEventListener('click', toggleMicrofono);
     speakerBtn.addEventListener('click', leerTextoActual);
-    chatTexto.addEventListener('focus', ocultarCta);
-    document.body.addEventListener('touchstart', ocultarCta);
-    document.body.addEventListener('click', ocultarCta);
+    statsBtn.addEventListener('click', toggleStats);
+    statsCerrar.addEventListener('click', toggleStats);
+    chatTexto.focus();
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
         const btnPermiso = document.createElement('div');
@@ -503,6 +585,11 @@
         btnPermiso.onclick = solicitarPermisoMovimiento;
         document.body.appendChild(btnPermiso);
     } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
+
+    // Mostrar estadísticas al inicio si ya hay historial
+    if (historial.length > 0) {
+        setTimeout(() => { toggleStats(); setTimeout(() => toggleStats(), 3000); }, 500);
+    }
 </script>
 </body>
 </html>
