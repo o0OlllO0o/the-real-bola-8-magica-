@@ -25,13 +25,21 @@
         .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
         .texto-multifuncional{width:100%;background:#0a0a0a;border:1px solid rgba(80,180,255,0.4);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:100%;height:auto;line-height:1.4;transition:all 0.3s ease;}
         .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.3);}
-        .botones-externos{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
-        .btn-externo{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
-        .btn-externo:active{transform:scale(0.96);background:#2a2a2a;}
+        
+        /* Botones principales agrupados */
+        .botones-principales{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
+        .btn-principal{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 20px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
+        .btn-principal:active{transform:scale(0.96);background:#2a2a2a;}
+        
+        /* Botón Stats separado (esquina superior derecha) */
+        .btn-stats{position:fixed;top:16px;right:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);transition:all 0.2s;}
+        .btn-stats:active{transform:scale(0.95);background:#2a2a2a;}
+        
         .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
         .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 70%);pointer-events:none;}
         .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
         @keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.9);}15%{opacity:1;transform:translate(-50%,-50%) scale(1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.05);visibility:hidden;}}
+        
         .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
         .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
         .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
@@ -61,12 +69,17 @@
         </div>
     </div>
 </div>
-<div class="botones-externos">
-    <button class="btn-externo" id="preguntarBtn">🔮 PREGUNTAR</button>
-    <button class="btn-externo" id="microBtn">🎤 HABLAR</button>
-    <button class="btn-externo" id="speakerBtn">🔊 LEER</button>
-    <button class="btn-externo" id="statsBtn">📊 STATS</button>
+
+<!-- Botón Stats separado (esquina superior derecha) -->
+<div class="btn-stats" id="statsBtn">📊</div>
+
+<!-- Botones principales agrupados -->
+<div class="botones-principales">
+    <button class="btn-principal" id="preguntarBtn">🔮 PREGUNTAR</button>
+    <button class="btn-principal" id="microBtn">🎤 HABLAR</button>
+    <button class="btn-principal" id="speakerBtn">🔊 LEER</button>
 </div>
+
 <div class="info-externa">📱 Toca la bola | Selección INTELIGENTE de citas según tu pregunta</div>
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
@@ -76,119 +89,53 @@
 
 <script>
     // ============================================================
-    // CITAS CÉLEBRES VERIFICADAS (autores reales, nada inventado)
+    // CITAS CÉLEBRES VERIFICADAS (autores reales)
     // ============================================================
     const citasPorTema = {
-        amor: [
-            "«El amor es una amistad que se enciende.» — Aristóteles (384-322 a.C.)",
-            "«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Gottfried Leibniz (1646-1716)",
-            "«El amor es la fuerza más humilde, pero la más poderosa que existe.» — Mahatma Gandhi (1869-1948)",
-            "«El amor no se mira, se siente.» — Joaquín Sabina (1949- )",
-            "«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — Gabriel García Márquez (1927-2014)"
-        ],
-        trabajo: [
-            "«Elige un trabajo que te guste y no tendrás que trabajar ni un día de tu vida.» — Confucio (551-479 a.C.)",
-            "«El trabajo dignifica.» — Proverbio italiano",
-            "«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs (1955-2011)",
-            "«El éxito en el trabajo no es cuestión de suerte, sino de perseverancia.» — Thomas Edison (1847-1931)"
-        ],
-        futuro: [
-            "«El futuro pertenece a los que creen en la belleza de sus sueños.» — Eleanor Roosevelt (1884-1962)",
-            "«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker (1909-2005)",
-            "«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo (1802-1885)"
-        ],
-        dinero: [
-            "«El dinero no da la felicidad, pero procura una sensación tan parecida que se necesita un especialista muy sutil para comprobar la diferencia.» — Woody Allen (1935- )",
-            "«No es rico el que más tiene, sino el que menos necesita.» — Proverbio popular",
-            "«El dinero es un buen siervo pero un mal amo.» — Francis Bacon (1561-1626)",
-            "«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Warren Buffett (1930- )"
-        ],
-        familia: [
-            "«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach (1936- )",
-            "«La familia es el primer lugar donde aprendemos a amar y ser amados.» — Papa Francisco (1936- )",
-            "«La familia es como la rama, los hijos como frutos, todos del mismo árbol.» — Proverbio chino",
-            "«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II (1920-2005)"
-        ],
-        amigos: [
-            "«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Elbert Hubbard (1856-1915)",
-            "«Los amigos son la familia que eliges.» — Jess C. Scott (1978- )",
-            "«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon (1561-1626)",
-            "«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller (1880-1968)"
-        ],
-        exito: [
-            "«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Albert Schweitzer (1875-1965)",
-            "«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Winston Churchill (1874-1965)",
-            "«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutar lo que se obtiene.» — Ralph Waldo Emerson (1803-1882)",
-            "«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen (1935- )"
-        ],
-        vida: [
-            "«La vida es lo que pasa mientras estás haciendo otros planes.» — John Lennon (1940-1980)",
-            "«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Albert Einstein (1879-1955)",
-            "«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Mahatma Gandhi (1869-1948)",
-            "«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou (1928-2014)"
-        ],
-        sabiduria: [
-            "«Solo sé que no sé nada.» — Sócrates (470-399 a.C.)",
-            "«Pienso, luego existo.» — René Descartes (1596-1650)",
-            "«La paciencia es amarga, pero sus frutos son dulces.» — Jean-Jacques Rousseau (1712-1778)",
-            "«El sentido común es el menos común de los sentidos.» — Voltaire (1694-1778)"
-        ]
+        amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
+        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El trabajo dignifica.» — Proverbio italiano","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El éxito en el trabajo no es cuestión de suerte, sino de perseverancia.» — Edison"],
+        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo"],
+        dinero: ["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«No es rico el que más tiene, sino el que menos necesita.» — Proverbio","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
+        familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«La familia es como la rama, los hijos como frutos.» — Proverbio chino","«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II"],
+        amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller"],
+        exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutarlo.» — Emerson","«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen"],
+        vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi","«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou"],
+        sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«La paciencia es amarga, pero sus frutos son dulces.» — Rousseau","«El sentido común es el menos común de los sentidos.» — Voltaire"]
     };
+    const respuestasSurrealistas = ["«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.»","«Si un libro te aburre, cámbiale el final. Tú eres el lector.»","«El tiempo vuela. Tú eres el piloto.»"];
 
-    const respuestasSurrealistas = [
-        "«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.» — Sabiduría popular",
-        "«Si un libro te aburre, cámbiale el final. Tú eres el lector.» — Refrán moderno",
-        "«El tiempo vuela. Tú eres el piloto.» — Proverbio anónimo"
-    ];
-
-    // ============================================================
-    // DETECCIÓN DE CONTEXTO (palabras clave)
-    // ============================================================
+    // Palabras clave para detección de contexto
     const palabrasClave = {
-        amor: ["amor", "pareja", "corazón", "novio", "novia", "casar", "romance", "cita", "beso", "sentimiento"],
-        trabajo: ["trabajo", "oficina", "jefe", "empresa", "ascender", "despido", "curro", "empleo", "profesión"],
-        futuro: ["futuro", "pasará", "destino", "mañana", "próximo", "va a pasar", "qué será", "sucederá"],
-        dinero: ["dinero", "rico", "pobre", "ganar", "invertir", "euro", "pasta", "fortuna", "millon", "ahorrar"],
-        familia: ["familia", "madre", "padre", "hijo", "hermano", "abuela", "abuelo", "tío", "primo", "mamá", "papá"],
-        amigos: ["amigo", "amigos", "amistad", "compañero", "colega", "pandilla", "grupo"],
-        exito: ["éxito", "triunfar", "lograr", "conseguir", "meta", "objetivo", "sueño", "aspirar"],
-        vida: ["vida", "vivir", "muerte", "nacer", "existencia", "morir"]
+        amor: ["amor", "pareja", "corazón", "novio", "novia", "casar", "romance", "beso"],
+        trabajo: ["trabajo", "oficina", "jefe", "empresa", "ascender", "curro", "empleo"],
+        futuro: ["futuro", "pasará", "destino", "mañana", "próximo", "sucederá"],
+        dinero: ["dinero", "rico", "pobre", "ganar", "invertir", "euro", "millon"],
+        familia: ["familia", "madre", "padre", "hijo", "hermano", "abuela"],
+        amigos: ["amigo", "amigos", "amistad", "compañero"],
+        exito: ["éxito", "triunfar", "lograr", "conseguir", "meta", "sueño"],
+        vida: ["vida", "vivir", "muerte", "existencia"]
     };
 
     function detectarTema(pregunta) {
         const texto = pregunta.toLowerCase();
         for (let [tema, palabras] of Object.entries(palabrasClave)) {
             for (let palabra of palabras) {
-                if (texto.includes(palabra)) {
-                    return tema;
-                }
+                if (texto.includes(palabra)) return tema;
             }
         }
-        return null; // Sin tema específico
+        return null;
     }
 
     function obtenerCitaPorContexto(pregunta) {
-        const temaDetectado = detectarTema(pregunta);
-        let categoria = temaDetectado;
-        
-        if (!categoria) {
-            // Si no detecta tema, elige sabiduría general
-            categoria = 'sabiduria';
-        }
-        
-        // Obtener citas del tema detectado o de sabiduría si no existe
-        let citasDisponibles = citasPorTema[categoria] || citasPorTema.sabiduria;
-        
-        // Evitar repetir citas recientes (memoria)
-        let candidatas = citasDisponibles.filter(c => !frasesUsadas.has(c));
-        if (candidatas.length === 0) candidatas = citasDisponibles;
-        
-        const citaElegida = candidatas[Math.floor(Math.random() * candidatas.length)];
-        return citaElegida;
+        const tema = detectarTema(pregunta) || 'sabiduria';
+        let citas = citasPorTema[tema] || citasPorTema.sabiduria;
+        let candidatas = citas.filter(c => !frasesUsadas.has(c));
+        if (candidatas.length === 0) candidatas = citas;
+        return candidatas[Math.floor(Math.random() * candidatas.length)];
     }
 
     // ============================================================
-    // SISTEMA DE MEMORIA (evita repetir citas)
+    // SISTEMA DE MEMORIA
     // ============================================================
     let sesionId = localStorage.getItem('bola8_sesion_id');
     if (!sesionId) { sesionId = 'sesion_' + Date.now() + '_' + Math.random().toString(36).substr(2, 8); localStorage.setItem('bola8_sesion_id', sesionId); }
@@ -196,44 +143,14 @@
     let frasesUsadas = new Set(historial.map(h => h.respuesta));
     let contadorCategorias = JSON.parse(localStorage.getItem('bola8_categorias_' + sesionId)) || {};
 
-    function guardarHistorial() { 
-        localStorage.setItem('bola8_historial_' + sesionId, JSON.stringify(historial)); 
-        localStorage.setItem('bola8_categorias_' + sesionId, JSON.stringify(contadorCategorias)); 
-    }
-    
-    function registrarInteraccion(pregunta, respuesta, categoria) { 
-        historial.unshift({ timestamp: new Date().toISOString(), pregunta, respuesta, categoria }); 
-        if (historial.length > 50) historial.pop(); 
-        frasesUsadas.add(respuesta); 
-        contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1; 
-        guardarHistorial(); 
-        actualizarStatsUI(); 
-    }
-    
-    function obtenerCategoriaDeCita(cita) {
-        for (let [cat, citas] of Object.entries(citasPorTema)) {
-            if (citas.includes(cita)) return cat;
-        }
-        return 'sabiduria';
-    }
-    
-    function actualizarStatsUI() { 
-        document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}`; 
-        let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; 
-        historial.slice(0, 10).forEach((item, i) => { 
-            html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; 
-        }); 
-        document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; 
-    }
-    
-    function toggleStats() { 
-        const panel = document.getElementById('statsPanel'); 
-        panel.classList.toggle('visible'); 
-        if (panel.classList.contains('visible')) actualizarStatsUI(); 
-    }
+    function guardarHistorial() { localStorage.setItem('bola8_historial_' + sesionId, JSON.stringify(historial)); localStorage.setItem('bola8_categorias_' + sesionId, JSON.stringify(contadorCategorias)); }
+    function registrarInteraccion(pregunta, respuesta, categoria) { historial.unshift({ timestamp: new Date().toISOString(), pregunta, respuesta, categoria }); if (historial.length > 50) historial.pop(); frasesUsadas.add(respuesta); contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1; guardarHistorial(); actualizarStatsUI(); }
+    function obtenerCategoriaDeCita(cita) { for (let [cat, citas] of Object.entries(citasPorTema)) if (citas.includes(cita)) return cat; return 'sabiduria'; }
+    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
+    function toggleStats() { const panel = document.getElementById('statsPanel'); panel.classList.toggle('visible'); if (panel.classList.contains('visible')) actualizarStatsUI(); }
 
     // ============================================================
-    // RESTO DE FUNCIONALIDAD (voz, giro, etc.)
+    // RESTO DE FUNCIONALIDAD
     // ============================================================
     let reconocimiento = null, grabando = false, girada = false, ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
     let synth = window.speechSynthesis, vozSeleccionada = null;
@@ -256,57 +173,14 @@
     const cta = document.getElementById('cta');
 
     function ocultarCta() { if (cta && cta.style.visibility !== 'hidden') { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; } }
-    
-    function girarBola() { 
-        bola.style.transform = 'rotateY(180deg)'; 
-        girada = true; 
-        if (timeoutTransform) clearTimeout(timeoutTransform);
-        timeoutTransform = setTimeout(() => { 
-            if (girada) shapeElement.classList.add('cuadrado'); 
-        }, 1500);
-    }
-    
-    function regresarBola() { 
-        bola.style.transform = 'rotateY(0deg)'; 
-        girada = false; 
-        if (timeoutTransform) clearTimeout(timeoutTransform);
-        shapeElement.classList.remove('cuadrado');
-    }
-    
+    function girarBola() { bola.style.transform = 'rotateY(180deg)'; girada = true; if (timeoutTransform) clearTimeout(timeoutTransform); timeoutTransform = setTimeout(() => { if (girada) shapeElement.classList.add('cuadrado'); }, 1500); }
+    function regresarBola() { bola.style.transform = 'rotateY(0deg)'; girada = false; if (timeoutTransform) clearTimeout(timeoutTransform); shapeElement.classList.remove('cuadrado'); }
     function toggleBola() { girada ? regresarBola() : girarBola(); }
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
-    function mostrarRespuesta(respuesta, pregunta, leer = true) { 
-        chatTexto.innerText = respuesta; 
-        const categoria = obtenerCategoriaDeCita(respuesta);
-        registrarInteraccion(pregunta, respuesta, categoria); 
-        if (leer) hablar(respuesta); 
-    }
-    
-    function procesarPregunta(texto, leer = true) { 
-        ocultarCta(); 
-        if (!texto || !texto.trim()) { 
-            let r = respuestasSurrealistas[Math.floor(Math.random() * respuestasSurrealistas.length)]; 
-            mostrarRespuesta(r, "[pregunta vacía]", leer); 
-            if (!girada) girarBola(); 
-            setTimeout(() => regresarBola(), 5000); 
-            return; 
-        } 
-        // SELECCIÓN INTELIGENTE según contexto
-        let respuesta = obtenerCitaPorContexto(texto);
-        mostrarRespuesta(respuesta, texto, leer); 
-        if (!girada) girarBola(); 
-        setTimeout(() => regresarBola(), 5000); 
-    }
-    
-    function respuestaAleatoria() { 
-        ocultarCta(); 
-        let r = citasPorTema.sabiduria[Math.floor(Math.random() * citasPorTema.sabiduria.length)];
-        mostrarRespuesta(r, "[aleatorio]", true); 
-        if (!girada) girarBola(); 
-        setTimeout(() => regresarBola(), 5000); 
-    }
-    
+    function mostrarRespuesta(respuesta, pregunta, leer = true) { chatTexto.innerText = respuesta; registrarInteraccion(pregunta, respuesta, obtenerCategoriaDeCita(respuesta)); if (leer) hablar(respuesta); }
+    function procesarPregunta(texto, leer = true) { ocultarCta(); if (!texto || !texto.trim()) { let r = respuestasSurrealistas[Math.floor(Math.random() * respuestasSurrealistas.length)]; mostrarRespuesta(r, "[pregunta vacía]", leer); if (!girada) girarBola(); setTimeout(() => regresarBola(), 5000); return; } let respuesta = obtenerCitaPorContexto(texto); mostrarRespuesta(respuesta, texto, leer); if (!girada) girarBola(); setTimeout(() => regresarBola(), 5000); }
+    function respuestaAleatoria() { ocultarCta(); let r = citasPorTema.sabiduria[Math.floor(Math.random() * citasPorTema.sabiduria.length)]; mostrarRespuesta(r, "[aleatorio]", true); if (!girada) girarBola(); setTimeout(() => regresarBola(), 5000); }
     function leerTextoActual() { let t = chatTexto.innerText; if (t && t.trim()) hablar(t); else { let s = "ESCRIBE UNA PREGUNTA PRIMERO"; chatTexto.innerText = s; hablar(s); } }
 
     function iniciarMicrofono() { if (!('webkitSpeechRecognition' in window)) { chatTexto.innerText = "❌ VOZ NO SOPORTADA"; return; } const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; reconocimiento = new SpeechRecognition(); reconocimiento.lang = 'es-ES'; reconocimiento.onstart = () => { grabando = true; microBtn.textContent = '🔴...'; chatTexto.innerText = "🎤 ESCUCHANDO..."; }; reconocimiento.onresult = (e) => { let texto = e.results[0][0].transcript; chatTexto.innerText = texto; procesarPregunta(texto, true); detenerMicrofono(); }; reconocimiento.onerror = () => detenerMicrofono(); reconocimiento.onend = () => detenerMicrofono(); reconocimiento.start(); }
