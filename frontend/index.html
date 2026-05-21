@@ -21,7 +21,6 @@
         .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
         .cara.back{background:radial-gradient(circle at 35% 35%, #0a0a0a, #000000);transform:rotateY(180deg);padding:12%;pointer-events:auto;}
         .triangulo-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
-        /* Triángulo más claro (como ventana real de bola 8) */
         .triangulo{width:85%;height:75%;background:linear-gradient(145deg, #2a3a4a, #1a2a3a);clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(100,180,255,0.4);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.15), 0 5px 15px rgba(0,0,0,0.2);}
         .texto-multifuncional{width:100%;background:rgba(15,25,35,0.95);border:1px solid rgba(100,180,255,0.5);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;backdrop-filter:blur(4px);word-break:break-word;min-height:120px;max-height:180px;overflow-y:auto;line-height:1.4;}
         .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.4);}
@@ -32,10 +31,12 @@
         .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), transparent 70%);pointer-events:none;}
         .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
         @keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.9);}15%{opacity:1;transform:translate(-50%,-50%) scale(1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.05);visibility:hidden;}}
-        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:150;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;}
-        .stats-panel.visible{transform:translateY(0);}
+        
+        /* Panel de estadísticas - Oculto por defecto, cerrable */
+        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;transition:transform 0.3s ease, opacity 0.2s ease, visibility 0.2s;}
+        .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
         .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
-        .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;}
+        .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;padding:0 8px;}
         .stats-resumen{margin-bottom:10px;padding:8px;background:#0a1a2a;border-radius:12px;font-size:0.7rem;color:#aaf;}
         .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;}
         .stats-item{padding:5px;border-bottom:1px solid #1a3a4a;}
@@ -69,7 +70,10 @@
 </div>
 <div class="info-externa">📱 Toca la bola (lado 8) para girar | Citas célebres VERIFICADAS</div>
 <div class="stats-panel" id="statsPanel">
-    <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
+    <div class="stats-header">
+        <span>📊 ESTADÍSTICAS DE TU SESIÓN</span>
+        <button class="stats-cerrar" id="statsCerrar">✕</button>
+    </div>
     <div class="stats-resumen" id="statsResumen"></div>
     <div class="stats-lista" id="statsLista"></div>
 </div>
@@ -103,8 +107,8 @@
     function obtenerCitaPorTema() { let todos = ['amor','trabajo','futuro','dinero','familia','amigos','exito','vida','sabiduria']; let pool = []; for (let t of todos) if (citasPorTema[t]) pool.push(...citasPorTema[t]); return obtenerCitaSinRepetir(pool); }
     function obtenerRespuestaExtrana() { return obtenerCitaSinRepetir(respuestasSurrealistas); }
     function obtenerCategoria(cita) { for (let [cat, citas] of Object.entries(citasPorTema)) if (citas.includes(cita)) return cat; return 'extrana'; }
-    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
-    function toggleStats() { document.getElementById('statsPanel').classList.toggle('visible'); actualizarStatsUI(); }
+    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}<br>📁 SESIÓN: ${sesionId.substr(0, 16)}...`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
+    function toggleStats() { const panel = document.getElementById('statsPanel'); panel.classList.toggle('visible'); if (panel.classList.contains('visible')) actualizarStatsUI(); }
 
     let reconocimiento = null, grabando = false, girada = false, ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
     let synth = window.speechSynthesis, vozSeleccionada = null;
