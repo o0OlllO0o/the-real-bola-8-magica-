@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1f2e">
-    <title>🔮 Bola Mágica 8</title>
+    <title>🔮 Bola Mágica 8 · Voz y Movimiento</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:linear-gradient(145deg,#1a1f2e 0%,#0a0d16 100%);color:#eee;padding:16px;}
@@ -22,17 +22,22 @@
         .filtros-lista{display:flex;flex-wrap:wrap;gap:8px;}
         .filtro-tag{background:#2c3e50;padding:6px 12px;border-radius:20px;font-size:0.8rem;display:inline-flex;align-items:center;gap:8px;}
         .filtro-tag .remove{background:none;border:none;color:#e6c89a;cursor:pointer;font-size:1rem;padding:0 4px;}
-        .chat-area{background:rgba(255,255,255,0.05);border-radius:20px;padding:15px;margin:15px 0;}
+        .chat-area{background:rgba(255,255,255,0.05);border-radius:20px;padding:15px;margin:15px 0;max-height:300px;overflow-y:auto;}
         .chat-mensaje{background:#2a2a3a;border-radius:18px;padding:12px 16px;margin-bottom:12px;font-size:0.9rem;}
         .chat-mensaje.bot{background:#2c3e50;border-bottom-left-radius:4px;}
         .chat-mensaje.usuario{background:#e6c89a;color:#1e2a36;text-align:right;border-bottom-right-radius:4px;}
         .sugerencias{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
         .sugerencia-btn{background:#3a4a5e;border:none;color:#fff;padding:8px 16px;border-radius:30px;font-size:0.85rem;cursor:pointer;}
-        .input-area{display:flex;gap:10px;margin-top:15px;}
-        input{flex:1;padding:12px;border-radius:30px;border:none;background:#2a2a3a;color:#fff;font-size:0.9rem;outline:none;}
+        .input-area{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap;}
+        input{flex:1;padding:12px;border-radius:30px;border:none;background:#2a2a3a;color:#fff;font-size:0.9rem;outline:none;min-width:120px;}
         button{background:#e6c89a;border:none;color:#1e2a36;font-weight:bold;padding:12px 20px;border-radius:30px;cursor:pointer;}
+        .microfono-btn{background:#5a7a9e;color:#fff;}
+        .microfono-btn.grabando{background:#e74c3c;animation:pulse 1s infinite;}
+        @keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
         .shake-hint{text-align:center;font-size:0.7rem;opacity:0.5;margin-top:15px;}
         .activar-shake{background:#5a7a9e;margin-top:10px;padding:8px;border-radius:20px;font-size:0.75rem;text-align:center;cursor:pointer;}
+        .permisos-panel{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;justify-content:center;}
+        .permiso-btn{background:#3a4a5e;padding:6px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;}
     </style>
 </head>
 <body>
@@ -40,29 +45,42 @@
     <div class="bola-header">
         <div class="contenedor-bola" id="bola">
             <div class="cristal-bola">
-                <p class="cita" id="cita">🔮 Selecciona filtros o escribe...</p>
+                <p class="cita" id="cita">🔮 Selecciona filtros, escribe o habla...</p>
                 <p class="autor" id="autor">— Asistente Mágico</p>
             </div>
         </div>
     </div>
+    
+    <div class="permisos-panel" id="permisosPanel">
+        <div class="permiso-btn" id="permisoMicrofonoBtn">🎤 Activar micrófono</div>
+        <div class="permiso-btn" id="permisoMovimientoBtn" style="display:none;">📱 Activar agitado</div>
+    </div>
+    
     <div class="filtros-acumulador" id="filtrosAcumulador" style="display:none;">
         <div class="filtros-titulo">🎯 Filtros activos:</div>
         <div class="filtros-lista" id="filtrosLista"></div>
     </div>
+    
     <div class="chat-area" id="chatArea">
         <div class="chat-mensaje bot" id="chatInicial">
             🔮 ¡Hola! Soy la Bola Mágica. ¿Con quién compartirás esta sabiduría?
         </div>
         <div class="sugerencias" id="sugerencias"></div>
     </div>
+    
     <div class="input-area">
         <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." autocomplete="off">
         <button id="enviarBtn">🔮 Preguntar</button>
+        <button id="microfonoBtn" class="microfono-btn">🎤 Hablar</button>
     </div>
     <div class="shake-hint" id="shakeHint">📱 Agita la bola para respuesta aleatoria</div>
-    <div class="activar-shake" id="activarShakeBtn" style="display:none;">🎯 Tocar para activar agitado</div>
+    <div class="activar-shake" id="activarShakeBtn" style="display:none;">🎯 Tocar para activar agitado (iOS)</div>
 </div>
+
 <script>
+    // ============================================================
+    // BASE DE DATOS DE RESPUESTAS
+    // ============================================================
     const respuestasPorFiltro = {
         familia: ["La familia es como un buen guiso: a veces sale mal, pero siempre alimenta el alma 🍲","El amor familiar es el único que no necesita WiFi","Tu familia te apoya... aunque no entiendan nada","Reunión familiar = amor + preguntas incómodas + comida 🛡️","La sangre tira más que el cable del cargador"],
         solo: ["La soledad es tu mejor maestra... y no cobra matrícula 🧘","Estar solo es tener el mando de la tele siempre para ti","La mejor compañía eres tú mismo","La independencia es como la batería: dura más 🔋","A solas con tus pensamientos... espero que sean buena gente"],
@@ -72,11 +90,15 @@
     };
     const respuestasGenerales = ["La sabiduría está en escuchar más de lo que hablas... pero yo soy una bola","El universo conspira a tu favor... cuando se acuerda","La respuesta está dentro de ti. Y también dentro de este código","La vida es como una cebolla: tiene capas, y a veces te hace llorar 🧅","No hay preguntas tontas, solo respuestas surrealistas"];
     
+    // Estado
     let filtrosActivos = [];
+    let reconocimiento = null;
+    let grabando = false;
     let shakeActivado = false;
     let ultimoAgite = 0;
     let ultimaX=0, ultimaY=0, ultimaZ=0;
     
+    // Elementos DOM
     const bola = document.getElementById('bola');
     const cita = document.getElementById('cita');
     const autor = document.getElementById('autor');
@@ -86,9 +108,15 @@
     const sugerenciasDiv = document.getElementById('sugerencias');
     const inputPregunta = document.getElementById('pregunta');
     const enviarBtn = document.getElementById('enviarBtn');
+    const microfonoBtn = document.getElementById('microfonoBtn');
     const shakeHint = document.getElementById('shakeHint');
     const activarShakeBtn = document.getElementById('activarShakeBtn');
+    const permisoMicrofonoBtn = document.getElementById('permisoMicrofonoBtn');
+    const permisoMovimientoBtn = document.getElementById('permisoMovimientoBtn');
     
+    // ============================================================
+    // FUNCIONES PRINCIPALES
+    // ============================================================
     function actualizarFiltrosUI() {
         if (filtrosActivos.length === 0) { filtrosAcumulador.style.display = 'none'; return; }
         filtrosAcumulador.style.display = 'block';
@@ -113,6 +141,7 @@
         msgDiv.className = `chat-mensaje ${esUsuario ? 'usuario' : 'bot'}`;
         msgDiv.textContent = texto;
         chatArea.insertBefore(msgDiv, sugerenciasDiv);
+        chatArea.scrollTop = chatArea.scrollHeight;
     }
     
     function regenerarSugerencias() {
@@ -149,7 +178,7 @@
     }
     
     function mostrarRespuesta(pregunta) {
-        if (!pregunta.trim()) { cita.textContent = "🔮 Escribe una pregunta primero..."; return; }
+        if (!pregunta.trim()) { cita.textContent = "🔮 Escribe o habla una pregunta..."; return; }
         cita.textContent = "🔮 La bola está meditando... 🔮";
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
@@ -165,9 +194,75 @@
         bola.classList.add('agitando');
         setTimeout(() => bola.classList.remove('agitando'), 500);
         if (inputPregunta.value.trim()) mostrarRespuesta(inputPregunta.value);
-        else { cita.textContent = "¡Escribe una pregunta primero!"; setTimeout(() => cita.textContent = "🔮 Selecciona filtros o escribe...", 2000); }
+        else { cita.textContent = "¡Escribe o habla una pregunta primero!"; setTimeout(() => cita.textContent = "🔮 Selecciona filtros, escribe o habla...", 2000); }
     }
     
+    // ============================================================
+    // MICRÓFONO (Reconocimiento de Voz)
+    // ============================================================
+    function iniciarMicrofono() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            agregarMensaje("❌ Tu navegador no soporta reconocimiento de voz.");
+            return;
+        }
+        
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        reconocimiento = new SpeechRecognition();
+        reconocimiento.lang = 'es-ES';
+        reconocimiento.continuous = false;
+        reconocimiento.interimResults = false;
+        
+        reconocimiento.onstart = () => {
+            grabando = true;
+            microfonoBtn.classList.add('grabando');
+            microfonoBtn.textContent = '🔴 Grabando...';
+            agregarMensaje("🎤 Escuchando... habla ahora");
+        };
+        
+        reconocimiento.onresult = (event) => {
+            const texto = event.results[0][0].transcript;
+            inputPregunta.value = texto;
+            agregarMensaje(`🎤 Dijiste: "${texto}"`, true);
+            mostrarRespuesta(texto);
+        };
+        
+        reconocimiento.onerror = (event) => {
+            console.error('Error:', event.error);
+            agregarMensaje(`❌ Error de micrófono: ${event.error}`);
+            detenerMicrofono();
+        };
+        
+        reconocimiento.onend = () => {
+            detenerMicrofono();
+        };
+        
+        reconocimiento.start();
+    }
+    
+    function detenerMicrofono() {
+        if (reconocimiento) {
+            try { reconocimiento.stop(); } catch(e) {}
+        }
+        grabando = false;
+        microfonoBtn.classList.remove('grabando');
+        microfonoBtn.textContent = '🎤 Hablar';
+    }
+    
+    function toggleMicrofono() {
+        if (grabando) {
+            detenerMicrofono();
+        } else {
+            if (reconocimiento) {
+                try { reconocimiento.start(); } catch(e) { iniciarMicrofono(); }
+            } else {
+                iniciarMicrofono();
+            }
+        }
+    }
+    
+    // ============================================================
+    // MOVIMIENTO (Giroscopio / Agitado)
+    // ============================================================
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', function(e) {
@@ -185,35 +280,74 @@
             });
             shakeActivado = true;
             shakeHint.textContent = "📱 ¡Agitado activado! Agita la bola";
-            activarShakeBtn.style.display = 'none';
+            if(activarShakeBtn) activarShakeBtn.style.display = 'none';
+            if(permisoMovimientoBtn) permisoMovimientoBtn.style.display = 'none';
         }
     }
     
-    // iOS: pedir permiso (necesita interacción del usuario)
-    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-        shakeHint.textContent = "📱 iOS detectado. Toca 'Activar agitado' para usar el giroscopio";
-        activarShakeBtn.style.display = 'block';
-        activarShakeBtn.addEventListener('click', () => {
+    function solicitarPermisoMovimiento() {
+        if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
             DeviceMotionEvent.requestPermission()
                 .then(response => {
                     if (response === 'granted') {
                         iniciarDeteccionMovimiento();
+                    } else {
+                        shakeHint.textContent = "📱 Permiso denegado. Usa el botón.";
                     }
                 })
-                .catch(console.error);
-        });
-    } else if (window.DeviceMotionEvent) {
-        iniciarDeteccionMovimiento();
-    } else {
-        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado. Usa el botón.";
+                .catch(err => {
+                    console.error(err);
+                    shakeHint.textContent = "📱 Error al pedir permiso. Usa el botón.";
+                });
+        } else {
+            iniciarDeteccionMovimiento();
+        }
     }
     
+    // ============================================================
+    // PERMISOS INICIALES
+    // ============================================================
+    function solicitarPermisoMicrofono() {
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(() => {
+                agregarMensaje("✅ Micrófono activado. Puedes usar el botón 🎤");
+                permisoMicrofonoBtn.style.display = 'none';
+            })
+            .catch(err => {
+                agregarMensaje("❌ No se pudo acceder al micrófono. Usa el teclado.");
+                console.error(err);
+            });
+    }
+    
+    // Eventos UI
+    microfonoBtn.addEventListener('click', toggleMicrofono);
     enviarBtn.addEventListener('click', () => mostrarRespuesta(inputPregunta.value));
     inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') mostrarRespuesta(inputPregunta.value); });
     bola.addEventListener('click', animarAgitar);
+    permisoMicrofonoBtn.addEventListener('click', solicitarPermisoMicrofono);
     
+    // Configurar agitado según plataforma
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+        shakeHint.textContent = "📱 iOS: toca 'Activar agitado' para usar el giroscopio";
+        activarShakeBtn.style.display = 'block';
+        permisoMovimientoBtn.style.display = 'block';
+        activarShakeBtn.addEventListener('click', solicitarPermisoMovimiento);
+        permisoMovimientoBtn.addEventListener('click', solicitarPermisoMovimiento);
+    } else if (window.DeviceMotionEvent) {
+        iniciarDeteccionMovimiento();
+    } else {
+        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado. Usa botón o voz.";
+    }
+    
+    // Inicializar
     actualizarFiltrosUI();
     regenerarSugerencias();
+    
+    // Mensaje de bienvenida con instrucciones
+    setTimeout(() => {
+        agregarMensaje("🎤 Puedes usar el micrófono para hablar tu pregunta");
+        agregarMensaje("📱 En móvil, agita la bola después de activar permisos");
+    }, 1000);
 </script>
 </body>
 </html>
