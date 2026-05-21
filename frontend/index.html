@@ -29,25 +29,80 @@
         
         .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;}
         .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);}
-        .cara.back{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(180deg);padding:12%;pointer-events:auto;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);}
+        
+        /* Cara trasera: solo esfera negra, sin contenido visible */
+        .cara.back{
+            background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);
+            transform:rotateY(180deg);
+            box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);
+        }
+        
         .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
         .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
-        .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
-        .triangulo-shape{width:85%;height:75%;background:#0a0a0a;clip-path:polygon(50% 8%,6% 92%,94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(80,180,255,0.3);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.08),0 5px 15px rgba(0,0,0,0.3);transition:all 0.6s cubic-bezier(0.2,0.9,0.4,1.1);}
-        .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%,100% 0%,100% 100%,0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
-        .texto-container{width:100%;position:relative;display:flex;flex-direction:column;gap:12px;}
-        .texto-multifuncional{width:100%;background:#0a0a0a;border:1px solid rgba(80,180,255,0.4);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:100px;height:auto;line-height:1.4;transition:all 0.3s ease;}
-        .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.3);}
+        
+        /* Panel flotante SIN fondo ni bordes - efecto fantasma */
+        .panel-flotante{
+            position:fixed;
+            top:50%;left:50%;
+            transform:translate(-50%,-50%);
+            width:min(68vw,68vh,340px);
+            z-index:50;
+            display:flex;
+            flex-direction:column;
+            gap:12px;
+            opacity:0;
+            visibility:hidden;
+            transition:opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .panel-flotante.visible{
+            opacity:1;
+            visibility:visible;
+        }
+        
+        .texto-multifuncional{
+            width:100%;
+            background:transparent;
+            border:none;
+            padding:14px 12px;
+            color:#e0f0ff;
+            font-size:clamp(0.75rem,3.5vw,0.95rem);
+            font-family:inherit;
+            text-align:center;
+            resize:none;
+            outline:none;
+            word-break:break-word;
+            min-height:80px;
+            height:auto;
+            line-height:1.5;
+            text-shadow:0 0 20px rgba(0,0,0,0.9),0 2px 4px rgba(0,0,0,0.7);
+        }
+        .texto-multifuncional:focus{
+            text-shadow:0 0 25px rgba(0,0,0,0.95),0 2px 6px rgba(0,0,0,0.8);
+        }
         
         .iconos-barra{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px;}
-        .icono-accion{background:#1a2a3a;border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transition:all 0.2s;position:relative;}
-        .icono-accion:active{transform:scale(0.95);background:#2a4a6a;}
+        .icono-accion{
+            background:rgba(10,20,30,0.7);
+            border:1px solid rgba(136,204,255,0.3);
+            color:#cceeff;
+            width:44px;height:44px;
+            border-radius:44px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:1.3rem;
+            cursor:pointer;
+            transition:all 0.2s;
+            position:relative;
+            backdrop-filter:blur(4px);
+        }
+        .icono-accion:active{transform:scale(0.95);background:rgba(30,50,70,0.9);}
         .icono-accion.grabando{background:#e74c3c;border-color:#f88;animation:pulse 1s infinite;}
         
-        /* Botón PLAY principal con brillo elegante */
+        /* Botón PLAY/PAUSE principal */
         .icono-accion.principal{
             width:52px;height:52px;font-size:1.4rem;
-            background:linear-gradient(135deg,#1a2a3a 0%,#0d1b2a 100%);
+            background:rgba(10,20,30,0.8);
             border:2px solid rgba(136,204,255,0.6);
             box-shadow:0 0 15px rgba(100,160,255,0.2);
             overflow:hidden;
@@ -73,17 +128,20 @@
         .icono-accion.principal span.play-icon{
             position:relative;z-index:2;
             display:flex;align-items:center;justify-content:center;
-            margin-left:3px;
+            margin-left:2px;
         }
         .icono-accion.principal:active{transform:scale(0.92);box-shadow:0 0 25px rgba(100,160,255,0.5);}
+        .icono-accion.principal.reproduciendo{background:rgba(20,40,60,0.9);border-color:#f8c;}
+        .icono-accion.principal.reproduciendo::before{animation-play-state:paused;}
+        .icono-accion.principal.reproduciendo::after{animation-play-state:paused;}
         
         @keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg);}100%{transform:translateX(100%) rotate(45deg);}}
         @keyframes borderPulse{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.8;transform:scale(1.06);}}
         @keyframes pulse{0%{opacity:0.7;transform:scale(1);}100%{opacity:1;transform:scale(1.05);}}
         
-        .btn-modo,.btn-voz{position:fixed;top:16px;left:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;font-size:1.3rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
+        .btn-modo,.btn-voz{position:fixed;top:16px;left:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;font-size:1.3rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
         .btn-voz{left:68px;}
-        .btn-modo:active,.btn-voz:active{transform:scale(0.95);background:#2a2a2a;}
+        .btn-modo:active,.btn-voz:active{transform:scale(0.95);background:rgba(30,30,30,0.9);}
         
         .modo-panel,.voz-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;display:flex;flex-wrap:wrap;gap:10px;max-width:280px;}
         .voz-panel{max-width:320px;}
@@ -92,8 +150,8 @@
         .modo-opcion:hover,.voz-opcion:hover{background:#2a4a6a;}
         .modo-opcion.activo,.voz-opcion.activo{background:#3a5a7a;border-color:#8cf;}
         
-        .btn-stats{position:fixed;top:16px;right:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);}
-        .btn-stats:active{transform:scale(0.95);background:#2a2a2a;}
+        .btn-stats{position:fixed;top:16px;right:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);}
+        .btn-stats:active{transform:scale(0.95);background:rgba(30,30,30,0.9);}
         
         .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
         .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12),transparent 70%);pointer-events:none;}
@@ -111,23 +169,25 @@
 <div class="container">
     <div class="scene" id="scene">
         <div class="bola" id="bola">
-            <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
+            <div class="cara front">
+                <div class="numero-8"><span>8</span></div>
+                <div class="brillo"></div>
+            </div>
             <div class="cara back" id="caraBack">
-                <div class="transformable-container">
-                    <div class="triangulo-shape" id="shapeElement">
-                        <div class="texto-container">
-                            <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
-                            <div class="iconos-barra">
-                                <div class="icono-accion" id="reproducirBtn" title="Repetir última respuesta">🔄</div>
-                                <div class="icono-accion principal" id="preguntarBtn" title="Consultar a la bola"><span class="play-icon">▶</span></div>
-                                <div class="icono-accion" id="microBtn" title="Hablar por micrófono">🎤</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Solo esfera negra, sin contenido visible -->
                 <div class="brillo"></div>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- Panel flotante sobre la bola -->
+<div class="panel-flotante" id="panelFlotante">
+    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
+    <div class="iconos-barra">
+        <div class="icono-accion" id="reproducirBtn" title="Repetir última respuesta">🔄</div>
+        <div class="icono-accion principal" id="preguntarBtn" title="Reproducir todas las citas del modo"><span class="play-icon" id="playIcon">▶</span></div>
+        <div class="icono-accion" id="microBtn" title="Hablar por micrófono">🎤</div>
     </div>
 </div>
 
@@ -152,7 +212,7 @@
     <div class="voz-opcion" data-voz="sabia"><span>🦉</span>Sabia</div>
 </div>
 <div class="btn-stats" id="statsBtn">📊</div>
-<div class="info-externa">📱 Toca bola | 🎭 Modo | 🎙️ Voz | ▶ Preguntar | 🎤 Hablar | 🔄 Repetir</div>
+<div class="info-externa">📱 Toca bola | 🎭 Modo | 🎙️ Voz | ▶ Reproducir | 🎤 Hablar | 🔄 Repetir</div>
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
     <div class="stats-resumen" id="statsResumen"></div>
@@ -605,443 +665,87 @@ sabiduria:[
 
 const modoFeliz={nombre:"Feliz",citas:{
 amor:[
-"«El amor es la alegría de compartir la vida.» — Proverbio",
-"«El amor verdadero te hace más feliz.» — Proverbio",
-"«Donde hay amor, hay felicidad.» — Proverbio",
-"«Amar y ser amado es el mayor tesoro.» — Proverbio",
-"«El amor es la chispa que enciende la felicidad.» — Proverbio",
-"«Cada día es mejor cuando amas y te aman.» — Proverbio",
-"«El amor es un sol que ilumina los días grises.» — Proverbio",
-"«Amar es sembrar felicidad y cosechar sonrisas.» — Proverbio",
-"«El amor es el idioma universal de la alegría.» — Proverbio",
-"«En los ojos de quien ama encuentras la felicidad.» — Proverbio"
-],
+"«El amor es la alegría de compartir la vida.» — Proverbio","«El amor verdadero te hace más feliz.» — Proverbio","«Donde hay amor, hay felicidad.» — Proverbio","«Amar y ser amado es el mayor tesoro.» — Proverbio","«El amor es la chispa que enciende la felicidad.» — Proverbio","«Cada día es mejor cuando amas y te aman.» — Proverbio","«El amor es un sol que ilumina los días grises.» — Proverbio","«Amar es sembrar felicidad y cosechar sonrisas.» — Proverbio","«El amor es el idioma universal de la alegría.» — Proverbio","«En los ojos de quien ama encuentras la felicidad.» — Proverbio"],
 trabajo:[
-"«Haz lo que amas y nunca trabajarás.» — Confucio",
-"«El trabajo alegre es el mejor remedio.» — Proverbio",
-"«Trabajar con pasión convierte el deber en placer.» — Proverbio",
-"«Cada tarea terminada es un paso hacia la alegría.» — Proverbio",
-"«El trabajo bien hecho es una fiesta del alma.» — Proverbio",
-"«Disfruta lo que haces y el éxito vendrá solo.» — Proverbio",
-"«El trabajo es una bendición cuando se hace con amor.» — Proverbio",
-"«La satisfacción laboral es el mejor salario.» — Proverbio",
-"«Trabaja cantando y el día se hará corto.» — Proverbio",
-"«El secreto de la felicidad laboral es hacer lo que amas.» — Proverbio"
-],
+"«Haz lo que amas y nunca trabajarás.» — Confucio","«El trabajo alegre es el mejor remedio.» — Proverbio","«Trabajar con pasión convierte el deber en placer.» — Proverbio","«Cada tarea terminada es un paso hacia la alegría.» — Proverbio","«El trabajo bien hecho es una fiesta del alma.» — Proverbio","«Disfruta lo que haces y el éxito vendrá solo.» — Proverbio","«El trabajo es una bendición cuando se hace con amor.» — Proverbio","«La satisfacción laboral es el mejor salario.» — Proverbio","«Trabaja cantando y el día se hará corto.» — Proverbio","«El secreto de la felicidad laboral es hacer lo que amas.» — Proverbio"],
 futuro:[
-"«El futuro es brillante para quien tiene esperanza.» — Proverbio",
-"«Cada día es una nueva oportunidad.» — Proverbio",
-"«El mañana será mejor si hoy siembras alegría.» — Proverbio",
-"«No temas al futuro, está lleno de posibilidades.» — Proverbio",
-"«El futuro se construye con sueños de hoy.» — Proverbio",
-"«Lo mejor está por llegar.» — Proverbio",
-"«El futuro es un lienzo en blanco listo para pintar.» — Proverbio",
-"«Confía en el mañana, sorpréndete con el presente.» — Proverbio",
-"«Cada amanecer trae un futuro nuevo.» — Proverbio",
-"«El futuro sonríe a quien sonríe al presente.» — Proverbio"
-],
+"«El futuro es brillante para quien tiene esperanza.» — Proverbio","«Cada día es una nueva oportunidad.» — Proverbio","«El mañana será mejor si hoy siembras alegría.» — Proverbio","«No temas al futuro, está lleno de posibilidades.» — Proverbio","«El futuro se construye con sueños de hoy.» — Proverbio","«Lo mejor está por llegar.» — Proverbio","«El futuro es un lienzo en blanco listo para pintar.» — Proverbio","«Confía en el mañana, sorpréndete con el presente.» — Proverbio","«Cada amanecer trae un futuro nuevo.» — Proverbio","«El futuro sonríe a quien sonríe al presente.» — Proverbio"],
 dinero:[
-"«La verdadera riqueza es disfrutar lo que tienes.» — Proverbio",
-"«La felicidad no cuesta dinero.» — Proverbio",
-"«Los mejores momentos de la vida son gratis.» — Proverbio",
-"«El dinero no compra las risas ni los abrazos.» — Proverbio",
-"«Más vale poco con alegría que mucho con tristeza.» — Proverbio",
-"«La riqueza está en el corazón, no en el bolsillo.» — Proverbio",
-"«Disfruta lo simple, es lo más valioso.» — Proverbio",
-"«El mejor tesoro es una conciencia tranquila.» — Proverbio",
-"«No necesitas millones para sentirte millonario.» — Proverbio",
-"«La felicidad es la moneda más valiosa.» — Proverbio"
-],
+"«La verdadera riqueza es disfrutar lo que tienes.» — Proverbio","«La felicidad no cuesta dinero.» — Proverbio","«Los mejores momentos de la vida son gratis.» — Proverbio","«El dinero no compra las risas ni los abrazos.» — Proverbio","«Más vale poco con alegría que mucho con tristeza.» — Proverbio","«La riqueza está en el corazón, no en el bolsillo.» — Proverbio","«Disfruta lo simple, es lo más valioso.» — Proverbio","«El mejor tesoro es una conciencia tranquila.» — Proverbio","«No necesitas millones para sentirte millonario.» — Proverbio","«La felicidad es la moneda más valiosa.» — Proverbio"],
 familia:[
-"«La familia es el mayor tesoro.» — Proverbio",
-"«Un hogar feliz es el mejor lugar del mundo.» — Proverbio",
-"«La familia es donde la vida comienza y el amor nunca termina.» — Proverbio",
-"«En la familia encontramos las mejores razones para sonreír.» — Proverbio",
-"«Una familia unida es una fiesta diaria.» — Proverbio",
-"«El calor del hogar no se compra ni se vende.» — Proverbio",
-"«La alegría compartida en familia se multiplica.» — Proverbio",
-"«Cada reunión familiar es un tesoro de recuerdos felices.» — Proverbio",
-"«La familia es el mejor equipo.» — Proverbio",
-"«Hogar es donde tus pies pueden ir pero tu corazón se queda.» — Proverbio"
-],
+"«La familia es el mayor tesoro.» — Proverbio","«Un hogar feliz es el mejor lugar del mundo.» — Proverbio","«La familia es donde la vida comienza y el amor nunca termina.» — Proverbio","«En la familia encontramos las mejores razones para sonreír.» — Proverbio","«Una familia unida es una fiesta diaria.» — Proverbio","«El calor del hogar no se compra ni se vende.» — Proverbio","«La alegría compartida en familia se multiplica.» — Proverbio","«Cada reunión familiar es un tesoro de recuerdos felices.» — Proverbio","«La familia es el mejor equipo.» — Proverbio","«Hogar es donde tus pies pueden ir pero tu corazón se queda.» — Proverbio"],
 amigos:[
-"«Los amigos son la familia que elige el corazón.» — Proverbio",
-"«La amistad es el secreto de la felicidad.» — Proverbio",
-"«Un buen amigo es un rayo de sol en días grises.» — Proverbio",
-"«Los amigos multiplican las alegrías.» — Proverbio",
-"«La risa compartida con amigos es la mejor medicina.» — Proverbio",
-"«Los verdaderos amigos son los que te sacan una sonrisa cuando más lo necesitas.» — Proverbio",
-"«La amistad es un jardín que florece con cariño.» — Proverbio",
-"«Un amigo es un regalo que te haces a ti mismo.» — Proverbio",
-"«Los amigos convierten los días ordinarios en extraordinarios.» — Proverbio",
-"«La vida es mejor con amigos a tu lado.» — Proverbio"
-],
+"«Los amigos son la familia que elige el corazón.» — Proverbio","«La amistad es el secreto de la felicidad.» — Proverbio","«Un buen amigo es un rayo de sol en días grises.» — Proverbio","«Los amigos multiplican las alegrías.» — Proverbio","«La risa compartida con amigos es la mejor medicina.» — Proverbio","«Los verdaderos amigos son los que te sacan una sonrisa cuando más lo necesitas.» — Proverbio","«La amistad es un jardín que florece con cariño.» — Proverbio","«Un amigo es un regalo que te haces a ti mismo.» — Proverbio","«Los amigos convierten los días ordinarios en extraordinarios.» — Proverbio","«La vida es mejor con amigos a tu lado.» — Proverbio"],
 exito:[
-"«El éxito es sonreír al final del día.» — Proverbio",
-"«La mejor medida del éxito es la felicidad.» — Proverbio",
-"«El verdadero éxito es disfrutar el camino.» — Proverbio",
-"«Triunfar es levantarse con ilusión cada mañana.» — Proverbio",
-"«El éxito sin alegría no es éxito.» — Proverbio",
-"«Celebra cada pequeño logro, son peldaños hacia la felicidad.» — Proverbio",
-"«El éxito es vivir la vida que quieres vivir.» — Proverbio",
-"«No midas el éxito en dinero, mide en sonrisas.» — Proverbio",
-"«Cada paso adelante merece un aplauso.» — Proverbio",
-"«El éxito es paz interior y gratitud.» — Proverbio"
-],
+"«El éxito es sonreír al final del día.» — Proverbio","«La mejor medida del éxito es la felicidad.» — Proverbio","«El verdadero éxito es disfrutar el camino.» — Proverbio","«Triunfar es levantarse con ilusión cada mañana.» — Proverbio","«El éxito sin alegría no es éxito.» — Proverbio","«Celebra cada pequeño logro, son peldaños hacia la felicidad.» — Proverbio","«El éxito es vivir la vida que quieres vivir.» — Proverbio","«No midas el éxito en dinero, mide en sonrisas.» — Proverbio","«Cada paso adelante merece un aplauso.» — Proverbio","«El éxito es paz interior y gratitud.» — Proverbio"],
 vida:[
-"«La vida es bella si decides verla así.» — Proverbio",
-"«Sonríe, la vida merece la pena.» — Proverbio",
-"«Cada día es una nueva oportunidad para ser feliz.» — Proverbio",
-"«La vida es un regalo, ábrelo con alegría.» — Proverbio",
-"«No esperes a que pase la tormenta, aprende a bailar bajo la lluvia.» — Proverbio",
-"«La felicidad está en las pequeñas cosas.» — Proverbio",
-"«Vive con entusiasmo cada instante.» — Proverbio",
-"«La vida es corta, haz que cada momento cuente.» — Proverbio",
-"«Despierta con gratitud, acuéstate con paz.» — Proverbio",
-"«La vida es una canción, cántala con alegría.» — Proverbio"
-],
+"«La vida es bella si decides verla así.» — Proverbio","«Sonríe, la vida merece la pena.» — Proverbio","«Cada día es una nueva oportunidad para ser feliz.» — Proverbio","«La vida es un regalo, ábrelo con alegría.» — Proverbio","«No esperes a que pase la tormenta, aprende a bailar bajo la lluvia.» — Proverbio","«La felicidad está en las pequeñas cosas.» — Proverbio","«Vive con entusiasmo cada instante.» — Proverbio","«La vida es corta, haz que cada momento cuente.» — Proverbio","«Despierta con gratitud, acuéstate con paz.» — Proverbio","«La vida es una canción, cántala con alegría.» — Proverbio"],
 sabiduria:[
-"«La alegría está en el viaje, no en el destino.» — Proverbio",
-"«La felicidad es querer lo que tienes.» — Proverbio",
-"«El sabio disfruta lo simple.» — Proverbio",
-"«La gratitud es la memoria del corazón feliz.» — Proverbio",
-"«Aprender a ser feliz es la mayor sabiduría.» — Proverbio",
-"«La felicidad no se busca, se cultiva.» — Proverbio",
-"«El optimismo es la sabiduría del alma.» — Proverbio",
-"«Sabio es quien encuentra belleza en lo cotidiano.» — Proverbio",
-"«La risa es la sabiduría del cuerpo.» — Proverbio",
-"«Ser feliz es una decisión, no una casualidad.» — Proverbio"
-]}};
+"«La alegría está en el viaje, no en el destino.» — Proverbio","«La felicidad es querer lo que tienes.» — Proverbio","«El sabio disfruta lo simple.» — Proverbio","«La gratitud es la memoria del corazón feliz.» — Proverbio","«Aprender a ser feliz es la mayor sabiduría.» — Proverbio","«La felicidad no se busca, se cultiva.» — Proverbio","«El optimismo es la sabiduría del alma.» — Proverbio","«Sabio es quien encuentra belleza en lo cotidiano.» — Proverbio","«La risa es la sabiduría del cuerpo.» — Proverbio","«Ser feliz es una decisión, no una casualidad.» — Proverbio"]
+}};
 
 const modoMelancolico={nombre:"Melancólico",citas:{
 amor:[
-"«El amor que se fue deja un vacío.» — Proverbio",
-"«Recordar es volver a vivir lo que ya no está.» — Proverbio",
-"«El amor eterno solo existe en el recuerdo.» — Proverbio",
-"«Añorar es un verbo que se conjuga en pasado.» — Proverbio",
-"«El amor perdido es un fantasma que habita el alma.» — Proverbio",
-"«Donde hubo fuego, cenizas quedan.» — Proverbio español",
-"«La ausencia es al amor lo que el viento al fuego: apaga el pequeño y aviva el grande.» — Proverbio",
-"«El primer amor nunca se olvida... para nuestra desgracia.» — Proverbio",
-"«Amar es sufrir la ausencia antes de que llegue.» — Proverbio",
-"«Los amores que se fueron son estrellas que ya no brillan.» — Proverbio"
-],
+"«El amor que se fue deja un vacío.» — Proverbio","«Recordar es volver a vivir lo que ya no está.» — Proverbio","«El amor eterno solo existe en el recuerdo.» — Proverbio","«Añorar es un verbo que se conjuga en pasado.» — Proverbio","«El amor perdido es un fantasma que habita el alma.» — Proverbio","«Donde hubo fuego, cenizas quedan.» — Proverbio español","«La ausencia es al amor lo que el viento al fuego: apaga el pequeño y aviva el grande.» — Proverbio","«El primer amor nunca se olvida... para nuestra desgracia.» — Proverbio","«Amar es sufrir la ausencia antes de que llegue.» — Proverbio","«Los amores que se fueron son estrellas que ya no brillan.» — Proverbio"],
 trabajo:[
-"«El trabajo nos distrae del vacío existencial.» — Proverbio",
-"«A veces el cansancio es solo nostalgia.» — Proverbio",
-"«Trabajar para olvidar es como beber para no tener sed.» — Proverbio",
-"«El trabajo sin sentido es como caminar en círculos.» — Proverbio",
-"«Cada día en la oficina es un día menos de vida.» — Proverbio",
-"«El lunes es el día más melancólico de la semana.» — Proverbio",
-"«Trabajar cansa, no trabajar desespera.» — Proverbio",
-"«El trabajo rutinario adormece el alma.» — Proverbio",
-"«A veces el trabajo es el único refugio del pensamiento.» — Proverbio",
-"«El trabajo llena el bolsillo pero vacía el alma.» — Proverbio"
-],
+"«El trabajo nos distrae del vacío existencial.» — Proverbio","«A veces el cansancio es solo nostalgia.» — Proverbio","«Trabajar para olvidar es como beber para no tener sed.» — Proverbio","«El trabajo sin sentido es como caminar en círculos.» — Proverbio","«Cada día en la oficina es un día menos de vida.» — Proverbio","«El lunes es el día más melancólico de la semana.» — Proverbio","«Trabajar cansa, no trabajar desespera.» — Proverbio","«El trabajo rutinario adormece el alma.» — Proverbio","«A veces el trabajo es el único refugio del pensamiento.» — Proverbio","«El trabajo llena el bolsillo pero vacía el alma.» — Proverbio"],
 futuro:[
-"«El futuro es incierto y eso asusta.» — Proverbio",
-"«Mañana será otro día, pero con los mismos recuerdos.» — Proverbio",
-"«El futuro no existe, solo hay un pasado que se repite.» — Proverbio",
-"«¿Para qué planear si todo acaba igual?» — Proverbio",
-"«El mañana es una promesa que rara vez se cumple.» — Proverbio",
-"«El tiempo pasa y no perdona.» — Proverbio",
-"«El futuro es un eco del pasado.» — Proverbio",
-"«Nunca llueve a gusto de todos... ni a gusto de nadie.» — Proverbio",
-"«Lo peor del futuro es que se convierte en presente.» — Proverbio",
-"«El futuro es un suspiro lejano.» — Proverbio"
-],
+"«El futuro es incierto y eso asusta.» — Proverbio","«Mañana será otro día, pero con los mismos recuerdos.» — Proverbio","«El futuro no existe, solo hay un pasado que se repite.» — Proverbio","«¿Para qué planear si todo acaba igual?» — Proverbio","«El mañana es una promesa que rara vez se cumple.» — Proverbio","«El tiempo pasa y no perdona.» — Proverbio","«El futuro es un eco del pasado.» — Proverbio","«Nunca llueve a gusto de todos... ni a gusto de nadie.» — Proverbio","«Lo peor del futuro es que se convierte en presente.» — Proverbio","«El futuro es un suspiro lejano.» — Proverbio"],
 dinero:[
-"«El dinero no compra la felicidad, solo la alquila.» — Proverbio",
-"«A veces lo más valioso no tiene precio.» — Proverbio",
-"«El dinero da poder, pero no da paz.» — Proverbio",
-"«Pobre no es quien tiene poco, sino quien ha perdido todo.» — Proverbio",
-"«El dinero es un buen siervo pero un tirano melancólico.» — Proverbio",
-"«La riqueza material no llena el vacío del alma.» — Proverbio",
-"«El dinero va y viene, pero lo perdido no vuelve.» — Proverbio",
-"«Más vale nostalgia que deuda.» — Proverbio",
-"«El dinero no seca las lágrimas.» — Proverbio",
-"«Hay pobrezas que el dinero no cura.» — Proverbio"
-],
+"«El dinero no compra la felicidad, solo la alquila.» — Proverbio","«A veces lo más valioso no tiene precio.» — Proverbio","«El dinero da poder, pero no da paz.» — Proverbio","«Pobre no es quien tiene poco, sino quien ha perdido todo.» — Proverbio","«El dinero es un buen siervo pero un tirano melancólico.» — Proverbio","«La riqueza material no llena el vacío del alma.» — Proverbio","«El dinero va y viene, pero lo perdido no vuelve.» — Proverbio","«Más vale nostalgia que deuda.» — Proverbio","«El dinero no seca las lágrimas.» — Proverbio","«Hay pobrezas que el dinero no cura.» — Proverbio"],
 familia:[
-"«La familia es el refugio donde puedes llorar.» — Proverbio",
-"«Los recuerdos familiares son un tesoro agridulce.» — Proverbio",
-"«La familia es el espejo donde ves tu historia.» — Proverbio",
-"«En la familia están las raíces de nuestra melancolía.» — Proverbio",
-"«Los ausentes siempre están presentes en la mesa familiar.» — Proverbio",
-"«La familia es la primera pérdida y el último refugio.» — Proverbio",
-"«Recordar a los que se fueron es el tributo familiar.» — Proverbio",
-"«La casa vacía guarda los ecos de los que ya no están.» — Proverbio",
-"«La familia es un álbum de fotos en blanco y negro.» — Proverbio",
-"«Donde hubo hogar, queda nostalgia.» — Proverbio"
-],
+"«La familia es el refugio donde puedes llorar.» — Proverbio","«Los recuerdos familiares son un tesoro agridulce.» — Proverbio","«La familia es el espejo donde ves tu historia.» — Proverbio","«En la familia están las raíces de nuestra melancolía.» — Proverbio","«Los ausentes siempre están presentes en la mesa familiar.» — Proverbio","«La familia es la primera pérdida y el último refugio.» — Proverbio","«Recordar a los que se fueron es el tributo familiar.» — Proverbio","«La casa vacía guarda los ecos de los que ya no están.» — Proverbio","«La familia es un álbum de fotos en blanco y negro.» — Proverbio","«Donde hubo hogar, queda nostalgia.» — Proverbio"],
 amigos:[
-"«Un amigo es quien te escucha cuando todos se han ido.» — Proverbio",
-"«La amistad sobrevive al silencio.» — Proverbio",
-"«Los amigos de verdad son los que se quedan cuando los demás se van.» — Proverbio",
-"«La amistad es un refugio en días grises.» — Proverbio",
-"«Hay amigos que son estrellas fugaces en nuestra vida.» — Proverbio",
-"«La distancia no mata la amistad, pero la hiere.» — Proverbio",
-"«Un amigo ausente es una herida que no cicatriza.» — Proverbio",
-"«La melancolía compartida es menos pesada.» — Proverbio",
-"«Los amigos se van, el recuerdo queda.» — Proverbio",
-"«Un amigo que se fue es un capítulo que nunca se cierra.» — Proverbio"
-],
+"«Un amigo es quien te escucha cuando todos se han ido.» — Proverbio","«La amistad sobrevive al silencio.» — Proverbio","«Los amigos de verdad son los que se quedan cuando los demás se van.» — Proverbio","«La amistad es un refugio en días grises.» — Proverbio","«Hay amigos que son estrellas fugaces en nuestra vida.» — Proverbio","«La distancia no mata la amistad, pero la hiere.» — Proverbio","«Un amigo ausente es una herida que no cicatriza.» — Proverbio","«La melancolía compartida es menos pesada.» — Proverbio","«Los amigos se van, el recuerdo queda.» — Proverbio","«Un amigo que se fue es un capítulo que nunca se cierra.» — Proverbio"],
 exito:[
-"«El éxito sin alguien con quien compartirlo es vacío.» — Proverbio",
-"«El fracaso es una oportunidad para empezar de nuevo.» — Proverbio",
-"«El éxito ajeno es un espejo de nuestras carencias.» — Proverbio",
-"«Triunfar en soledad es fracasar en compañía.» — Proverbio",
-"«El éxito es una cumbre solitaria.» — Proverbio",
-"«A veces ganar es perder algo importante.» — Proverbio",
-"«El éxito no llena el vacío de la ausencia.» — Proverbio",
-"«Fracasar es humano; triunfar, casi divino... y casi imposible.» — Proverbio",
-"«El mayor fracaso es no haberlo intentado por miedo.» — Proverbio",
-"«El éxito es un disfraz que oculta cicatrices.» — Proverbio"
-],
+"«El éxito sin alguien con quien compartirlo es vacío.» — Proverbio","«El fracaso es una oportunidad para empezar de nuevo.» — Proverbio","«El éxito ajeno es un espejo de nuestras carencias.» — Proverbio","«Triunfar en soledad es fracasar en compañía.» — Proverbio","«El éxito es una cumbre solitaria.» — Proverbio","«A veces ganar es perder algo importante.» — Proverbio","«El éxito no llena el vacío de la ausencia.» — Proverbio","«Fracasar es humano; triunfar, casi divino... y casi imposible.» — Proverbio","«El mayor fracaso es no haberlo intentado por miedo.» — Proverbio","«El éxito es un disfraz que oculta cicatrices.» — Proverbio"],
 vida:[
-"«La vida es un suspiro entre dos eternidades.» — Proverbio",
-"«La melancolía es la tristeza que ha perdido su memoria.» — Proverbio",
-"«Vivir es despedirse constantemente.» — Proverbio",
-"«La vida es una larga nostalgia de lo que no fue.» — Proverbio",
-"«Cada día morimos un poco.» — Proverbio",
-"«La vida es un vals lento hacia el olvido.» — Proverbio",
-"«Nacemos llorando, vivimos sufriendo, morimos olvidando.» — Proverbio",
-"«La vida es un eco de lo que pudo ser.» — Proverbio",
-"«Vivir es recordar; morir, ser recordado.» — Proverbio",
-"«La vida es una herida que nunca cicatriza del todo.» — Proverbio"
-],
+"«La vida es un suspiro entre dos eternidades.» — Proverbio","«La melancolía es la tristeza que ha perdido su memoria.» — Proverbio","«Vivir es despedirse constantemente.» — Proverbio","«La vida es una larga nostalgia de lo que no fue.» — Proverbio","«Cada día morimos un poco.» — Proverbio","«La vida es un vals lento hacia el olvido.» — Proverbio","«Nacemos llorando, vivimos sufriendo, morimos olvidando.» — Proverbio","«La vida es un eco de lo que pudo ser.» — Proverbio","«Vivir es recordar; morir, ser recordado.» — Proverbio","«La vida es una herida que nunca cicatriza del todo.» — Proverbio"],
 sabiduria:[
-"«La tristeza también enseña, si sabemos escucharla.» — Proverbio",
-"«En la quietud encontramos respuestas.» — Proverbio",
-"«La melancolía es la sabiduría del corazón roto.» — Proverbio",
-"«Sabio es quien abraza su tristeza sin hundirse en ella.» — Proverbio",
-"«La nostalgia es poesía del recuerdo.» — Proverbio",
-"«Aprender a perder es la mayor sabiduría.» — Proverbio",
-"«La melancolía es la musa de los grandes espíritus.» — Proverbio",
-"«El dolor enseña lo que la alegría no puede.» — Proverbio",
-"«La sabiduría melancólica es la más profunda.» — Proverbio",
-"«En el silencio del alma se esconden las grandes verdades.» — Proverbio"
-]}};
+"«La tristeza también enseña, si sabemos escucharla.» — Proverbio","«En la quietud encontramos respuestas.» — Proverbio","«La melancolía es la sabiduría del corazón roto.» — Proverbio","«Sabio es quien abraza su tristeza sin hundirse en ella.» — Proverbio","«La nostalgia es poesía del recuerdo.» — Proverbio","«Aprender a perder es la mayor sabiduría.» — Proverbio","«La melancolía es la musa de los grandes espíritus.» — Proverbio","«El dolor enseña lo que la alegría no puede.» — Proverbio","«La sabiduría melancólica es la más profunda.» — Proverbio","«En el silencio del alma se esconden las grandes verdades.» — Proverbio"]
+}};
 
 const modoMotivacion={nombre:"Motivación",citas:{
 amor:[
-"«Amar con valentía es el mayor acto de fortaleza.» — Proverbio",
-"«El amor te da alas cuando todo te arrastra.» — Proverbio",
-"«El amor es el motor más poderoso del universo.» — Proverbio",
-"«Lucha por quien amas, empieza por ti mismo.» — Proverbio",
-"«El amor todo lo puede, todo lo soporta.» — Proverbio",
-"«Amar es el acto más revolucionario.» — Proverbio",
-"«Si amas, no te rindas nunca.» — Proverbio",
-"«El amor verdadero supera cualquier obstáculo.» — Proverbio",
-"«Con amor no hay batalla perdida.» — Proverbio",
-"«El amor es la fuerza que mueve montañas.» — Proverbio"
-],
+"«Amar con valentía es el mayor acto de fortaleza.» — Proverbio","«El amor te da alas cuando todo te arrastra.» — Proverbio","«El amor es el motor más poderoso del universo.» — Proverbio","«Lucha por quien amas, empieza por ti mismo.» — Proverbio","«El amor todo lo puede, todo lo soporta.» — Proverbio","«Amar es el acto más revolucionario.» — Proverbio","«Si amas, no te rindas nunca.» — Proverbio","«El amor verdadero supera cualquier obstáculo.» — Proverbio","«Con amor no hay batalla perdida.» — Proverbio","«El amor es la fuerza que mueve montañas.» — Proverbio"],
 trabajo:[
-"«El trabajo duro vence al talento cuando el talento no trabaja.» — Proverbio",
-"«Cada día es una batalla, cada batalla una oportunidad.» — Proverbio",
-"«Levántate, sacúdete el polvo y sigue adelante.» — Proverbio",
-"«El éxito laboral se construye ladrillo a ladrillo.» — Proverbio",
-"«No hay ascensor al éxito, hay que subir por las escaleras.» — Proverbio",
-"«Trabaja mientras otros duermen, triunfa mientras otros sueñan.» — Proverbio",
-"«El esfuerzo de hoy es el triunfo de mañana.» — Proverbio",
-"«No pares hasta que tu trabajo hable por ti.» — Proverbio",
-"«La disciplina es el puente entre metas y logros.» — Proverbio",
-"«Trabaja con pasión, los resultados llegarán.» — Proverbio"
-],
+"«El trabajo duro vence al talento cuando el talento no trabaja.» — Proverbio","«Cada día es una batalla, cada batalla una oportunidad.» — Proverbio","«Levántate, sacúdete el polvo y sigue adelante.» — Proverbio","«El éxito laboral se construye ladrillo a ladrillo.» — Proverbio","«No hay ascensor al éxito, hay que subir por las escaleras.» — Proverbio","«Trabaja mientras otros duermen, triunfa mientras otros sueñan.» — Proverbio","«El esfuerzo de hoy es el triunfo de mañana.» — Proverbio","«No pares hasta que tu trabajo hable por ti.» — Proverbio","«La disciplina es el puente entre metas y logros.» — Proverbio","«Trabaja con pasión, los resultados llegarán.» — Proverbio"],
 futuro:[
-"«El futuro te pertenece si luchas por él.» — Proverbio",
-"«Mañana es el primer día del resto de tu vida.» — Proverbio",
-"«No esperes el futuro, sal a su encuentro.» — Proverbio",
-"«Cada decisión de hoy es el futuro de mañana.» — Proverbio",
-"«El futuro es de los valientes.» — Proverbio",
-"«Construye hoy el mañana que sueñas.» — Proverbio",
-"«El futuro se escribe con acciones, no con deseos.» — Proverbio",
-"«No te conformes con esperar, ve a por ello.» — Proverbio",
-"«El mañana empieza en el ahora.» — Proverbio",
-"«Tu futuro es tu responsabilidad, no tu destino.» — Proverbio"
-],
+"«El futuro te pertenece si luchas por él.» — Proverbio","«Mañana es el primer día del resto de tu vida.» — Proverbio","«No esperes el futuro, sal a su encuentro.» — Proverbio","«Cada decisión de hoy es el futuro de mañana.» — Proverbio","«El futuro es de los valientes.» — Proverbio","«Construye hoy el mañana que sueñas.» — Proverbio","«El futuro se escribe con acciones, no con deseos.» — Proverbio","«No te conformes con esperar, ve a por ello.» — Proverbio","«El mañana empieza en el ahora.» — Proverbio","«Tu futuro es tu responsabilidad, no tu destino.» — Proverbio"],
 dinero:[
-"«El dinero es una herramienta para alcanzar tus sueños.» — Proverbio",
-"«La riqueza comienza en la mente.» — Proverbio",
-"«Invierte en ti mismo, es el mejor negocio.» — Proverbio",
-"«El dinero no da la felicidad, pero da libertad para buscarla.» — Proverbio",
-"«No persigas el dinero, persigue la excelencia.» — Proverbio",
-"«La prosperidad es el fruto del esfuerzo constante.» — Proverbio",
-"«El dinero es un siervo excelente pero un amo terrible.» — Proverbio",
-"«Gana, ahorra, invierte: el ciclo de la libertad financiera.» — Proverbio",
-"«No es cuestión de ganar más, sino de gastar mejor.» — Proverbio",
-"«El dinero sigue a la disciplina.» — Proverbio"
-],
+"«El dinero es una herramienta para alcanzar tus sueños.» — Proverbio","«La riqueza comienza en la mente.» — Proverbio","«Invierte en ti mismo, es el mejor negocio.» — Proverbio","«El dinero no da la felicidad, pero da libertad para buscarla.» — Proverbio","«No persigas el dinero, persigue la excelencia.» — Proverbio","«La prosperidad es el fruto del esfuerzo constante.» — Proverbio","«El dinero es un siervo excelente pero un amo terrible.» — Proverbio","«Gana, ahorra, invierte: el ciclo de la libertad financiera.» — Proverbio","«No es cuestión de ganar más, sino de gastar mejor.» — Proverbio","«El dinero sigue a la disciplina.» — Proverbio"],
 familia:[
-"«La familia es tu ejército, lucha contigo.» — Proverbio",
-"«Por ellos vale la pena levantarse cada día.» — Proverbio",
-"«La familia es el motor que impulsa tus sueños.» — Proverbio",
-"«Lucha por tu familia como ellos luchan por ti.» — Proverbio",
-"«El hogar es el lugar donde recargas fuerzas.» — Proverbio",
-"«Cada logro familiar es una victoria compartida.» — Proverbio",
-"«La familia es el mejor equipo que tendrás nunca.» — Proverbio",
-"«Motiva a tu familia, ellos te motivarán a ti.» — Proverbio",
-"«Juntos en familia, nada es imposible.» — Proverbio",
-"«La familia es el ancla y el timón.» — Proverbio"
-],
+"«La familia es tu ejército, lucha contigo.» — Proverbio","«Por ellos vale la pena levantarse cada día.» — Proverbio","«La familia es el motor que impulsa tus sueños.» — Proverbio","«Lucha por tu familia como ellos luchan por ti.» — Proverbio","«El hogar es el lugar donde recargas fuerzas.» — Proverbio","«Cada logro familiar es una victoria compartida.» — Proverbio","«La familia es el mejor equipo que tendrás nunca.» — Proverbio","«Motiva a tu familia, ellos te motivarán a ti.» — Proverbio","«Juntos en familia, nada es imposible.» — Proverbio","«La familia es el ancla y el timón.» — Proverbio"],
 amigos:[
-"«Un amigo es quien te levanta cuando tropiezas.» — Proverbio",
-"«Los amigos son el combustible de tu motor.» — Proverbio",
-"«Rodéate de quienes te impulsen a ser mejor.» — Proverbio",
-"«Un amigo motivador vale más que cien pesimistas.» — Proverbio",
-"«Los amigos de verdad celebran tus éxitos como propios.» — Proverbio",
-"«Juntos con amigos se llega más lejos.» — Proverbio",
-"«Un amigo te da fuerzas cuando crees que no puedes más.» — Proverbio",
-"«La amistad es el mejor suplemento energético.» — Proverbio",
-"«Con buenos amigos no hay meta inalcanzable.» — Proverbio",
-"«Un amigo fiel es tu mayor patrocinador.» — Proverbio"
-],
+"«Un amigo es quien te levanta cuando tropiezas.» — Proverbio","«Los amigos son el combustible de tu motor.» — Proverbio","«Rodéate de quienes te impulsen a ser mejor.» — Proverbio","«Un amigo motivador vale más que cien pesimistas.» — Proverbio","«Los amigos de verdad celebran tus éxitos como propios.» — Proverbio","«Juntos con amigos se llega más lejos.» — Proverbio","«Un amigo te da fuerzas cuando crees que no puedes más.» — Proverbio","«La amistad es el mejor suplemento energético.» — Proverbio","«Con buenos amigos no hay meta inalcanzable.» — Proverbio","«Un amigo fiel es tu mayor patrocinador.» — Proverbio"],
 exito:[
-"«El éxito es la suma de pequeños esfuerzos repetidos.» — Robert Collier",
-"«No te rindas, el principio es lo más difícil.» — Proverbio",
-"«El éxito no llega por casualidad, llega por constancia.» — Proverbio",
-"«Cada fracaso es una lección disfrazada.» — Proverbio",
-"«Triunfa quien persevera cuando todos abandonan.» — Proverbio",
-"«El éxito es caer nueve veces y levantarse diez.» — Proverbio",
-"«No hay éxito sin sacrificio, ni atajo sin aprendizaje.» — Proverbio",
-"«Sueña en grande, trabaja en silencio, triunfa con humildad.» — Proverbio",
-"«El verdadero éxito es superar tus propios límites.» — Proverbio",
-"«Hoy es el día para empezar a construir tu éxito.» — Proverbio"
-],
+"«El éxito es la suma de pequeños esfuerzos repetidos.» — Robert Collier","«No te rindas, el principio es lo más difícil.» — Proverbio","«El éxito no llega por casualidad, llega por constancia.» — Proverbio","«Cada fracaso es una lección disfrazada.» — Proverbio","«Triunfa quien persevera cuando todos abandonan.» — Proverbio","«El éxito es caer nueve veces y levantarse diez.» — Proverbio","«No hay éxito sin sacrificio, ni atajo sin aprendizaje.» — Proverbio","«Sueña en grande, trabaja en silencio, triunfa con humildad.» — Proverbio","«El verdadero éxito es superar tus propios límites.» — Proverbio","«Hoy es el día para empezar a construir tu éxito.» — Proverbio"],
 vida:[
-"«La vida no espera, levántate y lucha.» — Proverbio",
-"«Cada amanecer es una nueva oportunidad.» — Proverbio",
-"«La vida es un desafío, acéptalo y supéralo.» — Proverbio",
-"«No pidas una vida fácil, pide fuerzas para superar la difícil.» — Proverbio",
-"«Vive con intensidad, ama con pasión, lucha con valentía.» — Proverbio",
-"«La vida es una aventura, no un ensayo.» — Proverbio",
-"«Cada día es una página en blanco: escribe tu historia.» — Proverbio",
-"«No sobrevivas, vive.» — Proverbio",
-"«La vida es corta para ser mediocre.» — Proverbio",
-"«Despierta con determinación, acuéstate con satisfacción.» — Proverbio"
-],
+"«La vida no espera, levántate y lucha.» — Proverbio","«Cada amanecer es una nueva oportunidad.» — Proverbio","«La vida es un desafío, acéptalo y supéralo.» — Proverbio","«No pidas una vida fácil, pide fuerzas para superar la difícil.» — Proverbio","«Vive con intensidad, ama con pasión, lucha con valentía.» — Proverbio","«La vida es una aventura, no un ensayo.» — Proverbio","«Cada día es una página en blanco: escribe tu historia.» — Proverbio","«No sobrevivas, vive.» — Proverbio","«La vida es corta para ser mediocre.» — Proverbio","«Despierta con determinación, acuéstate con satisfacción.» — Proverbio"],
 sabiduria:[
-"«La sabiduría te da fuerzas para seguir.» — Proverbio",
-"«El conocimiento es poder, la acción es victoria.» — Proverbio",
-"«Sabio no es quien sabe más, sino quien mejor usa lo que sabe.» — Proverbio",
-"«Aprende de ayer, vive hoy, conquista mañana.» — Proverbio",
-"«La sabiduría es la mejor inversión.» — Proverbio",
-"«Nunca dejes de aprender, es el combustible del alma.» — Proverbio",
-"«La experiencia es la madre de la motivación.» — Proverbio",
-"«El verdadero poder está en la mente disciplinada.» — Proverbio",
-"«Saber lo que quieres es el primer paso para conseguirlo.» — Proverbio",
-"«La sabiduría es el faro que guía en la tormenta.» — Proverbio"
-]}};
+"«La sabiduría te da fuerzas para seguir.» — Proverbio","«El conocimiento es poder, la acción es victoria.» — Proverbio","«Sabio no es quien sabe más, sino quien mejor usa lo que sabe.» — Proverbio","«Aprende de ayer, vive hoy, conquista mañana.» — Proverbio","«La sabiduría es la mejor inversión.» — Proverbio","«Nunca dejes de aprender, es el combustible del alma.» — Proverbio","«La experiencia es la madre de la motivación.» — Proverbio","«El verdadero poder está en la mente disciplinada.» — Proverbio","«Saber lo que quieres es el primer paso para conseguirlo.» — Proverbio","«La sabiduría es el faro que guía en la tormenta.» — Proverbio"]
+}};
 
 const modoCalma={nombre:"Calma",citas:{
 amor:[
-"«El amor tranquilo es el que dura para siempre.» — Proverbio",
-"«Ama sin prisa, que el amor no entiende de relojes.» — Proverbio",
-"«El amor sereno es el más profundo.» — Proverbio",
-"«En la calma del amor se encuentra la verdad.» — Proverbio",
-"«Amar en paz es el mayor lujo del alma.» — Proverbio",
-"«El amor no grita, susurra.» — Proverbio",
-"«La ternura es el lenguaje del amor tranquilo.» — Proverbio",
-"«El amor verdadero es un remanso de paz.» — Proverbio",
-"«Ama sin poseer, vive sin atar.» — Proverbio",
-"«El amor calmado es bálsamo para el espíritu.» — Proverbio"
-],
+"«El amor tranquilo es el que dura para siempre.» — Proverbio","«Ama sin prisa, que el amor no entiende de relojes.» — Proverbio","«El amor sereno es el más profundo.» — Proverbio","«En la calma del amor se encuentra la verdad.» — Proverbio","«Amar en paz es el mayor lujo del alma.» — Proverbio","«El amor no grita, susurra.» — Proverbio","«La ternura es el lenguaje del amor tranquilo.» — Proverbio","«El amor verdadero es un remanso de paz.» — Proverbio","«Ama sin poseer, vive sin atar.» — Proverbio","«El amor calmado es bálsamo para el espíritu.» — Proverbio"],
 trabajo:[
-"«Trabaja con calma, que el estrés es enemigo de la calidad.» — Proverbio",
-"«El trabajo en paz es el mejor trabajo.» — Proverbio",
-"«Haz una cosa a la vez, con toda tu atención.» — Proverbio zen",
-"«La prisa es mala consejera del buen hacer.» — Proverbio",
-"«Trabaja sin ansiedad, el resultado llegará.» — Proverbio",
-"«El trabajo tranquilo es más productivo.» — Proverbio",
-"«No corras, que el día es largo.» — Proverbio",
-"«La calma en el trabajo es señal de maestría.» — Proverbio",
-"«Respira hondo y continúa.» — Proverbio",
-"«El buen trabajador no suda, sonríe.» — Proverbio"
-],
+"«Trabaja con calma, que el estrés es enemigo de la calidad.» — Proverbio","«El trabajo en paz es el mejor trabajo.» — Proverbio","«Haz una cosa a la vez, con toda tu atención.» — Proverbio zen","«La prisa es mala consejera del buen hacer.» — Proverbio","«Trabaja sin ansiedad, el resultado llegará.» — Proverbio","«El trabajo tranquilo es más productivo.» — Proverbio","«No corras, que el día es largo.» — Proverbio","«La calma en el trabajo es señal de maestría.» — Proverbio","«Respira hondo y continúa.» — Proverbio","«El buen trabajador no suda, sonríe.» — Proverbio"],
 futuro:[
-"«El futuro llegará cuando tenga que llegar. Hoy disfruta el presente.» — Proverbio",
-"«No corras, que la vida no es una carrera.» — Proverbio",
-"«El mañana se construye con la calma de hoy.» — Proverbio",
-"«No te angusties por lo que no ha llegado.» — Proverbio",
-"«El futuro es un río que fluye, no lo detengas.» — Proverbio",
-"«Paciencia, todo llega a su tiempo.» — Proverbio",
-"«El futuro será lo que tenga que ser; hoy, sé feliz.» — Proverbio",
-"«Confía en el proceso de la vida.» — Proverbio",
-"«No empujes el río, fluye con él.» — Proverbio",
-"«El futuro es incierto, y eso está bien.» — Proverbio"
-],
+"«El futuro llegará cuando tenga que llegar. Hoy disfruta el presente.» — Proverbio","«No corras, que la vida no es una carrera.» — Proverbio","«El mañana se construye con la calma de hoy.» — Proverbio","«No te angusties por lo que no ha llegado.» — Proverbio","«El futuro es un río que fluye, no lo detengas.» — Proverbio","«Paciencia, todo llega a su tiempo.» — Proverbio","«El futuro será lo que tenga que ser; hoy, sé feliz.» — Proverbio","«Confía en el proceso de la vida.» — Proverbio","«No empujes el río, fluye con él.» — Proverbio","«El futuro es incierto, y eso está bien.» — Proverbio"],
 dinero:[
-"«El dinero llega y va, la paz interior se queda.» — Proverbio",
-"«No dejes que el dinero perturbe tu serenidad.» — Proverbio",
-"«Más vale poco con tranquilidad que mucho con ansiedad.» — Proverbio",
-"«El dinero es un medio, no una fuente de estrés.» — Proverbio",
-"«La verdadera riqueza es la paz mental.» — Proverbio",
-"«No hipoteques tu calma por unas monedas.» — Proverbio",
-"«El dinero no vale tu salud mental.» — Proverbio",
-"«Vive con sencillez, el lujo está en la calma.» — Proverbio",
-"«No persigas la riqueza, persigue la serenidad.» — Proverbio",
-"«El dinero no compra la paz del alma.» — Proverbio"
-],
+"«El dinero llega y va, la paz interior se queda.» — Proverbio","«No dejes que el dinero perturbe tu serenidad.» — Proverbio","«Más vale poco con tranquilidad que mucho con ansiedad.» — Proverbio","«El dinero es un medio, no una fuente de estrés.» — Proverbio","«La verdadera riqueza es la paz mental.» — Proverbio","«No hipoteques tu calma por unas monedas.» — Proverbio","«El dinero no vale tu salud mental.» — Proverbio","«Vive con sencillez, el lujo está en la calma.» — Proverbio","«No persigas la riqueza, persigue la serenidad.» — Proverbio","«El dinero no compra la paz del alma.» — Proverbio"],
 familia:[
-"«La paz empieza en casa, en la calma de la familia.» — Proverbio",
-"«Un hogar en paz es el mejor refugio.» — Proverbio",
-"«La familia es un oasis de calma en el desierto del mundo.» — Proverbio",
-"«En la familia serena se cultiva el amor.» — Proverbio",
-"«El silencio familiar es a veces la mejor conversación.» — Proverbio",
-"«Hogar es donde encuentras paz.» — Proverbio",
-"«La calma familiar es el mayor tesoro.» — Proverbio",
-"«Una familia tranquila es una fortaleza.» — Proverbio",
-"«El respeto mutuo trae paz al hogar.» — Proverbio",
-"«La armonía familiar es la base de todo.» — Proverbio"
-],
+"«La paz empieza en casa, en la calma de la familia.» — Proverbio","«Un hogar en paz es el mejor refugio.» — Proverbio","«La familia es un oasis de calma en el desierto del mundo.» — Proverbio","«En la familia serena se cultiva el amor.» — Proverbio","«El silencio familiar es a veces la mejor conversación.» — Proverbio","«Hogar es donde encuentras paz.» — Proverbio","«La calma familiar es el mayor tesoro.» — Proverbio","«Una familia tranquila es una fortaleza.» — Proverbio","«El respeto mutuo trae paz al hogar.» — Proverbio","«La armonía familiar es la base de todo.» — Proverbio"],
 amigos:[
-"«Un amigo calmado es un bálsamo para el alma.» — Proverbio",
-"«La amistad en calma es la más sincera.» — Proverbio",
-"«Un buen amigo te da paz, no drama.» — Proverbio",
-"«Los amigos serenos son tesoros silenciosos.» — Proverbio",
-"«La amistad tranquila no necesita palabras.» — Proverbio",
-"«Un amigo que te escucha en calma vale más que mil consejos.» — Proverbio",
-"«La verdadera amistad es un remanso de paz.» — Proverbio",
-"«Con un amigo en calma, todo pasa.» — Proverbio",
-"«La amistad es un refugio tranquilo.» — Proverbio",
-"«Los amigos pacíficos traen equilibrio a tu vida.» — Proverbio"
-],
+"«Un amigo calmado es un bálsamo para el alma.» — Proverbio","«La amistad en calma es la más sincera.» — Proverbio","«Un buen amigo te da paz, no drama.» — Proverbio","«Los amigos serenos son tesoros silenciosos.» — Proverbio","«La amistad tranquila no necesita palabras.» — Proverbio","«Un amigo que te escucha en calma vale más que mil consejos.» — Proverbio","«La verdadera amistad es un remanso de paz.» — Proverbio","«Con un amigo en calma, todo pasa.» — Proverbio","«La amistad es un refugio tranquilo.» — Proverbio","«Los amigos pacíficos traen equilibrio a tu vida.» — Proverbio"],
 exito:[
-"«El éxito sin paz interior no es verdadero éxito.» — Proverbio",
-"«La verdadera victoria es estar en paz contigo mismo.» — Proverbio",
-"«El éxito es saber disfrutar del silencio.» — Proverbio",
-"«Triunfar es mantener la calma en la tormenta.» — Proverbio",
-"«El verdadero éxito es no dejarse arrastrar por la prisa.» — Proverbio",
-"«La calma es el mayor triunfo del espíritu.» — Proverbio",
-"«No hay éxito que merezca tu paz mental.» — Proverbio",
-"«Gana quien sabe esperar.» — Proverbio",
-"«El éxito sereno es el más duradero.» — Proverbio",
-"«La mayor conquista es la serenidad interior.» — Proverbio"
-],
+"«El éxito sin paz interior no es verdadero éxito.» — Proverbio","«La verdadera victoria es estar en paz contigo mismo.» — Proverbio","«El éxito es saber disfrutar del silencio.» — Proverbio","«Triunfar es mantener la calma en la tormenta.» — Proverbio","«El verdadero éxito es no dejarse arrastrar por la prisa.» — Proverbio","«La calma es el mayor triunfo del espíritu.» — Proverbio","«No hay éxito que merezca tu paz mental.» — Proverbio","«Gana quien sabe esperar.» — Proverbio","«El éxito sereno es el más duradero.» — Proverbio","«La mayor conquista es la serenidad interior.» — Proverbio"],
 vida:[
-"«La vida es un río, fluye con él, no luches.» — Proverbio",
-"«La calma es la fuerza silenciosa que todo lo puede.» — Proverbio",
-"«Respira. Todo está bien.» — Proverbio",
-"«Vivir con calma es vivir dos veces.» — Proverbio",
-"«La vida no es una emergencia.» — Proverbio",
-"«En la quietud se encuentra la esencia de la vida.» — Proverbio",
-"«La vida simple es la vida feliz.» — Proverbio",
-"«No busques fuera, la paz está dentro.» — Proverbio",
-"«Cada día es una meditación si lo vives con calma.» — Proverbio",
-"«La serenidad es el arte de vivir.» — Proverbio"
-],
+"«La vida es un río, fluye con él, no luches.» — Proverbio","«La calma es la fuerza silenciosa que todo lo puede.» — Proverbio","«Respira. Todo está bien.» — Proverbio","«Vivir con calma es vivir dos veces.» — Proverbio","«La vida no es una emergencia.» — Proverbio","«En la quietud se encuentra la esencia de la vida.» — Proverbio","«La vida simple es la vida feliz.» — Proverbio","«No busques fuera, la paz está dentro.» — Proverbio","«Cada día es una meditación si lo vives con calma.» — Proverbio","«La serenidad es el arte de vivir.» — Proverbio"],
 sabiduria:[
-"«La sabiduría está en saber cuándo actuar y cuándo callar.» — Proverbio",
-"«En el silencio encontramos las respuestas.» — Proverbio",
-"«La paciencia es la mayor sabiduría.» — Proverbio",
-"«Sabio es quien cultiva la calma en el caos.» — Proverbio",
-"«La quietud es la puerta de la sabiduría.» — Proverbio",
-"«Escucha el silencio, tiene mucho que enseñarte.» — Proverbio",
-"«La sabiduría es hija de la reflexión serena.» — Proverbio",
-"«No hay prisa para el que sabe esperar.» — Proverbio",
-"«La calma es la firma de la inteligencia emocional.» — Proverbio",
-"«El sabio encuentra paz donde otros encuentran ruido.» — Proverbio"
-]}};
+"«La sabiduría está en saber cuándo actuar y cuándo callar.» — Proverbio","«En el silencio encontramos las respuestas.» — Proverbio","«La paciencia es la mayor sabiduría.» — Proverbio","«Sabio es quien cultiva la calma en el caos.» — Proverbio","«La quietud es la puerta de la sabiduría.» — Proverbio","«Escucha el silencio, tiene mucho que enseñarte.» — Proverbio","«La sabiduría es hija de la reflexión serena.» — Proverbio","«No hay prisa para el que sabe esperar.» — Proverbio","«La calma es la firma de la inteligencia emocional.» — Proverbio","«El sabio encuentra paz donde otros encuentran ruido.» — Proverbio"]
+}};
 
 const modos={clasico:modoClasico,feminista:modoFeminista,humor:modoHumor,sabiduria:modoSabiduria,feliz:modoFeliz,melancolico:modoMelancolico,motivacion:modoMotivacion,calma:modoCalma};
 
@@ -1052,7 +756,6 @@ const respuestasSurrealistas=["«Los pingüinos usan esmoquin porque es el únic
 const palabrasClave={amor:["amor","pareja","corazón","novio","novia","casar","romance","beso","enamorar","querer","relación","matrimonio","boda"],trabajo:["trabajo","oficina","jefe","empresa","ascender","curro","empleo","salario","sueldo","profesión","carrera","despido","renuncia","trabajar"],futuro:["futuro","pasará","destino","mañana","próximo","sucederá","ocurrirá","vendrá","porvenir","predicción","adivinar","profecía"],dinero:["dinero","rico","pobre","ganar","invertir","euro","millon","ahorrar","gastar","fortuna","moneda","billete","premio","lotería","riqueza","pobreza"],familia:["familia","madre","padre","hijo","hermano","abuela","tío","tía","primo","sobrino","familiar","hogar","casa","pareja","esposo","esposa","marido","mujer"],amigos:["amigo","amigos","amistad","compañero","colega","conocido","amistades","social","quedar"],exito:["éxito","triunfar","lograr","conseguir","meta","sueño","objetivo","ganar","vencer","superar","cumplir","alcanzar","victoria"],vida:["vida","vivir","muerte","existencia","nacer","morir","fallecer","destino","camino","sentido"]};
 
 function detectarTema(pregunta){const texto=pregunta.toLowerCase();for(let[tema,palabras]of Object.entries(palabrasClave)){for(let palabra of palabras)if(texto.includes(palabra))return tema;}return'sabiduria';}
-
 function obtenerCitaPorContexto(pregunta){const tema=detectarTema(pregunta);let citasDisponibles=modoActivo.citas[tema]||modoActivo.citas.sabiduria;let candidatas=citasDisponibles.filter(c=>!frasesUsadas.has(c));if(candidatas.length===0){frasesUsadas.clear();candidatas=citasDisponibles;}return candidatas[Math.floor(Math.random()*candidatas.length)];}
 
 let sesionId=localStorage.getItem('bola8_sesion_id');if(!sesionId){sesionId='sesion_'+Date.now()+'_'+Math.random().toString(36).substr(2,8);localStorage.setItem('bola8_sesion_id',sesionId);}
@@ -1066,6 +769,74 @@ function toggleStats(){const panel=document.getElementById('statsPanel');panel.c
 
 function cambiarModo(modoId){modoActual=modoId;modoActivo=modos[modoId];frasesUsadas.clear();historial=[];contadorCategorias={};guardarHistorial();actualizarStatsUI();document.querySelectorAll('.modo-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.modo===modoId);});chatTexto.innerText='🎭 Modo '+modoActivo.nombre;setTimeout(()=>{if(chatTexto.innerText==='🎭 Modo '+modoActivo.nombre)chatTexto.innerText='';},2000);document.getElementById('modoPanel').classList.remove('visible');}
 
+// ============================================================
+// REPRODUCTOR DE CITAS (PLAY/PAUSE)
+// ============================================================
+let reproduciendoCitas=false;
+let indiceCitaActual=0;
+let todasLasCitas=[];
+let timeoutCita=null;
+
+function obtenerTodasLasCitasDelModo(){
+    let citas=[];
+    for(let cat in modoActivo.citas){
+        citas=citas.concat(modoActivo.citas[cat]);
+    }
+    // Barajar
+    for(let i=citas.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [citas[i],citas[j]]=[citas[j],citas[i]];
+    }
+    return citas;
+}
+
+function toggleReproduccionCitas(){
+    if(reproduciendoCitas){
+        pausarReproduccion();
+    }else{
+        iniciarReproduccion();
+    }
+}
+
+function iniciarReproduccion(){
+    if(reproduciendoCitas)return;
+    reproduciendoCitas=true;
+    todasLasCitas=obtenerTodasLasCitasDelModo();
+    indiceCitaActual=0;
+    document.getElementById('preguntarBtn').classList.add('reproduciendo');
+    document.getElementById('playIcon').textContent='⏸️';
+    reproducirSiguienteCita();
+}
+
+function pausarReproduccion(){
+    reproduciendoCitas=false;
+    if(timeoutCita)clearTimeout(timeoutCita);
+    if(synth&&synth.speaking)synth.cancel();
+    document.getElementById('preguntarBtn').classList.remove('reproduciendo');
+    document.getElementById('playIcon').textContent='▶';
+}
+
+function reproducirSiguienteCita(){
+    if(!reproduciendoCitas)return;
+    if(indiceCitaActual>=todasLasCitas.length){
+        // Reiniciar ciclo
+        indiceCitaActual=0;
+        todasLasCitas=obtenerTodasLasCitasDelModo();
+    }
+    const cita=todasLasCitas[indiceCitaActual];
+    chatTexto.innerText=cita;
+    ultimaRespuesta=cita;
+    registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));
+    if(!girada)girarBola();
+    agitarBola();
+    setTimeout(()=>hablar(cita),500);
+    indiceCitaActual++;
+    // Esperar a que termine de hablar para pasar a la siguiente
+    timeoutCita=setTimeout(()=>{
+        reproducirSiguienteCita();
+    },8000); // 8 segundos entre citas
+}
+
 // VOCES
 let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let synth=window.speechSynthesis;let vocesDisponibles=[];let vozActual='auto';let vozSeleccionada=null;let timeoutTransform=null;let ultimaRespuesta='';
 
@@ -1074,7 +845,7 @@ const estilosVoz={auto:{preferencias:[]},grave:{preferencias:['grave','profunda'
 function cargarVoces(){if(!synth)return;vocesDisponibles=synth.getVoices();seleccionarVozPorEstilo(vozActual);}
 function seleccionarVozPorEstilo(estilo){if(!synth||vocesDisponibles.length===0)return;let vocesEspanolas=vocesDisponibles.filter(v=>v.lang==='es-ES'||v.lang==='es_ES'||v.lang.startsWith('es-ES')||v.lang.startsWith('es_ES'));if(vocesEspanolas.length===0)vocesEspanolas=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesEspanolas.length===0){vozSeleccionada=null;return;}if(estilo==='auto'){vozSeleccionada=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain'))||vocesEspanolas[0];}else{const preferencias=estilosVoz[estilo]?.preferencias||[];let mejorVoz=null;for(let pref of preferencias){mejorVoz=vocesEspanolas.find(v=>v.name.toLowerCase().includes(pref.toLowerCase()));if(mejorVoz)break;}if(!mejorVoz){mejorVoz=vocesEspanolas.find(v=>v.name.includes('España'))||vocesEspanolas[0];}vozSeleccionada=mejorVoz;}vozActual=estilo;localStorage.setItem('bola8_voz_estilo',estilo);document.querySelectorAll('.voz-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.voz===estilo);});}
 
-function hablar(texto){if(!synth)return;if(synth.speaking)synth.cancel();if(vocesDisponibles.length===0)cargarVoces();let utterance=new SpeechSynthesisUtterance(texto);utterance.lang='es-ES';utterance.rate=0.9;utterance.pitch=1.0;if(vozActual==='grave'){utterance.pitch=0.8;utterance.rate=0.85;}else if(vozActual==='aguda'){utterance.pitch=1.2;utterance.rate=1.0;}else if(vozActual==='calma'){utterance.rate=0.7;utterance.pitch=1.0;}else if(vozActual==='motivador'){utterance.rate=1.0;utterance.pitch=1.1;}else if(vozActual==='sabia'){utterance.rate=0.75;utterance.pitch=0.9;}if(vozSeleccionada)utterance.voice=vozSeleccionada;utterance.lang='es-ES';synth.speak(utterance);}
+function hablar(texto){if(!synth)return;if(synth.speaking&&!reproduciendoCitas)synth.cancel();if(vocesDisponibles.length===0)cargarVoces();let utterance=new SpeechSynthesisUtterance(texto);utterance.lang='es-ES';utterance.rate=0.9;utterance.pitch=1.0;if(vozActual==='grave'){utterance.pitch=0.8;utterance.rate=0.85;}else if(vozActual==='aguda'){utterance.pitch=1.2;utterance.rate=1.0;}else if(vozActual==='calma'){utterance.rate=0.7;utterance.pitch=1.0;}else if(vozActual==='motivador'){utterance.rate=1.0;utterance.pitch=1.1;}else if(vozActual==='sabia'){utterance.rate=0.75;utterance.pitch=0.9;}if(vozSeleccionada)utterance.voice=vozSeleccionada;utterance.lang='es-ES';synth.speak(utterance);}
 
 if(synth){vozActual=localStorage.getItem('bola8_voz_estilo')||'auto';cargarVoces();synth.onvoiceschanged=function(){cargarVoces();};setTimeout(()=>{if(vocesDisponibles.length===0)cargarVoces();},500);}
 
@@ -1083,36 +854,84 @@ function lanzarParticulas(){const scene=document.getElementById('scene');const r
 function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');lanzarParticulas();setTimeout(()=>{bola.classList.remove('shaking');},800);}
 
 // UI
-const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const caraBack=document.getElementById('caraBack');const chatTexto=document.getElementById('chatTexto');const shapeElement=document.getElementById('shapeElement');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');
+const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const caraBack=document.getElementById('caraBack');const chatTexto=document.getElementById('chatTexto');const panelFlotante=document.getElementById('panelFlotante');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const playIcon=document.getElementById('playIcon');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');
 
-function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;if(timeoutTransform)clearTimeout(timeoutTransform);timeoutTransform=setTimeout(()=>{if(girada)shapeElement.classList.add('cuadrado');},1500);}
-function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;if(timeoutTransform)clearTimeout(timeoutTransform);shapeElement.classList.remove('cuadrado');}
+function girarBola(){
+    bola.style.transform='rotateY(180deg)';
+    girada=true;
+    panelFlotante.classList.add('visible');
+}
+function regresarBola(){
+    bola.style.transform='rotateY(0deg)';
+    girada=false;
+    panelFlotante.classList.remove('visible');
+}
 function toggleBola(){girada?regresarBola():girarBola();}
 setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
 
-function mostrarRespuesta(respuesta,pregunta,leer=true){chatTexto.innerText=respuesta;ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer){setTimeout(()=>hablar(respuesta),500);}}
+function mostrarRespuesta(respuesta,pregunta,leer=true){
+    chatTexto.innerText=respuesta;
+    ultimaRespuesta=respuesta;
+    registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));
+    if(leer&&!reproduciendoCitas){
+        setTimeout(()=>hablar(respuesta),500);
+    }
+}
 
-function procesarPregunta(texto,leer=true){if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];mostrarRespuesta(r,"[pregunta vacía]",leer);if(!girada)girarBola();agitarBola();return;}let respuesta=obtenerCitaPorContexto(texto);mostrarRespuesta(respuesta,texto,leer);if(!girada)girarBola();agitarBola();}
+function procesarPregunta(texto,leer=true){
+    if(reproduciendoCitas)pausarReproduccion();
+    if(!texto||!texto.trim()){
+        let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];
+        mostrarRespuesta(r,"[pregunta vacía]",leer);
+        if(!girada)girarBola();
+        agitarBola();
+        return;
+    }
+    let respuesta=obtenerCitaPorContexto(texto);
+    mostrarRespuesta(respuesta,texto,leer);
+    if(!girada)girarBola();
+    agitarBola();
+}
 
-function respuestaAleatoria(){let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];mostrarRespuesta(r,"[aleatorio]",true);if(!girada)girarBola();agitarBola();}
+function respuestaAleatoria(){
+    if(reproduciendoCitas)pausarReproduccion();
+    let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];
+    mostrarRespuesta(r,"[aleatorio]",true);
+    if(!girada)girarBola();
+    agitarBola();
+}
 
-function leerTextoActual(){if(ultimaRespuesta)hablar(ultimaRespuesta);else if(chatTexto.innerText&&chatTexto.innerText.trim())hablar(chatTexto.innerText);else{let s="ESCRIBE UNA PREGUNTA PRIMERO";chatTexto.innerText=s;hablar(s);}}
+function leerTextoActual(){
+    if(ultimaRespuesta)hablar(ultimaRespuesta);
+    else if(chatTexto.innerText&&chatTexto.innerText.trim())hablar(chatTexto.innerText);
+    else{let s="ESCRIBE UNA PREGUNTA PRIMERO";chatTexto.innerText=s;hablar(s);}
+}
 
-function iniciarMicrofono(){if(!('webkitSpeechRecognition'in window)){chatTexto.innerText="❌ VOZ NO SOPORTADA EN ESTE NAVEGADOR";return;}const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;reconocimiento=new SpeechRecognition();reconocimiento.lang='es-ES';reconocimiento.onstart=()=>{grabando=true;microBtn.classList.add('grabando');chatTexto.innerText="🎤 ESCUCHANDO...";};reconocimiento.onresult=(e)=>{let texto=e.results[0][0].transcript;chatTexto.innerText=texto;procesarPregunta(texto,true);detenerMicrofono();};reconocimiento.onerror=()=>detenerMicrofono();reconocimiento.onend=()=>detenerMicrofono();reconocimiento.start();}
+function iniciarMicrofono(){
+    if(reproduciendoCitas)pausarReproduccion();
+    if(!('webkitSpeechRecognition'in window)){chatTexto.innerText="❌ VOZ NO SOPORTADA EN ESTE NAVEGADOR";return;}
+    const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+    reconocimiento=new SpeechRecognition();reconocimiento.lang='es-ES';
+    reconocimiento.onstart=()=>{grabando=true;microBtn.classList.add('grabando');chatTexto.innerText="🎤 ESCUCHANDO...";};
+    reconocimiento.onresult=(e)=>{let texto=e.results[0][0].transcript;chatTexto.innerText=texto;procesarPregunta(texto,true);detenerMicrofono();};
+    reconocimiento.onerror=()=>detenerMicrofono();
+    reconocimiento.onend=()=>detenerMicrofono();
+    reconocimiento.start();
+}
 function detenerMicrofono(){if(reconocimiento)try{reconocimiento.stop();}catch(e){}grabando=false;microBtn.classList.remove('grabando');if(chatTexto.innerText==="🎤 ESCUCHANDO...")chatTexto.innerText="";}
 function toggleMicrofono(){grabando?detenerMicrofono():iniciarMicrofono();}
 
 function iniciarDeteccionMovimiento(){if(window.DeviceMotionEvent){window.addEventListener('devicemotion',(e)=>{let ahora=Date.now();if(ahora-ultimoAgite<800)return;let acc=e.accelerationIncludingGravity;if(!acc)return;let fuerza=Math.abs((acc.x||0)-ultimaX)+Math.abs((acc.y||0)-ultimaY)+Math.abs((acc.z||0)-ultimaZ);if(fuerza>25){ultimoAgite=ahora;respuestaAleatoria();}ultimaX=acc.x||0;ultimaY=acc.y||0;ultimaZ=acc.z||0;});}}
 function solicitarPermisoMovimiento(){if(typeof DeviceMotionEvent.requestPermission==='function'){DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')iniciarDeteccionMovimiento();});}else iniciarDeteccionMovimiento();}
 
-sceneEl.addEventListener('click',(e)=>{if(e.target===reproducirBtn||e.target===preguntarBtn||e.target===microBtn||reproducirBtn.contains(e.target)||preguntarBtn.contains(e.target)||microBtn.contains(e.target))return;if(e.target===caraBack||caraBack.contains(e.target)){if(girada)chatTexto.focus();}else{toggleBola();}});
-preguntarBtn.addEventListener('click',()=>procesarPregunta(chatTexto.innerText,true));
+sceneEl.addEventListener('click',(e)=>{if(e.target===reproducirBtn||e.target===preguntarBtn||e.target===microBtn||reproducirBtn.contains(e.target)||preguntarBtn.contains(e.target)||microBtn.contains(e.target))return;toggleBola();});
+preguntarBtn.addEventListener('click',toggleReproduccionCitas);
 microBtn.addEventListener('click',toggleMicrofono);
-reproducirBtn.addEventListener('click',leerTextoActual);
+reproducirBtn.addEventListener('click',()=>{if(reproduciendoCitas)pausarReproduccion();leerTextoActual();});
 statsBtn.addEventListener('click',toggleStats);
 statsCerrar.addEventListener('click',toggleStats);
 btnModo.addEventListener('click',(e)=>{e.stopPropagation();modoPanel.classList.toggle('visible');vozPanel.classList.remove('visible');});
-document.querySelectorAll('.modo-opcion').forEach(btn=>{btn.addEventListener('click',()=>cambiarModo(btn.dataset.modo));});
+document.querySelectorAll('.modo-opcion').forEach(btn=>{btn.addEventListener('click',()=>{if(reproduciendoCitas)pausarReproduccion();cambiarModo(btn.dataset.modo);});});
 btnVoz.addEventListener('click',(e)=>{e.stopPropagation();vozPanel.classList.toggle('visible');modoPanel.classList.remove('visible');});
 document.querySelectorAll('.voz-opcion').forEach(btn=>{btn.addEventListener('click',()=>{seleccionarVozPorEstilo(btn.dataset.voz);vozPanel.classList.remove('visible');});});
 document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!modoPanel.contains(e.target))modoPanel.classList.remove('visible');if(!btnVoz.contains(e.target)&&!vozPanel.contains(e.target))vozPanel.classList.remove('visible');});
