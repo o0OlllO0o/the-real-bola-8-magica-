@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1f2e">
-    <title>🔮 Bola Mágica 8 · Asistente de Sabiduría</title>
+    <title>🔮 Bola Mágica 8</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:linear-gradient(145deg,#1a1f2e 0%,#0a0d16 100%);color:#eee;padding:16px;}
@@ -32,6 +32,7 @@
         input{flex:1;padding:12px;border-radius:30px;border:none;background:#2a2a3a;color:#fff;font-size:0.9rem;outline:none;}
         button{background:#e6c89a;border:none;color:#1e2a36;font-weight:bold;padding:12px 20px;border-radius:30px;cursor:pointer;}
         .shake-hint{text-align:center;font-size:0.7rem;opacity:0.5;margin-top:15px;}
+        .activar-shake{background:#5a7a9e;margin-top:10px;padding:8px;border-radius:20px;font-size:0.75rem;text-align:center;cursor:pointer;}
     </style>
 </head>
 <body>
@@ -59,18 +60,23 @@
         <button id="enviarBtn">🔮 Preguntar</button>
     </div>
     <div class="shake-hint" id="shakeHint">📱 Agita la bola para respuesta aleatoria</div>
+    <div class="activar-shake" id="activarShakeBtn" style="display:none;">🎯 Tocar para activar agitado</div>
 </div>
 <script>
     const respuestasPorFiltro = {
-        familia: ["La familia es como un buen guiso: a veces sale mal, pero siempre alimenta el alma 🍲","El amor familiar es el único que no necesita WiFi para funcionar","Tu familia te apoya... aunque no entiendan nada de lo que haces","Reunión familiar = amor + preguntas incómodas + comida 🛡️","La sangre tira más que el cable del cargador"],
-        solo: ["La soledad es tu mejor maestra... y no cobra matrícula 🧘","Estar solo es como tener el mando de la tele siempre para ti","La mejor compañía eres tú mismo","La independencia es como la batería: cuando estás solo, dura más 🔋","A solas con tus pensamientos... espero que sean buena gente"],
-        mascotas: ["Tu mascota te quiere incondicionalmente. Sobre todo si tienes comida 🐕","Los perros te miran como si fueras un héroe. Los gatos, como su sirviente","La lealtad de un animal es más pura que la mayoría de los humanos 🐱","Pasea a tu mascota. Ella te pasea el alma","Ellos no entienden tus problemas, pero entienden cuando estás tristes"],
-        pareja: ["El amor es como las plantas: hay que regarlo, pero sin ahogarlo 💑","La pareja perfecta no existe. La que se ríe de tus chistes malos, esa sí","Discutir por la manta es parte del plan. El amor también es compartir frío ❄️","El amor dura lo que un cargador nuevo... si lo cuidas, mucho más","Las relaciones son como el software: necesitan actualizaciones constantes"],
-        amigos: ["Los amigos son la familia que eliges... y que te aguanta las borracheras 🍻","Un amigo es quien te ayuda a mover el sofá... y se queda a ver la tele","La amistad es como el WiFi gratis: no siempre la encuentras, pero cuando la tienes es oro","Los verdaderos amigos son los que te dicen 'tienes algo en el diente'","Amigos: esas personas que conocen tu música rara y no te juzgan 🎵"]
+        familia: ["La familia es como un buen guiso: a veces sale mal, pero siempre alimenta el alma 🍲","El amor familiar es el único que no necesita WiFi","Tu familia te apoya... aunque no entiendan nada","Reunión familiar = amor + preguntas incómodas + comida 🛡️","La sangre tira más que el cable del cargador"],
+        solo: ["La soledad es tu mejor maestra... y no cobra matrícula 🧘","Estar solo es tener el mando de la tele siempre para ti","La mejor compañía eres tú mismo","La independencia es como la batería: dura más 🔋","A solas con tus pensamientos... espero que sean buena gente"],
+        mascotas: ["Tu mascota te quiere incondicionalmente. Sobre todo si tienes comida 🐕","Los perros te miran como si fueras un héroe. Los gatos, como su sirviente","La lealtad de un animal es más pura que la humana 🐱","Pasea a tu mascota. Ella te pasea el alma","Ellos no entienden tus problemas, pero entienden cuando estás tristes"],
+        pareja: ["El amor es como las plantas: hay que regarlo, sin ahogarlo 💑","La pareja perfecta no existe. La que se ríe de tus chistes malos","Discutir por la manta es parte del plan. El amor también es frío ❄️","El amor dura como un cargador nuevo... si lo cuidas, mucho más","Las relaciones son como el software: necesitan actualizaciones"],
+        amigos: ["Los amigos son la familia que eliges... y que te aguanta 🍻","Un amigo te ayuda a mover el sofá... y se queda a ver la tele","La amistad es como el WiFi gratis: cuando la tienes es oro","Los verdaderos amigos te dicen 'tienes algo en el diente'","Amigos: esos que conocen tu música rara y no te juzgan 🎵"]
     };
-    const respuestasGenerales = ["La sabiduría está en escuchar más de lo que hablas... pero yo soy una bola","El universo conspira a tu favor... cuando se acuerda","La respuesta está dentro de ti. Y también dentro de este código","La vida es como una cebolla: tiene capas, y a veces te hace llorar 🧅","No hay preguntas tontas, solo respuestas surrealistas como esta"];
+    const respuestasGenerales = ["La sabiduría está en escuchar más de lo que hablas... pero yo soy una bola","El universo conspira a tu favor... cuando se acuerda","La respuesta está dentro de ti. Y también dentro de este código","La vida es como una cebolla: tiene capas, y a veces te hace llorar 🧅","No hay preguntas tontas, solo respuestas surrealistas"];
     
     let filtrosActivos = [];
+    let shakeActivado = false;
+    let ultimoAgite = 0;
+    let ultimaX=0, ultimaY=0, ultimaZ=0;
+    
     const bola = document.getElementById('bola');
     const cita = document.getElementById('cita');
     const autor = document.getElementById('autor');
@@ -81,6 +87,7 @@
     const inputPregunta = document.getElementById('pregunta');
     const enviarBtn = document.getElementById('enviarBtn');
     const shakeHint = document.getElementById('shakeHint');
+    const activarShakeBtn = document.getElementById('activarShakeBtn');
     
     function actualizarFiltrosUI() {
         if (filtrosActivos.length === 0) { filtrosAcumulador.style.display = 'none'; return; }
@@ -113,7 +120,7 @@
         const todos = ['familia', 'solo', 'mascotas', 'pareja', 'amigos'];
         const disponibles = todos.filter(f => !filtrosActivos.includes(f));
         if (disponibles.length === 0) {
-            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los filtros activados. Elimina alguno para añadir más.</span>';
+            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los filtros activados. Elimina alguno.</span>';
             return;
         }
         disponibles.forEach(filtro => {
@@ -161,22 +168,49 @@
         else { cita.textContent = "¡Escribe una pregunta primero!"; setTimeout(() => cita.textContent = "🔮 Selecciona filtros o escribe...", 2000); }
     }
     
+    function iniciarDeteccionMovimiento() {
+        if (window.DeviceMotionEvent) {
+            window.addEventListener('devicemotion', function(e) {
+                const ahora = Date.now();
+                if (ahora - ultimoAgite < 800) return;
+                const acc = e.accelerationIncludingGravity;
+                if (!acc) return;
+                const x = acc.x || 0, y = acc.y || 0, z = acc.z || 0;
+                const fuerza = Math.abs(x - ultimaX) + Math.abs(y - ultimaY) + Math.abs(z - ultimaZ);
+                if (fuerza > 25) {
+                    ultimoAgite = ahora;
+                    animarAgitar();
+                }
+                ultimaX = x; ultimaY = y; ultimaZ = z;
+            });
+            shakeActivado = true;
+            shakeHint.textContent = "📱 ¡Agitado activado! Agita la bola";
+            activarShakeBtn.style.display = 'none';
+        }
+    }
+    
+    // iOS: pedir permiso (necesita interacción del usuario)
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
+        shakeHint.textContent = "📱 iOS detectado. Toca 'Activar agitado' para usar el giroscopio";
+        activarShakeBtn.style.display = 'block';
+        activarShakeBtn.addEventListener('click', () => {
+            DeviceMotionEvent.requestPermission()
+                .then(response => {
+                    if (response === 'granted') {
+                        iniciarDeteccionMovimiento();
+                    }
+                })
+                .catch(console.error);
+        });
+    } else if (window.DeviceMotionEvent) {
+        iniciarDeteccionMovimiento();
+    } else {
+        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado. Usa el botón.";
+    }
+    
     enviarBtn.addEventListener('click', () => mostrarRespuesta(inputPregunta.value));
     inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') mostrarRespuesta(inputPregunta.value); });
     bola.addEventListener('click', animarAgitar);
-    
-    if (window.DeviceMotionEvent) {
-        let ultimaX=0, ultimaY=0, ultimaZ=0, ultimoAgite=0;
-        window.addEventListener('devicemotion', function(e) {
-            const ahora=Date.now();
-            if(ahora-ultimoAgite<800) return;
-            const acc=e.accelerationIncludingGravity;
-            if(!acc) return;
-            const fuerza=Math.abs((acc.x||0)-ultimaX)+Math.abs((acc.y||0)-ultimaY)+Math.abs((acc.z||0)-ultimaZ);
-            if(fuerza>25){ ultimoAgite=ahora; animarAgitar(); }
-            ultimaX=acc.x||0; ultimaY=acc.y||0; ultimaZ=acc.z||0;
-        });
-    }
     
     actualizarFiltrosUI();
     regenerarSugerencias();
