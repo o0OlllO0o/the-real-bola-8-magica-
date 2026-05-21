@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#111111">
-    <title>🎱 Bola Mágica 8</title>
+    <title>🎱 Bola Mágica 8 - Con Voz</title>
     <style>
         * {
             margin: 0;
@@ -125,6 +125,7 @@
             background: radial-gradient(circle at 35% 35%, #1a2a2a, #0a0a1a);
             transform: rotateY(180deg);
             padding: 8%;
+            pointer-events: auto;
         }
 
         .triangulo {
@@ -139,14 +140,15 @@
             padding: 15% 10% 20% 10%;
             border: 1px solid rgba(80, 180, 255, 0.4);
             box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
         }
 
         .chat-area {
             width: 100%;
-            height: 100%;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            transition: all 0.3s ease;
         }
 
         .texto-unificado {
@@ -166,6 +168,18 @@
             min-height: 100px;
             max-height: 160px;
             overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .texto-unificado.expandido {
+            min-height: 180px;
+            max-height: 250px;
+            font-size: clamp(0.8rem, 4vw, 1rem);
+            padding: 18px 14px;
+        }
+
+        .triangulo.expandido {
+            padding: 10% 8% 18% 8%;
         }
 
         .texto-unificado:focus {
@@ -198,6 +212,10 @@
         .micro-btn.grabando {
             background: #a33;
             animation: pulse 1s infinite;
+        }
+
+        .speaker-btn {
+            background: #4a6a8a;
         }
 
         @keyframes pulse {
@@ -233,7 +251,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- Call to action flotante -->
     <div class="cta" id="cta">✨ ¿Qué quieres hoy? ✨</div>
 
     <div class="scene" id="scene">
@@ -242,13 +259,14 @@
                 <div class="numero-8"><span>8</span></div>
                 <div class="brillo"></div>
             </div>
-            <div class="cara back">
-                <div class="triangulo">
+            <div class="cara back" id="caraBack">
+                <div class="triangulo" id="triangulo">
                     <div class="chat-area">
                         <div class="texto-unificado" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
                         <div class="botones-triangulo">
                             <button class="btn" id="preguntarBtn">🔮 Preguntar</button>
                             <button class="btn micro-btn" id="microBtn">🎤 Hablar</button>
+                            <button class="btn speaker-btn" id="speakerBtn">🔊 Leer</button>
                         </div>
                     </div>
                 </div>
@@ -257,7 +275,7 @@
         </div>
     </div>
 </div>
-<div class="info-externa" id="infoExterna">📱 Toca la bola para girarla | Agita para respuesta aleatoria</div>
+<div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | 🔊 La bola lee las respuestas</div>
 
 <script>
     // ============================================================
@@ -295,44 +313,62 @@
     let grabando = false;
     let girada = false;
     let ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
+    let synth = window.speechSynthesis;
+    let vozSeleccionada = null;
+
+    // Cargar voz en español
+    function cargarVoz() {
+        if (!synth) return;
+        const voces = synth.getVoices();
+        vozSeleccionada = voces.find(v => v.lang.startsWith('es')) || voces[0];
+    }
+    if (synth) {
+        synth.onvoiceschanged = cargarVoz;
+        cargarVoz();
+    }
+
+    function hablar(texto) {
+        if (!synth) return;
+        if (synth.speaking) synth.cancel();
+        const utterance = new SpeechSynthesisUtterance(texto);
+        if (vozSeleccionada) utterance.voice = vozSeleccionada;
+        utterance.lang = 'es-ES';
+        utterance.rate = 0.9;
+        utterance.pitch = 0.9;
+        synth.speak(utterance);
+    }
 
     const bola = document.getElementById('bola');
     const scene = document.getElementById('scene');
+    const caraBack = document.getElementById('caraBack');
+    const triangulo = document.getElementById('triangulo');
     const chatTexto = document.getElementById('chatTexto');
     const preguntarBtn = document.getElementById('preguntarBtn');
     const microBtn = document.getElementById('microBtn');
+    const speakerBtn = document.getElementById('speakerBtn');
     const cta = document.getElementById('cta');
 
-    // ============================================================
-    // OCULTAR CTA AL INTERACTUAR
-    // ============================================================
     function ocultarCta() {
-        if (cta) {
+        if (cta && cta.style.visibility !== 'hidden') {
             cta.style.opacity = '0';
             cta.style.visibility = 'hidden';
-            cta.style.pointerEvents = 'none';
         }
     }
 
-    // Detectar cualquier interacción del usuario
-    scene.addEventListener('click', ocultarCta);
-    preguntarBtn.addEventListener('click', ocultarCta);
-    microBtn.addEventListener('click', ocultarCta);
-    chatTexto.addEventListener('focus', ocultarCta);
-    document.body.addEventListener('touchstart', ocultarCta);
-    document.body.addEventListener('click', ocultarCta);
-
-    // ============================================================
-    // BOLA
-    // ============================================================
     function girarBola() { bola.style.transform = 'rotateY(180deg)'; girada = true; }
     function regresarBola() { bola.style.transform = 'rotateY(0deg)'; girada = false; }
     function toggleBola() { girada ? regresarBola() : girarBola(); }
+
+    function expandirChat() {
+        if (girada) {
+            chatTexto.classList.toggle('expandido');
+            triangulo.classList.toggle('expandido');
+            chatTexto.focus();
+        }
+    }
+
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
-    // ============================================================
-    // RESPUESTAS
-    // ============================================================
     function obtenerRespuestaNormal() {
         let pool = [];
         for (let tema of temasActivos) if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
@@ -342,21 +378,24 @@
 
     function obtenerRespuestaExtrana() { return frasesExtranas[Math.floor(Math.random() * frasesExtranas.length)]; }
 
-    function mostrarRespuesta(respuesta) {
+    function mostrarRespuesta(respuesta, leer = true) {
         chatTexto.innerText = respuesta;
+        chatTexto.classList.remove('expandido');
+        triangulo.classList.remove('expandido');
+        if (leer) hablar(respuesta);
     }
 
-    function procesarPregunta(texto) {
+    function procesarPregunta(texto, leerRespuesta = true) {
         ocultarCta();
         if (!texto || !texto.trim()) {
             const respuesta = obtenerRespuestaExtrana();
-            mostrarRespuesta(respuesta);
+            mostrarRespuesta(respuesta, leerRespuesta);
             if (!girada) girarBola();
             setTimeout(() => regresarBola(), 3800);
             return;
         }
         const respuesta = obtenerRespuestaNormal();
-        mostrarRespuesta(respuesta);
+        mostrarRespuesta(respuesta, leerRespuesta);
         if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3800);
     }
@@ -364,14 +403,24 @@
     function respuestaAleatoria() {
         ocultarCta();
         const esExtrana = Math.random() < 0.5;
-        mostrarRespuesta(esExtrana ? obtenerRespuestaExtrana() : obtenerRespuestaNormal());
+        const respuesta = esExtrana ? obtenerRespuestaExtrana() : obtenerRespuestaNormal();
+        mostrarRespuesta(respuesta, true);
         if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3800);
     }
 
-    // ============================================================
-    // MICRÓFONO
-    // ============================================================
+    function leerTextoActual() {
+        const texto = chatTexto.innerText;
+        if (texto && texto.trim()) {
+            hablar(texto);
+        } else {
+            const saludo = "Escribe o pregunta algo, y te lo leeré.";
+            chatTexto.innerText = saludo;
+            hablar(saludo);
+        }
+    }
+
+    // Micrófono
     function iniciarMicrofono() {
         if (!('webkitSpeechRecognition' in window)) {
             chatTexto.innerText = "❌ Voz no soportada";
@@ -389,7 +438,7 @@
         reconocimiento.onresult = (event) => {
             const texto = event.results[0][0].transcript;
             chatTexto.innerText = texto;
-            procesarPregunta(texto);
+            procesarPregunta(texto, true);
             detenerMicrofono();
         };
         reconocimiento.onerror = () => {
@@ -410,9 +459,7 @@
 
     function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
 
-    // ============================================================
-    // AGITADO
-    // ============================================================
+    // Movimiento
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', (e) => {
@@ -433,13 +480,21 @@
         } else iniciarDeteccionMovimiento();
     }
 
-    // ============================================================
-    // EVENTOS
-    // ============================================================
-    scene.addEventListener('click', toggleBola);
-    preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText));
+    // Eventos
+    scene.addEventListener('click', (e) => {
+        if (e.target === caraBack || caraBack.contains(e.target)) {
+            if (girada) expandirChat();
+        } else {
+            toggleBola();
+        }
+    });
+
+    preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText, true));
     microBtn.addEventListener('click', toggleMicrofono);
-    chatTexto.focus();
+    speakerBtn.addEventListener('click', leerTextoActual);
+    chatTexto.addEventListener('focus', ocultarCta);
+    document.body.addEventListener('touchstart', ocultarCta);
+    document.body.addEventListener('click', ocultarCta);
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
         const btnPermiso = document.createElement('div');
