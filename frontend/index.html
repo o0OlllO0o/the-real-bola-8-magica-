@@ -19,33 +19,34 @@
         .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);}
         .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
         .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
-        .cara.back{background:radial-gradient(circle at 35% 35%, #0a0a0a, #000000);transform:rotateY(180deg);padding:12%;pointer-events:auto;overflow:hidden;}
         
-        /* Contenedor del elemento transformable */
-        .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;transition:all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
+        /* Cara trasera completamente NEGRA */
+        .cara.back{background:#000000;transform:rotateY(180deg);padding:12%;pointer-events:auto;box-shadow:inset 0 -25px 35px rgba(0,0,0,0.8), inset 0 25px 30px rgba(0,0,0,0.2), 0 25px 35px rgba(0,0,0,0.6);}
         
-        /* Estado inicial: triángulo */
-        .triangulo-shape{width:85%;height:75%;background:linear-gradient(145deg, #2a3a4a, #1a2a3a);clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(100,180,255,0.4);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.15), 0 5px 15px rgba(0,0,0,0.2);transition:all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
+        .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
         
-        /* Estado cuadrado (cuando está activo) */
-        .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:linear-gradient(145deg, #2a3a4a, #1a2a3a);}
+        /* Triángulo con fondo negro/gris muy oscuro */
+        .triangulo-shape{width:85%;height:75%;background:#0a0a0a;clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(80,180,255,0.3);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.08), 0 5px 15px rgba(0,0,0,0.3);transition:all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
         
-        .texto-multifuncional{width:100%;background:rgba(15,25,35,0.95);border:1px solid rgba(100,180,255,0.5);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;backdrop-filter:blur(4px);word-break:break-word;min-height:100%;height:auto;line-height:1.4;transition:all 0.3s ease;}
-        .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.4);}
+        /* Cuadrado (después de la transición) */
+        .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
+        
+        .texto-multifuncional{width:100%;background:#0a0a0a;border:1px solid rgba(80,180,255,0.4);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:100%;height:auto;line-height:1.4;transition:all 0.3s ease;}
+        .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.3);}
         
         .botones-externos{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
-        .btn-externo{background:#1a2a3a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
-        .btn-externo:active{transform:scale(0.96);background:#2a4a6a;}
-        .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.6);padding:6px;backdrop-filter:blur(4px);z-index:100;}
-        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), transparent 70%);pointer-events:none;}
+        .btn-externo{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
+        .btn-externo:active{transform:scale(0.96);background:#2a2a2a;}
+        .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
+        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 70%);pointer-events:none;}
         .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
         @keyframes fadeInOut{0%{opacity:0;transform:translate(-50%,-50%) scale(0.9);}15%{opacity:1;transform:translate(-50%,-50%) scale(1);}85%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.05);visibility:hidden;}}
         
-        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;transition:transform 0.3s ease, opacity 0.2s ease, visibility 0.2s;}
+        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
         .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
         .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
         .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;padding:0 8px;}
-        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a1a2a;border-radius:12px;font-size:0.7rem;color:#aaf;}
+        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a0a0a;border-radius:12px;font-size:0.7rem;color:#aaf;}
         .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;}
         .stats-item{padding:5px;border-bottom:1px solid #1a3a4a;}
     </style>
@@ -60,7 +61,7 @@
                 <div class="brillo"></div>
             </div>
             <div class="cara back" id="caraBack">
-                <div class="transformable-container" id="transformableContainer">
+                <div class="transformable-container">
                     <div class="triangulo-shape" id="shapeElement">
                         <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
                     </div>
@@ -76,7 +77,7 @@
     <button class="btn-externo" id="speakerBtn">🔊 LEER</button>
     <button class="btn-externo" id="statsBtn">📊 STATS</button>
 </div>
-<div class="info-externa">📱 Toca la bola (lado 8) para girar | El triángulo se transforma en cuadrado</div>
+<div class="info-externa">📱 Toca la bola | Triángulo → Cuadrado (transición elegante)</div>
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
     <div class="stats-resumen" id="statsResumen"></div>
@@ -85,7 +86,7 @@
 
 <script>
     // ============================================================
-    // CITAS CÉLEBRES VERIFICADAS
+    // CITAS CÉLEBRES VERIFICADAS (misma base de datos confiable)
     // ============================================================
     const citasPorTema = {
         amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
@@ -112,7 +113,7 @@
     function obtenerCitaPorTema() { let todos = ['amor','trabajo','futuro','dinero','familia','amigos','exito','vida','sabiduria']; let pool = []; for (let t of todos) if (citasPorTema[t]) pool.push(...citasPorTema[t]); return obtenerCitaSinRepetir(pool); }
     function obtenerRespuestaExtrana() { return obtenerCitaSinRepetir(respuestasSurrealistas); }
     function obtenerCategoria(cita) { for (let [cat, citas] of Object.entries(citasPorTema)) if (citas.includes(cita)) return cat; return 'extrana'; }
-    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}<br>📁 SESIÓN: ${sesionId.substr(0, 16)}...`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
+    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
     function toggleStats() { const panel = document.getElementById('statsPanel'); panel.classList.toggle('visible'); if (panel.classList.contains('visible')) actualizarStatsUI(); }
 
     let reconocimiento = null, grabando = false, girada = false, ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
@@ -132,19 +133,28 @@
     const statsBtn = document.getElementById('statsBtn');
     const statsCerrar = document.getElementById('statsCerrar');
     const cta = document.getElementById('cta');
+    
+    let timeoutTransform = null;
 
     function ocultarCta() { if (cta && cta.style.visibility !== 'hidden') { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; } }
+    
     function girarBola() { 
         bola.style.transform = 'rotateY(180deg)'; 
         girada = true; 
-        // Al girar, transformar triángulo a cuadrado con delay sutil
-        setTimeout(() => { shapeElement.classList.add('cuadrado'); }, 200);
+        // Esperar 1.5 segundos para que se vea bien el triángulo, luego transformar a cuadrado
+        if (timeoutTransform) clearTimeout(timeoutTransform);
+        timeoutTransform = setTimeout(() => { 
+            if (girada) shapeElement.classList.add('cuadrado'); 
+        }, 1500);
     }
+    
     function regresarBola() { 
         bola.style.transform = 'rotateY(0deg)'; 
         girada = false; 
+        if (timeoutTransform) clearTimeout(timeoutTransform);
         shapeElement.classList.remove('cuadrado');
     }
+    
     function toggleBola() { girada ? regresarBola() : girarBola(); }
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
@@ -153,28 +163,31 @@
         registrarInteraccion(pregunta, respuesta, obtenerCategoria(respuesta)); 
         if (leer) hablar(respuesta); 
     }
+    
     function procesarPregunta(texto, leer = true) { 
         ocultarCta(); 
         if (!texto || !texto.trim()) { 
             let r = obtenerRespuestaExtrana() || respuestasSurrealistas[0]; 
             mostrarRespuesta(r, "[pregunta vacía]", leer); 
             if (!girada) girarBola(); 
-            setTimeout(() => regresarBola(), 4000); 
+            setTimeout(() => regresarBola(), 5000); 
             return; 
         } 
         let r = obtenerCitaPorTema() || citasPorTema.sabiduria[0]; 
         mostrarRespuesta(r, texto, leer); 
         if (!girada) girarBola(); 
-        setTimeout(() => regresarBola(), 4000); 
+        setTimeout(() => regresarBola(), 5000); 
     }
+    
     function respuestaAleatoria() { 
         ocultarCta(); 
         let esExtrana = Math.random() < 0.3; 
         let r = esExtrana ? (obtenerRespuestaExtrana() || respuestasSurrealistas[0]) : (obtenerCitaPorTema() || citasPorTema.sabiduria[0]); 
         mostrarRespuesta(r, "[aleatorio]", true); 
         if (!girada) girarBola(); 
-        setTimeout(() => regresarBola(), 4000); 
+        setTimeout(() => regresarBola(), 5000); 
     }
+    
     function leerTextoActual() { let t = chatTexto.innerText; if (t && t.trim()) hablar(t); else { let s = "ESCRIBE UNA PREGUNTA PRIMERO"; chatTexto.innerText = s; hablar(s); } }
 
     function iniciarMicrofono() { if (!('webkitSpeechRecognition' in window)) { chatTexto.innerText = "❌ VOZ NO SOPORTADA"; return; } const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; reconocimiento = new SpeechRecognition(); reconocimiento.lang = 'es-ES'; reconocimiento.onstart = () => { grabando = true; microBtn.textContent = '🔴...'; chatTexto.innerText = "🎤 ESCUCHANDO..."; }; reconocimiento.onresult = (e) => { let texto = e.results[0][0].transcript; chatTexto.innerText = texto; procesarPregunta(texto, true); detenerMicrofono(); }; reconocimiento.onerror = () => detenerMicrofono(); reconocimiento.onend = () => detenerMicrofono(); reconocimiento.start(); }
@@ -194,7 +207,7 @@
     document.body.addEventListener('touchstart', ocultarCta);
     document.body.addEventListener('click', ocultarCta);
 
-    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') { let btn = document.createElement('div'); btn.innerText = '🎯 ACTIVAR AGITADO'; btn.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a2a3a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a'; btn.onclick = solicitarPermisoMovimiento; document.body.appendChild(btn); } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
+    if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') { let btn = document.createElement('div'); btn.innerText = '🎯 ACTIVAR AGITADO'; btn.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a'; btn.onclick = solicitarPermisoMovimiento; document.body.appendChild(btn); } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
 
     chatTexto.innerText = "ESCRIBE TU PREGUNTA...";
     setTimeout(() => { if (chatTexto.innerText === "ESCRIBE TU PREGUNTA...") chatTexto.innerText = ""; }, 2500);
