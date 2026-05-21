@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <title>🎱 Bola Mágica 8 - Esfera 3D</title>
+    <meta name="theme-color" content="#111111">
+    <title>🎱 Bola Mágica 8</title>
     <style>
         * {
             margin: 0;
@@ -15,31 +16,27 @@
 
         body {
             min-height: 100vh;
-            background: radial-gradient(circle at 30% 20%, #1a1a2e, #0a0a0a);
+            background: radial-gradient(circle at 30% 20%, #1a1a2e, #050510);
             display: flex;
             justify-content: center;
             align-items: center;
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-            overflow: hidden;
-            touch-action: manipulation;
+            padding: 16px;
         }
 
-        /* Contenedor principal */
+        /* Contenedor centrado */
         .container {
             width: 100%;
-            max-width: 550px;
-            margin: 0 auto;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            perspective: 1200px;
+            perspective: 1500px;
         }
 
-        /* Escena 3D */
+        /* Escena 3D - bola grande */
         .scene {
-            width: 320px;
-            height: 320px;
+            width: min(85vw, 85vh, 450px);
+            height: min(85vw, 85vh, 450px);
             position: relative;
             cursor: pointer;
         }
@@ -50,18 +47,17 @@
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
-            animation: rotateIn 1.5s ease-out;
+            animation: rotateIn 1.2s ease-out;
             transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
             border-radius: 50%;
         }
 
-        /* Animación de entrada: giro completo de presentación */
         @keyframes rotateIn {
             0% { transform: rotateY(0deg) rotateX(0deg); }
-            100% { transform: rotateY(360deg) rotateX(15deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
         }
 
-        /* Cada cara de la esfera */
+        /* Caras de la esfera */
         .face {
             position: absolute;
             width: 100%;
@@ -71,124 +67,127 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 -20px 30px rgba(0,0,0,0.5), inset 0 20px 25px rgba(255,255,255,0.1), 0 15px 25px rgba(0,0,0,0.4);
+            box-shadow: inset 0 -25px 35px rgba(0,0,0,0.6), inset 0 25px 30px rgba(255,255,255,0.1), 0 20px 30px rgba(0,0,0,0.5);
         }
 
         /* Cara frontal: número 8 clásico */
         .face.front {
-            background: radial-gradient(circle at 35% 35%, #222, #050505);
+            background: radial-gradient(circle at 35% 35%, #2a2a2a, #080808);
             transform: rotateY(0deg);
         }
 
         .number-8 {
-            width: 130px;
-            height: 130px;
+            width: 45%;
+            height: 45%;
             background: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .number-8 span {
-            font-size: 5.5rem;
+            font-size: clamp(3rem, 15vw, 6rem);
             font-weight: 900;
             color: #111;
             font-family: 'Impact', 'Arial Black', sans-serif;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
         }
 
-        /* Cara trasera: todo el triángulo invertido con la interfaz completa */
+        /* Cara trasera: triángulo invertido REAL (vértice ARRIBA) */
         .face.back {
             background: radial-gradient(circle at 35% 35%, #1a2a2a, #0a0a1a);
             transform: rotateY(180deg);
             flex-direction: column;
-            padding: 20px;
+            padding: 12%;
         }
 
-        /* Triángulo invertido (dos vértices arriba, punta abajo) */
-        .triangle-interface {
+        /* Triángulo con vértice arriba, base abajo */
+        .triangle-real {
             width: 100%;
+            height: 100%;
             background: linear-gradient(145deg, #0a1a2a, #051015);
             clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            padding: 50px 20px 35px 20px;
-            text-align: center;
-            border: 1px solid rgba(80, 180, 255, 0.4);
-            box-shadow: inset 0 0 20px rgba(0, 100, 200, 0.2), 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20% 12% 15% 12%;
+            border: 1px solid rgba(80, 180, 255, 0.3);
+            box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* Respuesta dentro del triángulo */
-        .respuesta-area {
-            min-height: 90px;
-            margin-bottom: 20px;
+        /* Área de respuesta */
+        .answer-area {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 15%;
         }
 
         .frase {
-            color: #cceeff;
-            font-size: 0.9rem;
+            color: #d4eaff;
+            font-size: clamp(0.75rem, 4vw, 1rem);
             line-height: 1.4;
             font-style: italic;
-            text-shadow: 0 0 5px rgba(100, 200, 255, 0.3);
+            text-shadow: 0 0 4px rgba(80, 180, 255, 0.3);
             font-weight: 500;
+            word-break: break-word;
         }
 
         .autor {
             color: #8ab3cc;
-            font-size: 0.7rem;
+            font-size: clamp(0.6rem, 3vw, 0.75rem);
             margin-top: 8px;
             border-top: 1px solid rgba(80, 180, 255, 0.3);
             padding-top: 6px;
         }
 
-        /* Campo de escritura dentro del triángulo */
-        .input-triangle {
+        /* Campo de texto dentro del triángulo */
+        .input-area-triangle {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 5%;
         }
 
-        .input-triangle input {
+        .input-area-triangle input {
             width: 100%;
-            padding: 12px;
-            border-radius: 40px;
+            padding: 12px 10px;
+            border-radius: 50px;
             border: none;
-            background: rgba(30, 50, 70, 0.9);
+            background: rgba(25, 45, 65, 0.9);
             color: #fff;
-            font-size: 0.85rem;
+            font-size: clamp(0.7rem, 3.5vw, 0.85rem);
             text-align: center;
             outline: none;
             font-family: inherit;
+            backdrop-filter: blur(4px);
         }
 
-        .input-triangle input::placeholder {
+        .input-area-triangle input::placeholder {
             color: #8ab3cc;
             font-style: italic;
         }
 
-        /* Botones dentro del triángulo */
-        .buttons-triangle {
+        /* Botones dentro del triángulo (solo los esenciales) */
+        .buttons-minimal {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 15px;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
-        .btn-triangle {
+        .btn-minimal {
             background: #2a4a6a;
             border: none;
             color: #cceeff;
             padding: 8px 16px;
             border-radius: 40px;
-            font-size: 0.75rem;
+            font-size: clamp(0.65rem, 3vw, 0.75rem);
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s;
         }
 
-        .btn-triangle:active {
-            transform: scale(0.96);
-        }
+        .btn-minimal:active { transform: scale(0.96); }
 
         .micro-btn {
             background: #3a5a7a;
@@ -204,66 +203,27 @@
             100% { opacity: 1; }
         }
 
-        /* Filtros dentro del triángulo (zona pequeña) */
-        .filtros-triangle {
-            margin-top: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-        }
-
-        .filtro-chip {
-            background: #1a3a4a;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            color: #aaf;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            border: 1px solid #4af;
-        }
-
-        .filtro-chip .remove {
-            color: #f66;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .sugerencia-chip {
-            background: #2a3a4a;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 0.65rem;
-            color: #ccf;
-            cursor: pointer;
-            border: 1px solid #6cf;
-        }
-
-        /* Mensaje de estado */
-        .estado {
-            font-size: 0.6rem;
+        /* Estado (mensajes sutiles) */
+        .estado-sutil {
+            font-size: clamp(0.55rem, 2.5vw, 0.65rem);
             color: #8ab3cc;
             margin-top: 12px;
             text-align: center;
+            opacity: 0.8;
         }
 
-        /* Instrucción de agitado */
-        .shake-info {
+        /* Instrucción de agitado fuera de la bola */
+        .info-externa {
+            position: fixed;
+            bottom: 15px;
+            left: 0;
+            right: 0;
             text-align: center;
             font-size: 0.6rem;
             color: #668;
-            margin-top: 15px;
-        }
-
-        /* Botón flotante para girar (opcional) */
-        .rotate-hint {
-            text-align: center;
-            font-size: 0.6rem;
-            color: #668;
-            margin-top: 5px;
+            background: rgba(0,0,0,0.5);
+            padding: 6px;
+            backdrop-filter: blur(4px);
         }
     </style>
 </head>
@@ -273,37 +233,33 @@
         <div class="sphere" id="sphere">
             <!-- Cara frontal: número 8 -->
             <div class="face front">
-                <div class="number-8">
-                    <span>8</span>
-                </div>
+                <div class="number-8"><span>8</span></div>
             </div>
-            <!-- Cara trasera: triángulo invertido con toda la interfaz -->
+            <!-- Cara trasera: triángulo invertido real (vértice arriba) -->
             <div class="face back">
-                <div class="triangle-interface">
-                    <div class="respuesta-area">
-                        <div class="frase" id="frase">🎱 Haz una pregunta...</div>
+                <div class="triangle-real">
+                    <div class="answer-area">
+                        <div class="frase" id="frase">🎱 Pregúntame...</div>
                         <div class="autor" id="autor">— Bola Mágica 8</div>
                     </div>
-                    <div class="input-triangle">
+                    <div class="input-area-triangle">
                         <input type="text" id="preguntaInput" placeholder="Escribe tu pregunta..." autocomplete="off">
                     </div>
-                    <div class="buttons-triangle">
-                        <button class="btn-triangle" id="preguntarBtn">🔮 Preguntar</button>
-                        <button class="btn-triangle micro-btn" id="microBtn">🎤 Hablar</button>
+                    <div class="buttons-minimal">
+                        <button class="btn-minimal" id="preguntarBtn">🔮 Preguntar</button>
+                        <button class="btn-minimal micro-btn" id="microBtn">🎤 Hablar</button>
                     </div>
-                    <div class="filtros-triangle" id="filtrosContainer"></div>
-                    <div class="estado" id="estadoMsg"></div>
+                    <div class="estado-sutil" id="estadoMsg"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="shake-info" id="shakeInfo">📱 Toca la bola para girarla | Agita para respuesta aleatoria</div>
-<div class="rotate-hint" id="rotateHint"></div>
+<div class="info-externa" id="infoExterna">📱 Toca la bola para girarla | Agita para respuesta aleatoria</div>
 
 <script>
     // ============================================================
-    // BASE DE DATOS DE FRASES
+    // BASE DE DATOS DE FRASES (con temas ocultos pero activos)
     // ============================================================
     const frasesPorTema = {
         amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
@@ -317,7 +273,9 @@
     };
     const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"];
 
-    let filtrosActivos = [];
+    // Temas activos (sin interfaz visible, pero funcionales)
+    let temasActivos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
+
     let reconocimiento = null;
     let grabando = false;
     let girada = false;
@@ -332,40 +290,23 @@
     const preguntaInput = document.getElementById('preguntaInput');
     const preguntarBtn = document.getElementById('preguntarBtn');
     const microBtn = document.getElementById('microBtn');
-    const filtrosContainer = document.getElementById('filtrosContainer');
     const estadoMsg = document.getElementById('estadoMsg');
-    const shakeInfo = document.getElementById('shakeInfo');
 
     // ============================================================
-    // FUNCIONES DE LA BOLA 3D
+    // BOLA 3D
     // ============================================================
-    function girarBola() {
-        sphere.style.transform = 'rotateY(180deg) rotateX(0deg)';
-        girada = true;
-    }
+    function girarBola() { sphere.style.transform = 'rotateY(180deg) rotateX(0deg)'; girada = true; }
+    function regresarBola() { sphere.style.transform = 'rotateY(0deg) rotateX(0deg)'; girada = false; }
+    function toggleBola() { girada ? regresarBola() : girarBola(); }
 
-    function regresarBola() {
-        sphere.style.transform = 'rotateY(0deg) rotateX(0deg)';
-        girada = false;
-    }
-
-    function toggleBola() {
-        if (girada) regresarBola();
-        else girarBola();
-    }
-
-    // Al cargar, la bola ya hizo la animación rotateIn, la dejamos en posición frontal
-    setTimeout(() => {
-        sphere.style.animation = 'none';
-        sphere.style.transform = 'rotateY(0deg) rotateX(0deg)';
-    }, 1500);
+    setTimeout(() => { sphere.style.animation = 'none'; sphere.style.transform = 'rotateY(0deg) rotateX(0deg)'; }, 1200);
 
     // ============================================================
-    // LÓGICA DE RESPUESTAS
+    // RESPUESTAS
     // ============================================================
     function obtenerRespuesta() {
         let pool = [];
-        for (let tema of filtrosActivos) {
+        for (let tema of temasActivos) {
             if (frasesPorTema[tema]) pool.push(...frasesPorTema[tema]);
         }
         if (pool.length === 0) pool = frasesGenerales;
@@ -376,22 +317,20 @@
         const partes = respuesta.split(' — ');
         fraseDiv.innerHTML = partes[0];
         autorDiv.innerHTML = '— ' + (partes[1] || 'Bola Mágica 8');
-        estadoMsg.innerHTML = '✨ Respuesta de la bola ✨';
-        setTimeout(() => { if (estadoMsg.innerHTML === '✨ Respuesta de la bola ✨') estadoMsg.innerHTML = ''; }, 2000);
+        estadoMsg.innerHTML = '✨';
+        setTimeout(() => { if (estadoMsg.innerHTML === '✨') estadoMsg.innerHTML = ''; }, 1500);
     }
 
     function procesarPregunta(texto) {
         if (!texto.trim()) {
-            estadoMsg.innerHTML = '❓ Escribe una pregunta primero';
-            setTimeout(() => { if (estadoMsg.innerHTML === '❓ Escribe una pregunta primero') estadoMsg.innerHTML = ''; }, 1500);
+            estadoMsg.innerHTML = '❓';
+            setTimeout(() => { if (estadoMsg.innerHTML === '❓') estadoMsg.innerHTML = ''; }, 1000);
             return;
         }
         const respuesta = obtenerRespuesta();
         mostrarRespuesta(respuesta);
         preguntaInput.value = '';
-        // Gira la bola para mostrar la respuesta
         if (!girada) girarBola();
-        // Vuelve a la cara del 8 después de 3 segundos
         setTimeout(() => regresarBola(), 3500);
     }
 
@@ -403,58 +342,11 @@
     }
 
     // ============================================================
-    // FILTROS (temas)
-    // ============================================================
-    function actualizarUI_Filtros() {
-        filtrosContainer.innerHTML = '';
-        const todosTemas = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
-        const nombres = {amor:'💕 Amor', trabajo:'💼 Trabajo', futuro:'🔮 Futuro', dinero:'💰 Dinero', familia:'👪 Familia', amigos:'👥 Amigos', exito:'🏆 Éxito', vida:'🌿 Vida'};
-
-        // Mostrar filtros activos (con X para eliminar)
-        for (let tema of filtrosActivos) {
-            const chip = document.createElement('span');
-            chip.className = 'filtro-chip';
-            chip.innerHTML = `${nombres[tema]} <span class="remove" data-tema="${tema}">✕</span>`;
-            filtrosContainer.appendChild(chip);
-        }
-
-        // Mostrar sugerencias de temas no activos
-        for (let tema of todosTemas) {
-            if (!filtrosActivos.includes(tema)) {
-                const sugerencia = document.createElement('span');
-                sugerencia.className = 'sugerencia-chip';
-                sugerencia.innerHTML = nombres[tema];
-                sugerencia.onclick = () => {
-                    if (!filtrosActivos.includes(tema)) {
-                        filtrosActivos.push(tema);
-                        actualizarUI_Filtros();
-                        estadoMsg.innerHTML = `✅ Añadido tema: ${nombres[tema]}`;
-                        setTimeout(() => { if (estadoMsg.innerHTML === `✅ Añadido tema: ${nombres[tema]}`) estadoMsg.innerHTML = ''; }, 1500);
-                    }
-                };
-                filtrosContainer.appendChild(sugerencia);
-            }
-        }
-
-        // Eventos para eliminar filtros
-        document.querySelectorAll('.remove').forEach(el => {
-            el.addEventListener('click', (e) => {
-                const tema = el.dataset.tema;
-                filtrosActivos = filtrosActivos.filter(t => t !== tema);
-                actualizarUI_Filtros();
-                estadoMsg.innerHTML = `🗑️ Eliminado tema: ${nombres[tema]}`;
-                setTimeout(() => { if (estadoMsg.innerHTML === `🗑️ Eliminado tema: ${nombres[tema]}`) estadoMsg.innerHTML = ''; }, 1500);
-                e.stopPropagation();
-            });
-        });
-    }
-
-    // ============================================================
     // MICRÓFONO
     // ============================================================
     function iniciarMicrofono() {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            estadoMsg.innerHTML = '❌ Tu navegador no soporta voz';
+            estadoMsg.innerHTML = '❌ Voz no soportada';
             return;
         }
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -465,8 +357,8 @@
         reconocimiento.onstart = () => {
             grabando = true;
             microBtn.classList.add('grabando');
-            microBtn.textContent = '🔴 Grabando...';
-            estadoMsg.innerHTML = '🎤 Escuchando... habla ahora';
+            microBtn.textContent = '🔴...';
+            estadoMsg.innerHTML = '🎤';
         };
         reconocimiento.onresult = (event) => {
             const texto = event.results[0][0].transcript;
@@ -474,10 +366,7 @@
             procesarPregunta(texto);
             detenerMicrofono();
         };
-        reconocimiento.onerror = () => {
-            estadoMsg.innerHTML = '❌ Error de micrófono';
-            detenerMicrofono();
-        };
+        reconocimiento.onerror = () => { estadoMsg.innerHTML = '❌'; detenerMicrofono(); };
         reconocimiento.onend = () => detenerMicrofono();
         reconocimiento.start();
     }
@@ -486,17 +375,14 @@
         if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
         grabando = false;
         microBtn.classList.remove('grabando');
-        microBtn.textContent = '🎤 Hablar';
-        if (estadoMsg.innerHTML === '🎤 Escuchando... habla ahora') estadoMsg.innerHTML = '';
+        microBtn.textContent = '🎤';
+        if (estadoMsg.innerHTML === '🎤') estadoMsg.innerHTML = '';
     }
 
-    function toggleMicrofono() {
-        if (grabando) detenerMicrofono();
-        else iniciarMicrofono();
-    }
+    function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
 
     // ============================================================
-    // MOVIMIENTO (AGITADO)
+    // AGITADO
     // ============================================================
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
@@ -507,59 +393,47 @@
                 if (!acc) return;
                 const x = acc.x || 0, y = acc.y || 0, z = acc.z || 0;
                 const fuerza = Math.abs(x - ultimaX) + Math.abs(y - ultimaY) + Math.abs(z - ultimaZ);
-                if (fuerza > 25) {
-                    ultimoAgite = ahora;
-                    respuestaAleatoria();
-                }
+                if (fuerza > 25) { ultimoAgite = ahora; respuestaAleatoria(); }
                 ultimaX = x; ultimaY = y; ultimaZ = z;
             });
-            shakeInfo.innerHTML = '📱 ¡Agitado activado! Agita la bola para respuesta aleatoria';
+            document.getElementById('infoExterna').innerHTML = '📱 Agita la bola para respuesta aleatoria';
         }
     }
 
     function solicitarPermisoMovimiento() {
         if (typeof DeviceMotionEvent.requestPermission === 'function') {
-            DeviceMotionEvent.requestPermission()
-                .then(response => {
-                    if (response === 'granted') iniciarDeteccionMovimiento();
-                    else shakeInfo.innerHTML = '📱 Permiso denegado para agitado';
-                })
-                .catch(() => shakeInfo.innerHTML = '📱 Error al pedir permiso');
+            DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') iniciarDeteccionMovimiento(); });
         } else iniciarDeteccionMovimiento();
     }
 
     // ============================================================
-    // EVENTOS Y ARRANQUE
+    // EVENTOS
     // ============================================================
     scene.addEventListener('click', toggleBola);
     preguntarBtn.addEventListener('click', () => procesarPregunta(preguntaInput.value));
     preguntaInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') procesarPregunta(preguntaInput.value); });
     microBtn.addEventListener('click', toggleMicrofono);
 
-    // Permiso de agitado en iOS
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-        shakeInfo.innerHTML = '📱 Toca "Activar agitado" para usar el giroscopio';
-        const activador = document.createElement('div');
-        activador.style.background = '#2a4a6a';
-        activador.style.color = '#ccf';
-        activador.style.padding = '6px 12px';
-        activador.style.borderRadius = '30px';
-        activador.style.fontSize = '0.7rem';
-        activador.style.marginTop = '10px';
-        activador.style.textAlign = 'center';
-        activador.style.cursor = 'pointer';
-        activador.innerText = '🎯 Activar agitado (iOS)';
-        activador.onclick = solicitarPermisoMovimiento;
-        document.body.appendChild(activador);
+        const btnPermiso = document.createElement('div');
+        btnPermiso.innerText = '🎯 Activar agitado';
+        btnPermiso.style.position = 'fixed';
+        btnPermiso.style.bottom = '50px';
+        btnPermiso.style.left = '50%';
+        btnPermiso.style.transform = 'translateX(-50%)';
+        btnPermiso.style.background = '#2a4a6a';
+        btnPermiso.style.color = '#ccf';
+        btnPermiso.style.padding = '6px 12px';
+        btnPermiso.style.borderRadius = '30px';
+        btnPermiso.style.fontSize = '0.65rem';
+        btnPermiso.style.zIndex = '100';
+        btnPermiso.style.cursor = 'pointer';
+        btnPermiso.onclick = solicitarPermisoMovimiento;
+        document.body.appendChild(btnPermiso);
+        document.getElementById('infoExterna').innerHTML = '📱 Toca "Activar agitado" para usar el giroscopio';
     } else if (window.DeviceMotionEvent) {
         iniciarDeteccionMovimiento();
-    } else {
-        shakeInfo.innerHTML = '🔮 Tu dispositivo no soporta agitado. Usa el botón.';
     }
-
-    actualizarUI_Filtros();
-    estadoMsg.innerHTML = '🎱 Bola Mágica 8 lista. Toca la bola para girar.';
-    setTimeout(() => { if (estadoMsg.innerHTML === '🎱 Bola Mágica 8 lista. Toca la bola para girar.') estadoMsg.innerHTML = ''; }, 3000);
 </script>
 </body>
 </html>
