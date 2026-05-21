@@ -97,7 +97,6 @@
             pointer-events: auto;
         }
 
-        /* Triángulo con vértice ABAJO */
         .triangulo {
             width: 100%;
             height: 100%;
@@ -112,7 +111,6 @@
             box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* Área de texto multifuncional */
         .texto-multifuncional {
             width: 100%;
             background: rgba(10, 25, 35, 0.95);
@@ -138,7 +136,6 @@
             box-shadow: 0 0 10px rgba(100, 200, 255, 0.3);
         }
 
-        /* Botones externos (fuera del triángulo) */
         .botones-externos {
             position: fixed;
             bottom: 70px;
@@ -149,6 +146,7 @@
             gap: 15px;
             padding: 10px;
             z-index: 150;
+            flex-wrap: wrap;
         }
 
         .btn-externo {
@@ -191,7 +189,7 @@
             pointer-events: none;
         }
 
-        /* Call to action */
+        /* CALL TO ACTION - NUEVO ESTILO: SIN ICONOS, MAYÚSCULAS, GRANDE, CONTRASTE */
         .cta {
             position: fixed;
             top: 50%;
@@ -199,30 +197,87 @@
             transform: translate(-50%, -50%);
             background: transparent;
             backdrop-filter: blur(8px);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: clamp(1rem, 5vw, 1.5rem);
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            padding: 16px 32px;
+            border-radius: 60px;
+            font-size: clamp(1.5rem, 8vw, 2.5rem);
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #FFFFFF;
+            text-shadow: 4px 4px 12px rgba(0,0,0,0.8), 0 0 8px rgba(0,0,0,0.5);
             white-space: nowrap;
             z-index: 200;
             pointer-events: none;
             animation: fadeInOut 3s ease-out forwards;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 0 30px rgba(0,0,0,0.4);
+            font-family: 'Impact', 'Arial Black', 'Segoe UI', sans-serif;
         }
 
         @keyframes fadeInOut {
             0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
             15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
             85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); visibility: hidden; }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.05); visibility: hidden; }
+        }
+
+        /* Panel de estadísticas */
+        .stats-panel {
+            position: fixed;
+            bottom: 120px;
+            left: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 12px;
+            border: 1px solid #4af;
+            z-index: 150;
+            transform: translateY(calc(100% + 10px));
+            transition: transform 0.3s ease;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .stats-panel.visible { transform: translateY(0); }
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #ccf;
+            border-bottom: 1px solid #4af;
+            padding-bottom: 8px;
+        }
+        .stats-cerrar {
+            background: none;
+            border: none;
+            color: #f88;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+        .stats-lista {
+            font-size: 0.7rem;
+            color: #aaf;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .stats-item {
+            padding: 5px;
+            border-bottom: 1px solid #2a4a6a;
+            font-family: monospace;
+        }
+        .stats-resumen {
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #1a3a4a;
+            border-radius: 12px;
+            font-size: 0.7rem;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="cta" id="cta">✨ ¿Qué quieres hoy? ✨</div>
+    <!-- CALL TO ACTION: SOLO TEXTO, MAYÚSCULAS, GRANDE, CONTRASTE -->
+    <div class="cta" id="cta">¿QUÉ QUIERES HOY?</div>
 
     <div class="scene" id="scene">
         <div class="bola" id="bola">
@@ -240,24 +295,23 @@
     </div>
 </div>
 
-<!-- Botones externos (fuera del triángulo) -->
 <div class="botones-externos">
-    <button class="btn-externo" id="preguntarBtn">🔮 Preguntar</button>
-    <button class="btn-externo" id="microBtn">🎤 Hablar</button>
-    <button class="btn-externo" id="speakerBtn">🔊 Leer</button>
-    <button class="btn-externo" id="statsBtn">📊 Stats</button>
+    <button class="btn-externo" id="preguntarBtn">🔮 PREGUNTAR</button>
+    <button class="btn-externo" id="microBtn">🎤 HABLAR</button>
+    <button class="btn-externo" id="speakerBtn">🔊 LEER</button>
+    <button class="btn-externo" id="statsBtn">📊 STATS</button>
 </div>
 
 <div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | El texto se lee automáticamente</div>
 
 <!-- Panel de estadísticas -->
-<div class="stats-panel" id="statsPanel" style="position:fixed; bottom:120px; left:10px; right:10px; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); border-radius:20px; padding:12px; border:1px solid #4af; z-index:150; transform:translateY(calc(100% + 10px)); transition:transform 0.3s ease; max-height:60vh; overflow-y:auto;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; color:#ccf; border-bottom:1px solid #4af; padding-bottom:8px;">
-        <span>📊 Estadísticas de tu sesión</span>
-        <button id="statsCerrar" style="background:none; border:none; color:#f88; font-size:1.2rem; cursor:pointer;">✕</button>
+<div class="stats-panel" id="statsPanel">
+    <div class="stats-header">
+        <span>📊 ESTADÍSTICAS DE TU SESIÓN</span>
+        <button class="stats-cerrar" id="statsCerrar">✕</button>
     </div>
-    <div id="statsResumen" style="margin-bottom:10px; padding:8px; background:#1a3a4a; border-radius:12px; font-size:0.7rem;"></div>
-    <div id="statsLista" style="font-size:0.7rem; color:#aaf; max-height:200px; overflow-y:auto;"></div>
+    <div class="stats-resumen" id="statsResumen"></div>
+    <div class="stats-lista" id="statsLista"></div>
 </div>
 
 <script>
@@ -358,25 +412,25 @@
         const statsResumen = document.getElementById('statsResumen');
         const statsLista = document.getElementById('statsLista');
         statsResumen.innerHTML = `
-            <strong>📊 Resumen</strong><br>
-            🎱 Preguntas: ${historial.length}<br>
-            💬 Frases únicas: ${frasesUsadas.size}<br>
-            📁 Sesión: ${sesionId.substr(0, 16)}...
+            <strong>📊 RESUMEN</strong><br>
+            🎱 PREGUNTAS: ${historial.length}<br>
+            💬 FRASES ÚNICAS: ${frasesUsadas.size}<br>
+            📁 SESIÓN: ${sesionId.substr(0, 16)}...
         `;
         if (historial.length > 0) {
-            statsLista.innerHTML = '<strong>📜 Últimas preguntas:</strong><br>';
+            statsLista.innerHTML = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>';
             historial.slice(0, 10).forEach((item, idx) => {
                 const fecha = new Date(item.timestamp).toLocaleTimeString();
-                statsLista.innerHTML += `<div style="padding:5px; border-bottom:1px solid #2a4a6a;">${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>→ ${item.respuesta.substring(0, 60)}...</div>`;
+                statsLista.innerHTML += `<div class="stats-item">${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>→ ${item.respuesta.substring(0, 60)}...</div>`;
             });
         } else {
-            statsLista.innerHTML = 'Aún no hay interacciones.';
+            statsLista.innerHTML = 'AÚN NO HAY INTERACCIONES.';
         }
     }
 
     function toggleStats() {
         const panel = document.getElementById('statsPanel');
-        panel.style.transform = panel.style.transform === 'translateY(0px)' ? 'translateY(calc(100% + 10px))' : 'translateY(0px)';
+        panel.classList.toggle('visible');
         actualizarStatsUI();
     }
 
@@ -472,7 +526,7 @@
         if (texto && texto.trim()) {
             hablar(texto);
         } else {
-            const saludo = "Escribe o pregunta algo primero.";
+            const saludo = "ESCRIBE O PREGUNTA ALGO PRIMERO.";
             chatTexto.innerText = saludo;
             hablar(saludo);
         }
@@ -481,7 +535,7 @@
     // Micrófono
     function iniciarMicrofono() {
         if (!('webkitSpeechRecognition' in window)) {
-            chatTexto.innerText = "❌ Voz no soportada";
+            chatTexto.innerText = "❌ VOZ NO SOPORTADA";
             return;
         }
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -490,7 +544,7 @@
         reconocimiento.onstart = () => {
             grabando = true;
             microBtn.textContent = '🔴...';
-            chatTexto.innerText = "🎤 Escuchando...";
+            chatTexto.innerText = "🎤 ESCUCHANDO...";
         };
         reconocimiento.onresult = (event) => {
             const texto = event.results[0][0].transcript;
@@ -506,8 +560,8 @@
     function detenerMicrofono() {
         if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
         grabando = false;
-        microBtn.textContent = '🎤 Hablar';
-        if (chatTexto.innerText === "🎤 Escuchando...") chatTexto.innerText = "";
+        microBtn.textContent = '🎤 HABLAR';
+        if (chatTexto.innerText === "🎤 ESCUCHANDO...") chatTexto.innerText = "";
     }
     function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
 
@@ -548,17 +602,17 @@
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
         const btnPermiso = document.createElement('div');
-        btnPermiso.innerText = '🎯 Activar agitado';
+        btnPermiso.innerText = '🎯 ACTIVAR AGITADO';
         btnPermiso.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#2a4a6a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer';
         btnPermiso.onclick = solicitarPermisoMovimiento;
         document.body.appendChild(btnPermiso);
     } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
 
-    // Mostrar bienvenida
-    chatTexto.innerText = "✨ ¿Qué quieres saber? ✨";
+    // Bienvenida
+    chatTexto.innerText = "ESCRIBE TU PREGUNTA...";
     setTimeout(() => {
-        if (chatTexto.innerText === "✨ ¿Qué quieres saber? ✨") chatTexto.innerText = "";
-    }, 3000);
+        if (chatTexto.innerText === "ESCRIBE TU PREGUNTA...") chatTexto.innerText = "";
+    }, 2500);
 </script>
 </body>
 </html>
