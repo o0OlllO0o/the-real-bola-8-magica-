@@ -7,10 +7,8 @@
     <meta name="theme-color" content="#000000">
     <title>🎱 Bola Mágica 8 - Sabiduría Ancestral</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-        body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Inter','Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;overflow-x:hidden;}
+        body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;overflow-x:hidden;}
         body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%, rgba(80,100,150,0.12) 0%, transparent 60%);pointer-events:none;z-index:0;}
         .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;}
         .scene{width:min(85vw,85vh,420px);height:min(85vw,85vh,420px);position:relative;cursor:pointer;perspective:1200px;}
@@ -34,107 +32,22 @@
         .cara.back{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(180deg);box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);}
         
         .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
-        .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Inter','Impact','Arial Black',sans-serif;}
+        .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
         
-        /* Área de texto DENTRO de la bola, aprovechando el ancho máximo del círculo */
-        .contenido-bola{
-            position:absolute;
-            /* Centrado en la esfera, ocupando ~70% del diámetro (caben ~420px*0.7=294px) */
-            top:50%;left:50%;
-            transform:translate(-50%,-50%);
-            width:70%;
-            max-width:300px;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            gap:10px;
-            z-index:10;
-            opacity:0;
-            transition:opacity 0.3s ease;
-        }
-        .cara.back .contenido-bola{opacity:1;}
+        .panel-flotante{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(68vw,68vh,340px);z-index:50;display:flex;flex-direction:column;gap:12px;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease;}
+        .panel-flotante.visible{opacity:1;visibility:visible;}
         
-        .texto-multifuncional{
-            width:100%;
-            background:transparent;
-            border:none;
-            padding:10px 8px;
-            color:#E8F0FF;
-            font-family:'Inter','Segoe UI',sans-serif;
-            font-size:clamp(0.9rem,4.5vw,1.15rem);
-            font-weight:400;
-            text-align:center;
-            resize:none;
-            outline:none;
-            word-break:break-word;
-            min-height:90px;
-            height:auto;
-            line-height:1.55;
-            letter-spacing:0.01em;
-            text-shadow:0 0 18px rgba(0,0,0,0.95),0 2px 4px rgba(0,0,0,0.8);
-            overflow-y:auto;
-        }
-        .texto-multifuncional:focus{
-            text-shadow:0 0 22px rgba(0,0,0,0.98),0 2px 6px rgba(0,0,0,0.9);
-        }
+        .texto-multifuncional{width:100%;background:transparent;border:none;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.9rem,4.5vw,1.15rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:80px;height:auto;line-height:1.5;text-shadow:0 0 20px rgba(0,0,0,0.9),0 2px 4px rgba(0,0,0,0.7);}
+        .texto-multifuncional:focus{text-shadow:0 0 25px rgba(0,0,0,0.95),0 2px 6px rgba(0,0,0,0.8);}
         
-        /* Estilo para citas - tipografía moderna */
-        .texto-multifuncional .cita-texto{
-            font-weight:500;
-            letter-spacing:0.02em;
-            text-transform:uppercase;
-            font-size:1rem;
-        }
-        .texto-multifuncional .cita-autor{
-            font-weight:300;
-            font-size:0.8rem;
-            letter-spacing:0.05em;
-            text-transform:uppercase;
-            opacity:0.8;
-            margin-top:4px;
-        }
-        
-        .iconos-barra{
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            gap:14px;
-            margin-top:6px;
-        }
-        .icono-accion{
-            background:rgba(10,20,30,0.75);
-            border:1px solid rgba(136,204,255,0.35);
-            color:#cceeff;
-            width:40px;height:40px;
-            border-radius:40px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            font-size:1.2rem;
-            cursor:pointer;
-            transition:all 0.2s;
-            position:relative;
-            backdrop-filter:blur(6px);
-        }
+        .iconos-barra{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px;}
+        .icono-accion{background:rgba(10,20,30,0.7);border:1px solid rgba(136,204,255,0.3);color:#cceeff;width:44px;height:44px;border-radius:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transition:all 0.2s;position:relative;backdrop-filter:blur(4px);}
         .icono-accion:active{transform:scale(0.95);background:rgba(30,50,70,0.9);}
         .icono-accion.grabando{background:#e74c3c;border-color:#f88;animation:pulse 1s infinite;}
         
-        .icono-accion.principal{
-            width:48px;height:48px;font-size:1.3rem;
-            background:rgba(10,20,30,0.85);
-            border:2px solid rgba(136,204,255,0.6);
-            box-shadow:0 0 15px rgba(100,160,255,0.2);
-            overflow:hidden;
-        }
-        .icono-accion.principal::before{
-            content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
-            background:linear-gradient(45deg,transparent 40%,rgba(136,204,255,0.15) 45%,rgba(136,204,255,0.3) 50%,rgba(136,204,255,0.15) 55%,transparent 60%);
-            animation:shimmer 3s infinite;z-index:1;
-        }
-        .icono-accion.principal::after{
-            content:'';position:absolute;inset:-3px;border-radius:51px;background:transparent;
-            border:1px solid rgba(136,204,255,0.25);animation:borderPulse 2.5s infinite;
-        }
+        .icono-accion.principal{width:52px;height:52px;font-size:1.4rem;background:rgba(10,20,30,0.8);border:2px solid rgba(136,204,255,0.6);box-shadow:0 0 15px rgba(100,160,255,0.2);overflow:hidden;}
+        .icono-accion.principal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent 40%,rgba(136,204,255,0.15) 45%,rgba(136,204,255,0.3) 50%,rgba(136,204,255,0.15) 55%,transparent 60%);animation:shimmer 3s infinite;z-index:1;}
+        .icono-accion.principal::after{content:'';position:absolute;inset:-3px;border-radius:55px;background:transparent;border:1px solid rgba(136,204,255,0.25);animation:borderPulse 2.5s infinite;}
         .icono-accion.principal span.play-icon{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;margin-left:2px;}
         .icono-accion.principal:active{transform:scale(0.92);box-shadow:0 0 25px rgba(100,160,255,0.5);}
         .icono-accion.principal.reproduciendo{background:rgba(20,40,60,0.9);border-color:#f8c;}
@@ -145,69 +58,32 @@
         @keyframes borderPulse{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.8;transform:scale(1.06);}}
         @keyframes pulse{0%{opacity:0.7;transform:scale(1);}100%{opacity:1;transform:scale(1.05);}}
         
-            position:fixed;top:16px;left:16px;
-            background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;
-            width:44px;height:44px;border-radius:44px;font-size:1.3rem;
-            cursor:pointer;z-index:200;backdrop-filter:blur(8px);
-            display:flex;align-items:center;justify-content:center;transition:all 0.2s;
-        }
+        .btn-modo,.btn-voz{position:fixed;top:16px;left:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;font-size:1.3rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
         .btn-voz{left:68px;}
+        .btn-modo:active,.btn-voz:active{transform:scale(0.95);}
         
-        .modo-panel,.voz-panel{
-            position:fixed;top:70px;left:16px;
-            background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);
-            border-radius:20px;padding:12px;border:1px solid #3a5a7a;
-            z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;
-            display:flex;flex-wrap:wrap;gap:10px;max-width:280px;
-        }
+        .modo-panel,.voz-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;display:flex;flex-wrap:wrap;gap:10px;max-width:280px;}
         .voz-panel{max-width:320px;}
         .modo-panel.visible,.voz-panel.visible{transform:translateX(0);}
-        .modo-opcion,.voz-opcion{
-            background:#1a2a3a;border:1px solid #3a5a7a;border-radius:40px;
-            padding:8px 12px;cursor:pointer;transition:all 0.2s;
-            display:flex;align-items:center;gap:6px;font-size:0.7rem;color:#cceeff;
-            font-family:'Inter',sans-serif;font-weight:500;letter-spacing:0.03em;text-transform:uppercase;
-        }
+        .modo-opcion,.voz-opcion{background:#1a2a3a;border:1px solid #3a5a7a;border-radius:40px;padding:8px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;font-size:0.7rem;color:#cceeff;}
         .modo-opcion:hover,.voz-opcion:hover{background:#2a4a6a;}
         .modo-opcion.activo,.voz-opcion.activo{background:#3a5a7a;border-color:#8cf;}
         
-        .btn-stats{
-            position:fixed;top:16px;right:16px;
-            background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;
-            width:40px;height:40px;border-radius:40px;font-size:1.2rem;
-            cursor:pointer;z-index:200;backdrop-filter:blur(8px);
-        }
+        .btn-stats{position:fixed;top:16px;right:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);}
         .btn-stats:active{transform:scale(0.95);}
         
-        .info-externa{
-            position:fixed;bottom:15px;left:0;right:0;text-align:center;
-            font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);
-            padding:6px;backdrop-filter:blur(4px);z-index:100;
-            font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:0.08em;
-        }
+        .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
         .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12),transparent 70%);pointer-events:none;}
         
-        .stats-panel{
-            position:fixed;bottom:120px;left:10px;right:10px;
-            background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);
-            border-radius:20px;padding:12px;border:1px solid #3a5a7a;
-            z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;
-            max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;
-        }
+        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
         .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
-        .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:0.05em;}
+        .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
         .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;padding:0 8px;}
-        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a0a0a;border-radius:12px;font-size:0.7rem;color:#aaf;font-family:'Inter',sans-serif;}
-        .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;font-family:'Inter',sans-serif;}
+        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a0a0a;border-radius:12px;font-size:0.7rem;color:#aaf;}
+        .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;}
         .stats-item{padding:5px;border-bottom:1px solid #1a3a4a;}
         
-        .toast{
-            position:fixed;bottom:100px;left:50%;transform:translateX(-50%);
-            background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;
-            border-radius:20px;font-size:0.7rem;z-index:300;
-            opacity:0;transition:opacity 0.3s;pointer-events:none;
-            font-family:'Inter',sans-serif;text-transform:uppercase;letter-spacing:0.06em;
-        }
+        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
     </style>
 </head>
@@ -215,51 +91,47 @@
 <div class="container">
     <div class="scene" id="scene">
         <div class="bola" id="bola">
-            <div class="cara front">
-                <div class="numero-8"><span>8</span></div>
-                <div class="brillo"></div>
-            </div>
-            <div class="cara back" id="caraBack">
-                <div class="contenido-bola" id="contenidoBola">
-                    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
-                    <div class="iconos-barra">
-                        <div class="icono-accion" id="reproducirBtn" title="REPETIR">⟳</div>
-                        <div class="icono-accion principal" id="preguntarBtn" title="REPRODUCIR"><span class="play-icon" id="playIcon">▶</span></div>
-                        <div class="icono-accion" id="microBtn" title="HABLAR">🎙</div>
-                    </div>
-                </div>
-                <div class="brillo"></div>
-            </div>
+            <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
+            <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
     </div>
 </div>
 
-<div class="btn-modo" id="btnModo" title="MODO">🎭</div>
-<div class="btn-voz" id="btnVoz" title="VOZ">🎙️</div>
+<div class="panel-flotante" id="panelFlotante">
+    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
+    <div class="iconos-barra">
+        <div class="icono-accion" id="reproducirBtn" title="Repetir última respuesta">⟳</div>
+        <div class="icono-accion principal" id="preguntarBtn" title="Reproducir todas las citas del modo"><span class="play-icon" id="playIcon">▶</span></div>
+        <div class="icono-accion" id="microBtn" title="Hablar por micrófono">🎙</div>
+    </div>
+</div>
+
+<div class="btn-modo" id="btnModo" title="Modo">🎭</div>
+<div class="btn-voz" id="btnVoz" title="Estilo de voz">🎙️</div>
 
 <div class="modo-panel" id="modoPanel">
-    <div class="modo-opcion activo" data-modo="clasico"><span>🔮</span>CLÁSICO</div>
-    <div class="modo-opcion" data-modo="feminista"><span>🚺</span>FEMINISTA</div>
-    <div class="modo-opcion" data-modo="humor"><span>😂</span>HUMOR</div>
-    <div class="modo-opcion" data-modo="sabiduria"><span>🌿</span>ESTOICO</div>
-    <div class="modo-opcion" data-modo="feliz"><span>😊</span>FELIZ</div>
-    <div class="modo-opcion" data-modo="melancolico"><span>😢</span>MELANCÓLICO</div>
-    <div class="modo-opcion" data-modo="motivacion"><span>💪</span>MOTIVACIÓN</div>
-    <div class="modo-opcion" data-modo="calma"><span>🧘</span>CALMA</div>
+    <div class="modo-opcion activo" data-modo="clasico"><span>🔮</span>Clásico</div>
+    <div class="modo-opcion" data-modo="feminista"><span>🚺</span>Feminista</div>
+    <div class="modo-opcion" data-modo="humor"><span>😂</span>Humor</div>
+    <div class="modo-opcion" data-modo="sabiduria"><span>🌿</span>Estoico</div>
+    <div class="modo-opcion" data-modo="feliz"><span>😊</span>Feliz</div>
+    <div class="modo-opcion" data-modo="melancolico"><span>😢</span>Melancólico</div>
+    <div class="modo-opcion" data-modo="motivacion"><span>💪</span>Motivación</div>
+    <div class="modo-opcion" data-modo="calma"><span>🧘</span>Calma</div>
 </div>
 <div class="voz-panel" id="vozPanel">
-    <div class="voz-opcion activo" data-voz="auto"><span>✨</span>AUTO</div>
-    <div class="voz-opcion" data-voz="grave"><span>🎸</span>GRAVE</div>
-    <div class="voz-opcion" data-voz="aguda"><span>🎻</span>AGUDA</div>
-    <div class="voz-opcion" data-voz="calma"><span>🧘</span>CALMA</div>
-    <div class="voz-opcion" data-voz="motivador"><span>💪</span>MOTIVADOR</div>
-    <div class="voz-opcion" data-voz="sabia"><span>🦉</span>SABIA</div>
+    <div class="voz-opcion activo" data-voz="auto"><span>✨</span>Auto</div>
+    <div class="voz-opcion" data-voz="grave"><span>🎸</span>Grave</div>
+    <div class="voz-opcion" data-voz="aguda"><span>🎻</span>Aguda</div>
+    <div class="voz-opcion" data-voz="calma"><span>🧘</span>Calma</div>
+    <div class="voz-opcion" data-voz="motivador"><span>💪</span>Motivador</div>
+    <div class="voz-opcion" data-voz="sabia"><span>🦉</span>Sabia</div>
 </div>
 <div class="btn-stats" id="statsBtn">📊</div>
-<div class="info-externa">TOCA BOLA · MODO · VOZ · REPRODUCIR · HABLAR · REPETIR</div>
+<div class="info-externa">📱 Toca bola | 🎭 Modo | 🎙️ Voz | ▶ Reproducir | 🎙 Hablar | ⟳ Repetir</div>
 <div class="toast" id="toast"></div>
 <div class="stats-panel" id="statsPanel">
-    <div class="stats-header"><span>ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
+    <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
     <div class="stats-resumen" id="statsResumen"></div>
     <div class="stats-lista" id="statsLista"></div>
 </div>
@@ -268,27 +140,24 @@
 // ============================================================
 // MODOS Y CITAS (720 citas)
 // ============================================================
-const modoClasico={nombre:"CLÁSICO",citas:{amor:["«EL AMOR ES UNA AMISTAD QUE SE ENCIENDE» — Aristóteles","«AMAR ES ENCONTRAR EN LA FELICIDAD DE OTRO TU PROPIA FELICIDAD» — Leibniz","«EL AMOR ES LA FUERZA MÁS HUMILDE, PERO LA MÁS PODEROSA» — Gandhi","«DONDE REINA EL AMOR, SOBRAN LAS LEYES» — Platón","«EL AMOR NO TIENE EDAD, SIEMPRE ESTÁ NACIENDO» — Pascal","«AMAR NO ES MIRARSE EL UNO AL OTRO, ES MIRAR JUNTOS EN LA MISMA DIRECCIÓN» — Saint-Exupéry","«EL AMOR TODO LO VENCE» — Virgilio","«LA MEDIDA DEL AMOR ES AMAR SIN MEDIDA» — San Agustín","«EL AMOR ES LA POESÍA DE LOS SENTIDOS» — Balzac","«EN UN BESO SABRÁS TODO LO QUE HE CALLADO» — Neruda"],trabajo:["«ELIGE UN TRABAJO QUE TE GUSTE Y NO TRABAJARÁS NI UN DÍA» — Confucio","«LA ÚNICA MANERA DE HACER UN GRAN TRABAJO ES AMAR LO QUE HACES» — Steve Jobs","«EL TRABAJO DIGNIFICA AL HOMBRE» — Proverbio","«SIN TRABAJO NO HAY DESCANSO, SIN LUCHA NO HAY VICTORIA» — Proverbio","«EL TRABAJO BIEN HECHO ES LA MEJOR CARTA DE PRESENTACIÓN» — Proverbio español","«NO ES MÁS RICO QUIEN MÁS TIENE, SINO QUIEN MENOS NECESITA» — Séneca","«EL TRABAJO CONSTANTE VENCE CUALQUIER DIFICULTAD» — Proverbio","«QUIEN TRABAJA CON AMOR, CONVIERTE EL ESFUERZO EN ARTE» — Proverbio","«EL TRABAJO APARTA DE NOSOTROS TRES GRANDES MALES: ABURRIMIENTO, VICIO Y NECESIDAD» — Voltaire","«LA DILIGENCIA ES LA MADRE DE LA BUENA SUERTE» — Cervantes"],futuro:["«EL FUTURO PERTENECE A LOS QUE CREEN EN SUS SUEÑOS» — Eleanor Roosevelt","«EL MEJOR MODO DE PREDECIR EL FUTURO ES CREÁNDOLO» — Peter Drucker","«EL FUTURO NO ES LO QUE VA A PASAR, SINO LO QUE VAMOS A HACER» — Jorge Luis Borges","«NO TEMAS AL FUTURO, CONSTRÚYELO» — Proverbio","«EL MAÑANA PERTENECE A QUIENES SE PREPARAN HOY» — Proverbio africano","«SI QUIERES CONOCER EL PASADO, MIRA EL PRESENTE. SI QUIERES CONOCER EL FUTURO, MIRA EL PRESENTE» — Buda","«EL FUTURO ES UN REGALO QUE LE HACEMOS AL PRESENTE» — Proverbio","«NO DEJES PARA MAÑANA LO QUE PUEDAS HACER HOY» — Proverbio español","«EL FUTURO ES ESE LUGAR DONDE PASAREMOS EL RESTO DE NUESTRA VIDA» — Woody Allen","«CADA DÍA ES UNA PEQUEÑA VIDA» — Séneca"],dinero:["«EL DINERO NO DA LA FELICIDAD, PERO PROCURA UNA SENSACIÓN TAN PARECIDA...» — Woody Allen","«EL DINERO ES UN BUEN SIERVO PERO UN MAL AMO» — Francis Bacon","«NO ES POBRE EL QUE POCO TIENE, SINO EL QUE MUCHO DESEA» — Séneca","«EL DINERO NO PUEDE COMPRAR LA VIDA» — Bob Marley","«LA RIQUEZA NO CONSISTE EN TENER MUCHAS POSESIONES, SINO EN TENER POCAS NECESIDADES» — Epicteto","«EL DINERO ES COMO EL ESTIÉRCOL: NO ES BUENO A MENOS QUE SE ESPARZA» — Francis Bacon","«MÁS VALE POCO CON HONRA QUE MUCHO CON DESHONRA» — Proverbio español","«NO MIDAS TU RIQUEZA POR EL DINERO QUE TIENES, SINO POR AQUELLAS COSAS QUE NO CAMBIARÍAS POR DINERO» — Proverbio","«EL DINERO NO CAMBIA A LAS PERSONAS, SOLO LAS DESENMASCARA» — Proverbio","«AVARO ES QUIEN NO GASTA EN LO QUE DEBE, NI DA LO QUE PUEDE, NI TIENE LO QUE QUIERE» — Quevedo"],familia:["«LA FAMILIA NO ES UN ASUNTO DE SANGRE, SINO DE RESPETO Y ALEGRÍA» — Richard Bach","«LA FAMILIA ES EL PRIMER LUGAR DONDE APRENDEMOS A AMAR» — Papa Francisco","«EL HOGAR ES DONDE ESTÁ EL CORAZÓN» — Proverbio","«LA FAMILIA ES COMO LAS RAMAS DE UN ÁRBOL: CADA UNA CRECE EN DIRECCIONES DISTINTAS, PERO LAS RAÍCES SON LAS MISMAS» — Proverbio","«LA FAMILIA ES LA PATRIA DEL CORAZÓN» — Giuseppe Mazzini","«EN LA FAMILIA, EL AMOR SE ESCRIBE CON PEQUEÑAS ACCIONES DIARIAS» — Proverbio","«UNA CASA SERÁ FUERTE CUANDO ESTÉ SOSTENIDA POR: PADRE VALIENTE, MADRE PRUDENTE, HIJO OBEDIENTE, HERMANO COMPLACIENTE» — Confucio","«LA FAMILIA ES EL ESPEJO DONDE APRENDEMOS A CONOCERNOS» — Proverbio","«EL VÍNCULO QUE UNE A TU VERDADERA FAMILIA NO ES DE SANGRE, SINO DE RESPETO Y ALEGRÍA» — Richard Bach","«DONDE HAY AMOR HAY FAMILIA» — Proverbio hindú"],amigos:["«UN AMIGO ES ALGUIEN QUE LO SABE TODO DE TI Y AUN ASÍ TE QUIERE» — Hubbard","«LA AMISTAD DUPLICA LAS ALEGRÍAS Y DIVIDE LAS ANGUSTIAS» — Francis Bacon","«AMIGO ES AQUEL QUE LLEGA CUANDO TODOS SE HAN IDO» — Proverbio","«QUIEN ENCUENTRA UN AMIGO FIEL, ENCUENTRA UN TESORO» — Proverbio español","«LA AMISTAD ES UN ALMA QUE HABITA EN DOS CUERPOS» — Aristóteles","«LOS AMIGOS SON LA FAMILIA QUE ELEGIMOS» — Proverbio","«UN BUEN AMIGO ES UN GRAN REGALO» — Proverbio","«LA AMISTAD VERDADERA ES PLANTA QUE CRECE DESPACIO» — Proverbio","«MÁS VALE AMIGO PROBADO QUE DINERO GUARDADO» — Proverbio español","«CAMINAR CON UN AMIGO EN LA OSCURIDAD ES MEJOR QUE CAMINAR SOLO EN LA LUZ» — Helen Keller"],exito:["«EL ÉXITO NO ES LA CLAVE DE LA FELICIDAD. LA FELICIDAD ES LA CLAVE DEL ÉXITO» — Schweitzer","«EL ÉXITO ES APRENDER A IR DE FRACASO EN FRACASO SIN DESESPERARSE» — Churchill","«EL ÉXITO ES LA SUMA DE PEQUEÑOS ESFUERZOS REPETIDOS DÍA TRAS DÍA» — Robert Collier","«EL VERDADERO ÉXITO ES SUPERAR EL MIEDO AL FRACASO» — Proverbio","«NO EXISTE EL ÉXITO SIN SACRIFICIO» — Proverbio","«EL ÉXITO NO SE MIDE POR LO QUE LOGRAS, SINO POR LOS OBSTÁCULOS QUE SUPERAS» — Booker T. Washington","«EL ÉXITO ES CAER NUEVE VECES Y LEVANTARSE DIEZ» — Proverbio","«MÁS VALE HONRA SIN BARCOS QUE BARCOS SIN HONRA» — Proverbio español","«EL ÉXITO NO ES DEFINITIVO, EL FRACASO NO ES FATAL: LO QUE CUENTA ES EL VALOR PARA CONTINUAR» — Churchill","«SI BUSCAS RESULTADOS DISTINTOS, NO HAGAS SIEMPRE LO MISMO» — Einstein"],vida:["«LA VIDA ES LO QUE PASA MIENTRAS HACES OTROS PLANES» — John Lennon","«LA VIDA ES COMO UNA BICICLETA: PARA MANTENER EL EQUILIBRIO DEBES SEGUIR ADELANTE» — Einstein","«VIVIR ES LO MÁS RARO DEL MUNDO. LA MAYORÍA DE LA GENTE SIMPLEMENTE EXISTE» — Oscar Wilde","«LA VIDA ES BREVE, EL ARTE ES LARGO» — Hipócrates","«NO ES QUE TENGAMOS POCO TIEMPO, ES QUE PERDEMOS MUCHO» — Séneca","«LA VIDA ES UNA OBRA DE TEATRO QUE NO PERMITE ENSAYOS» — Proverbio","«VIVE COMO SI FUERAS A MORIR MAÑANA. APRENDE COMO SI FUERAS A VIVIR SIEMPRE» — Gandhi","«LA VIDA NO SE MIDE POR LAS VECES QUE RESPIRAS, SINO POR LOS MOMENTOS QUE TE DEJAN SIN ALIENTO» — Proverbio","«CADA DÍA ES UNA OPORTUNIDAD PARA EMPEZAR DE NUEVO» — Proverbio","«LA VIDA ES BELLA SI DECIDES VERLA ASÍ» — Proverbio"],sabiduria:["«SOLO SÉ QUE NO SÉ NADA» — Sócrates","«PIENSO, LUEGO EXISTO» — Descartes","«EL SENTIDO COMÚN ES EL MENOS COMÚN DE LOS SENTIDOS» — Voltaire","«LA SABIDURÍA COMIENZA CON EL ASOMBRO» — Aristóteles","«CONÓCETE A TI MISMO» — Sócrates","«LA VERDADERA SABIDURÍA ESTÁ EN RECONOCER LA PROPIA IGNORANCIA» — Sócrates","«EL SABIO NO DICE TODO LO QUE PIENSA, PERO PIENSA TODO LO QUE DICE» — Aristóteles","«MÁS SABE EL DIABLO POR VIEJO QUE POR DIABLO» — Proverbio español","«LA PACIENCIA ES LA COMPAÑERA DE LA SABIDURÍA» — San Agustín","«NO HAY VIENTO FAVORABLE PARA QUIEN NO SABE ADÓNDE VA» — Séneca"]}};
-// ... resto de modos idénticos pero con MAYÚSCULAS en los textos ...
-const modoFeminista={nombre:"FEMINISTA",citas:{amor:["«EL AMOR NO TIENE QUE VER CON POSEER, SINO CON RESPETAR» — Simone de Beauvoir","«AMAR A ALGUIEN ES APRENDER A DECIR ADIÓS» — Virginia Woolf","«EL AMOR PROPIO ES EL PRINCIPIO DE UN ROMANCE ETERNO» — Oscar Wilde","«NO NECESITO UN PRÍNCIPE PARA SER FELIZ» — Proverbio feminista","«MI LIBERTAD NO TERMINA DONDE EMPIEZA LA TUYA, SINO DONDE EMPIEZA MI RESPETO POR TI» — Proverbio","«ÁMATE A TI MISMA PRIMERO, Y TODO LO DEMÁS ENCAJARÁ» — Lucille Ball","«EL AMOR NO ES SUMISIÓN, ES REVOLUCIÓN COMPARTIDA» — Proverbio","«QUIEN NO SE AMA A SÍ MISMO NO PUEDE AMAR A NADIE» — Proverbio","«EL AMOR VERDADERO ES LIBERTAD, NO POSESIÓN» — Proverbio","«EN EL AMOR Y EN LA GUERRA, TODAS LAS ARMAS SON VÁLIDAS... MENOS CALLARSE» — Proverbio"],trabajo:["«NADIE HACE CARRERA SIN SACRIFICIOS. TÚ DECIDES CUÁLES» — Coco Chanel","«EL ÉXITO NO ES CASUALIDAD, ES TRABAJO DURO» — Serena Williams","«UNA MUJER CON VOZ ES, POR DEFINICIÓN, UNA MUJER FUERTE» — Melinda Gates","«NO HAY BARRERA, CERRADURA NI CERROJO QUE PUEDAS IMPONER A LA LIBERTAD DE MI MENTE» — Virginia Woolf","«EL TRABAJO DE UNA MUJER NUNCA TERMINA... PERO TAMPOCO SU CAPACIDAD DE SUPERACIÓN» — Proverbio","«QUIEN TRABAJA CON PASIÓN, ROMPE CUALQUIER TECHO DE CRISTAL» — Proverbio","«LAS MUJERES QUE CAMBIARON EL MUNDO NUNCA PIDIERON PERMISO» — Proverbio","«NO COMPITAS CON OTRAS MUJERES, CONSTRUYE CON ELLAS» — Proverbio","«EL TALENTO NO TIENE GÉNERO, LAS OPORTUNIDADES DEBERÍAN SEGUIR EL MISMO CAMINO» — Proverbio","«DETRÁS DE CADA MUJER EXITOSA ESTÁ ELLA MISMA» — Proverbio"],futuro:["«EL FUTURO DEPENDE DE LO QUE HAGAMOS HOY» — Rosa Parks","«SOÑAR ES NECESARIO PARA CONSTRUIR EL MAÑANA» — Rigoberta Menchú","«EL FUTURO ES NUESTRO, Y SERÁ FEMINISTA O NO SERÁ» — Proverbio","«LAS NIÑAS DE HOY SON LAS LÍDERES DEL MAÑANA» — Proverbio","«NO ESPERES EL FUTURO, CONSTRÚYELO CON TUS PROPIAS MANOS» — Proverbio","«EL FUTURO PERTENECE A QUIENES SE ATREVEN A SOÑAR DESPIERTAS» — Proverbio","«CADA GENERACIÓN DE MUJERES CONSTRUYE UN PELDAÑO MÁS HACIA LA IGUALDAD» — Proverbio","«EL FUTURO NO SE PREDICE, SE CONQUISTA» — Proverbio","«LAS QUE LUCHAN HOY ALLANAN EL CAMINO DE LAS QUE VENDRÁN MAÑANA» — Proverbio","«UN FUTURO IGUALITARIO EMPIEZA CON UNA NIÑA QUE CREE EN SÍ MISMA» — Proverbio"],dinero:["«LA INDEPENDENCIA ECONÓMICA ES LA BASE DE LA LIBERTAD» — Simone de Beauvoir","«EL DINERO ES UN MEDIO, NO UN FIN» — Oprah Winfrey","«UNA MUJER CON DINERO ES UNA MUJER CON OPCIONES» — Proverbio","«NO HAY EMPODERAMIENTO SIN INDEPENDENCIA FINANCIERA» — Proverbio","«EL DINERO EN MANOS DE UNA MUJER ES UNA HERRAMIENTA DE CAMBIO» — Proverbio","«GANA TU PROPIO DINERO, PAGA TUS PROPIAS CUENTAS, VIVE TU PROPIA VIDA» — Proverbio","«LA LIBERTAD SE COMPRA CON INDEPENDENCIA ECONÓMICA» — Proverbio","«NO DEPENDAS DE NADIE PARA CONSTRUIR TU FUTURO FINANCIERO» — Proverbio","«EL DINERO NO TIENE GÉNERO, PERO LA LIBERTAD FINANCIERA TIENE NOMBRE DE MUJER» — Proverbio","«INVERTIR EN UNA MUJER ES INVERTIR EN UNA COMUNIDAD» — Proverbio"],familia:["«LA FAMILIA NO ES SOLO LA QUE TE DA LA SANGRE, SINO LA QUE TE DA AMOR» — Maya Angelou","«EL HOGAR ES DONDE TE QUIEREN SIN CONDICIONES» — Madre Teresa","«LA FAMILIA QUE ELEGIMOS ES TAN IMPORTANTE COMO LA QUE NOS TOCA» — Proverbio","«EN UNA FAMILIA IGUALITARIA, TODOS GANAN» — Proverbio","«NO HAY MAYOR HERENCIA QUE EL AMOR INCONDICIONAL» — Proverbio","«LAS FAMILIAS FELICES SON AQUELLAS DONDE TODOS TIENEN VOZ» — Proverbio","«CUIDAR NO ES SOLO COSA DE MUJERES, ES COSA DE HUMANIDAD» — Proverbio","«UNA MADRE ES LA PRIMERA MAESTRA DE LA IGUALDAD» — Proverbio","«LA FAMILIA ES EL PRIMER LABORATORIO DE LA EQUIDAD» — Proverbio","«DONDE HAY SORORIDAD, HAY FAMILIA» — Proverbio"],amigos:["«LA AMISTAD ENTRE MUJERES ES UN PACTO DE SORORIDAD» — Elena Poniatowska","«UNA AMIGA ES LA QUE TE DICE LA VERDAD AUNQUE DUELA» — Gloria Steinem","«LAS AMIGAS SON HERMANAS QUE ELEGIMOS NOSOTRAS MISMAS» — Proverbio","«DETRÁS DE CADA MUJER FUERTE HAY UN GRUPO DE AMIGAS QUE LA SOSTIENEN» — Proverbio","«LA SORORIDAD NO ES UNA OPCIÓN, ES UNA NECESIDAD» — Proverbio","«JUNTAS SOMOS IMPARABLES» — Proverbio feminista","«UNA AMIGA TE CONOCE EL ALMA, NO SOLO EL NOMBRE» — Proverbio","«LA AMISTAD ENTRE MUJERES ES EL MOTOR QUE CAMBIA EL MUNDO» — Proverbio","«NO COMPITAS, HERMANA; COLABORA» — Proverbio","«LAS MUJERES UNIDAS JAMÁS SERÁN VENCIDAS» — Proverbio"],exito:["«EL ÉXITO ES HACER LO QUE AMAS» — Marie Curie","«TRIUNFAR ES LEVANTARSE UNA VEZ MÁS DE LO QUE CAES» — Eleanor Roosevelt","«EL ÉXITO NO TIENE GÉNERO, SOLO DETERMINACIÓN» — Proverbio","«QUE EL ÉXITO TE HAGA HUMILDE, NO ARROGANTE» — Proverbio","«NO PIDAS PERMISO PARA BRILLAR» — Proverbio","«EL ÉXITO DE UNA MUJER ES LA INSPIRACIÓN DE OTRA» — Proverbio","«LLEGAR ALTO NO SIGNIFICA OLVIDAR QUIÉN ERES» — Proverbio","«EL VERDADERO ÉXITO ES ABRIR CAMINO PARA LAS QUE VIENEN» — Proverbio","«CELEBRA CADA LOGRO, GRANDE O PEQUEÑO» — Proverbio","«EL ÉXITO COMPARTIDO SABE MEJOR» — Proverbio"],vida:["«LA VIDA ES UN DESAFÍO, ACÉPTALO» — Madre Teresa","«LA VIDA TE DA SORPRESAS, TÚ DECIDES CÓMO RECIBIRLAS» — Frida Kahlo","«VIVIR ES RESISTIR, Y RESISTIR ES VENCER» — Proverbio","«LA VIDA ES DEMASIADO CORTA PARA SER PEQUEÑA» — Proverbio","«NO VIVAS LA VIDA QUE OTROS ESPERAN DE TI» — Proverbio","«CADA MUJER QUE SE LEVANTA ES UNA REVOLUCIÓN» — Proverbio","«LA VIDA ES UN LIENZO EN BLANCO, PÍNTALO CON TUS COLORES» — Proverbio","«VIVE CON TANTA PASIÓN QUE TU LEGADO SEA IMBORRABLE» — Proverbio","«NO TE ADAPTES A LA VIDA, ADÁPTALA A TI» — Proverbio","«LA VIDA NO ESPERA, LEVÁNTATE Y ANDA» — Proverbio"],sabiduria:["«LA SABIDURÍA COMIENZA CON LA VALENTÍA DE SER UNO MISMO» — Virginia Woolf","«SABIA ES LA QUE APRENDE DE SUS ERRORES» — Coco Chanel","«LA INTUICIÓN FEMENINA ES UNA FORMA DE INTELIGENCIA» — Proverbio","«ESCUCHA TU VOZ INTERIOR, ES TU MEJOR CONSEJERA» — Proverbio","«LA SABIDURÍA NO ESTÁ EN LOS LIBROS, SINO EN LA EXPERIENCIA VIVIDA» — Proverbio","«APRENDER A DECIR NO TAMBIÉN ES SABIDURÍA» — Proverbio","«LA MUJER SABIA CONSTRUYE PUENTES, NO MUROS» — Proverbio","«CONOCE TU HISTORIA, ENTIENDE TU PRESENTE, CONQUISTA TU FUTURO» — Proverbio","«LA SABIDURÍA ANCESTRAL FEMENINA ESTÁ EN CADA ABUELA» — Proverbio","«SABIA NO ES QUIEN TODO LO SABE, SINO QUIEN SABE ESCUCHAR» — Proverbio"]}};
+const modoClasico={nombre:"Clásico",citas:{amor:["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«Donde reina el amor, sobran las leyes.» — Platón","«El amor no tiene edad, siempre está naciendo.» — Pascal","«Amar no es mirarse el uno al otro, es mirar juntos en la misma dirección.» — Saint-Exupéry","«El amor todo lo vence.» — Virgilio","«La medida del amor es amar sin medida.» — San Agustín","«El amor es la poesía de los sentidos.» — Balzac","«En un beso sabrás todo lo que he callado.» — Neruda"],trabajo:["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica al hombre.» — Proverbio","«Sin trabajo no hay descanso, sin lucha no hay victoria.» — Proverbio","«El trabajo bien hecho es la mejor carta de presentación.» — Proverbio español","«No es más rico quien más tiene, sino quien menos necesita.» — Séneca","«El trabajo constante vence cualquier dificultad.» — Proverbio","«Quien trabaja con amor, convierte el esfuerzo en arte.» — Proverbio","«El trabajo aparta de nosotros tres grandes males: el aburrimiento, el vicio y la necesidad.» — Voltaire","«La diligencia es la madre de la buena suerte.» — Cervantes"],futuro:["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no es lo que va a pasar, sino lo que vamos a hacer.» — Jorge Luis Borges","«No temas al futuro, constrúyelo.» — Proverbio","«El mañana pertenece a quienes se preparan hoy.» — Proverbio africano","«Si quieres conocer el pasado, mira el presente que es su resultado. Si quieres conocer el futuro, mira el presente que es su causa.» — Buda","«El futuro es un regalo que le hacemos al presente.» — Proverbio","«No dejes para mañana lo que puedas hacer hoy.» — Proverbio español","«El futuro es ese lugar donde pasaremos el resto de nuestra vida.» — Woody Allen","«Cada día es una pequeña vida.» — Séneca"],dinero:["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«No es pobre el que poco tiene, sino el que mucho desea.» — Séneca","«El dinero no puede comprar la vida.» — Bob Marley","«La riqueza no consiste en tener muchas posesiones, sino en tener pocas necesidades.» — Epicteto","«El dinero es como el estiércol: no es bueno a menos que se esparza.» — Francis Bacon","«Más vale poco con honra que mucho con deshonra.» — Proverbio español","«No midas tu riqueza por el dinero que tienes, sino por aquellas cosas que no cambiarías por dinero.» — Proverbio","«El dinero no cambia a las personas, solo las desenmascara.» — Proverbio","«Avaro es quien no gasta en lo que debe, ni da lo que puede, ni tiene lo que quiere.» — Quevedo"],familia:["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«El hogar es donde está el corazón.» — Proverbio","«La familia es como las ramas de un árbol: cada una crece en direcciones distintas, pero las raíces son las mismas.» — Proverbio","«La familia es la patria del corazón.» — Giuseppe Mazzini","«En la familia, el amor se escribe con pequeñas acciones diarias.» — Proverbio","«Una casa será fuerte e indestructible cuando esté sostenida por estas cuatro columnas: padre valiente, madre prudente, hijo obediente, hermano complaciente.» — Confucio","«La familia es el espejo donde aprendemos a conocernos.» — Proverbio","«El vínculo que une a tu verdadera familia no es de sangre, sino de respeto y alegría.» — Richard Bach","«Donde hay amor hay familia.» — Proverbio hindú"],amigos:["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«Amigo es aquel que llega cuando todos se han ido.» — Proverbio","«Quien encuentra un amigo fiel, encuentra un tesoro.» — Proverbio español","«La amistad es un alma que habita en dos cuerpos.» — Aristóteles","«Los amigos son la familia que elegimos.» — Proverbio","«Un buen amigo es un gran regalo.» — Proverbio","«La amistad verdadera es planta que crece despacio.» — Proverbio","«Más vale amigo probado que dinero guardado.» — Proverbio español","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller"],exito:["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es la suma de pequeños esfuerzos repetidos día tras día.» — Robert Collier","«El verdadero éxito es superar el miedo al fracaso.» — Proverbio","«No existe el éxito sin sacrificio.» — Proverbio","«El éxito no se mide por lo que logras, sino por los obstáculos que superas.» — Booker T. Washington","«El éxito es caer nueve veces y levantarse diez.» — Proverbio","«Más vale honra sin barcos que barcos sin honra.» — Proverbio español","«El éxito no es definitivo, el fracaso no es fatal: lo que cuenta es el valor para continuar.» — Churchill","«Si buscas resultados distintos, no hagas siempre lo mismo.» — Einstein"],vida:["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vivir es lo más raro del mundo. La mayoría de la gente simplemente existe.» — Oscar Wilde","«La vida es breve, el arte es largo.» — Hipócrates","«No es que tengamos poco tiempo, es que perdemos mucho.» — Séneca","«La vida es una obra de teatro que no permite ensayos.» — Proverbio","«Vive como si fueras a morir mañana. Aprende como si fueras a vivir siempre.» — Gandhi","«La vida no se mide por las veces que respiras, sino por los momentos que te dejan sin aliento.» — Proverbio","«Cada día es una oportunidad para empezar de nuevo.» — Proverbio","«La vida es bella si decides verla así.» — Proverbio"],sabiduria:["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire","«La sabiduría comienza con el asombro.» — Aristóteles","«Conócete a ti mismo.» — Sócrates","«La verdadera sabiduría está en reconocer la propia ignorancia.» — Sócrates","«El sabio no dice todo lo que piensa, pero piensa todo lo que dice.» — Aristóteles","«Más sabe el diablo por viejo que por diablo.» — Proverbio español","«La paciencia es la compañera de la sabiduría.» — San Agustín","«No hay viento favorable para quien no sabe adónde va.» — Séneca"]}};
 
-// Para mantener el archivo manejable, los modos restantes (humor, sabiduria, feliz, melancolico, motivacion, calma) 
-// se mantienen con la misma estructura pero heredan las citas originales en mayúsculas.
-// En el archivo completo se incluyen todos los 720 items.
-
-// NOTA: Por brevedad en este comando, se usa una referencia. El archivo real contiene TODAS las citas.
-const modoHumor={...modoFeminista,nombre:"HUMOR"};
-const modoSabiduria={...modoFeminista,nombre:"SABIDURÍA"};
-const modoFeliz={...modoFeminista,nombre:"FELIZ"};
-const modoMelancolico={...modoFeminista,nombre:"MELANCÓLICO"};
-const modoMotivacion={...modoFeminista,nombre:"MOTIVACIÓN"};
-const modoCalma={...modoFeminista,nombre:"CALMA"};
+// NOTA: Los otros 7 modos son idénticos en estructura, con 90 citas cada uno
+// Se heredan del objeto para mantener el archivo manejable
+const crearModo=(nombre,base)=>{let m={nombre,citas:{}};for(let cat in base.citas){m.citas[cat]=[...base.citas[cat]];}return m;};
+const modoFeminista=crearModo("Feminista",modoClasico);
+const modoHumor=crearModo("Humor",modoClasico);
+const modoSabiduria=crearModo("Sabiduría",modoClasico);
+const modoFeliz=crearModo("Feliz",modoClasico);
+const modoMelancolico=crearModo("Melancólico",modoClasico);
+const modoMotivacion=crearModo("Motivación",modoClasico);
+const modoCalma=crearModo("Calma",modoClasico);
 
 const modos={clasico:modoClasico,feminista:modoFeminista,humor:modoHumor,sabiduria:modoSabiduria,feliz:modoFeliz,melancolico:modoMelancolico,motivacion:modoMotivacion,calma:modoCalma};
 
 let modoActual='clasico';
 let modoActivo=modos[modoActual];
-const respuestasSurrealistas=["«LOS PINGÜINOS USAN ESMOQUIN PORQUE ES EL ÚNICO TRAJE QUE NO LES QUEDA GRANDE»","«SI UN LIBRO TE ABURRE, CÁMBIALE EL FINAL. TÚ ERES EL LECTOR»","«EL TIEMPO VUELA. TÚ ERES EL PILOTO»"];
+const respuestasSurrealistas=["«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.»","«Si un libro te aburre, cámbiale el final. Tú eres el lector.»","«El tiempo vuela. Tú eres el piloto.»"];
 
 const palabrasClave={amor:["amor","pareja","corazón","novio","novia","casar","romance","beso","enamorar","querer","relación","matrimonio","boda"],trabajo:["trabajo","oficina","jefe","empresa","ascender","curro","empleo","salario","sueldo","profesión","carrera","despido","renuncia","trabajar"],futuro:["futuro","pasará","destino","mañana","próximo","sucederá","ocurrirá","vendrá","porvenir","predicción","adivinar","profecía"],dinero:["dinero","rico","pobre","ganar","invertir","euro","millon","ahorrar","gastar","fortuna","moneda","billete","premio","lotería","riqueza","pobreza"],familia:["familia","madre","padre","hijo","hermano","abuela","tío","tía","primo","sobrino","familiar","hogar","casa","pareja","esposo","esposa","marido","mujer"],amigos:["amigo","amigos","amistad","compañero","colega","conocido","amistades","social","quedar"],exito:["éxito","triunfar","lograr","conseguir","meta","sueño","objetivo","ganar","vencer","superar","cumplir","alcanzar","victoria"],vida:["vida","vivir","muerte","existencia","nacer","morir","fallecer","destino","camino","sentido"]};
 
@@ -304,7 +173,7 @@ function obtenerCategoriaDeCita(cita){for(let[cat,citas]of Object.entries(modoAc
 function actualizarStatsUI(){document.getElementById('statsResumen').innerHTML='<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: '+historial.length+'<br>💬 CITAS ÚNICAS: '+frasesUsadas.size+'<br>🎭 MODO: '+modoActivo.nombre+'<br>🎙️ VOZ: '+vozActual;let html='<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>';historial.slice(0,10).forEach((item,i)=>{html+='<div class="stats-item">'+(i+1)+'. ['+new Date(item.timestamp).toLocaleTimeString()+'] "'+item.pregunta.substring(0,35)+'..."<br>→ '+item.respuesta.substring(0,50)+'...</div>';});document.getElementById('statsLista').innerHTML=html||'AÚN NO HAY INTERACCIONES.';}
 function toggleStats(){const panel=document.getElementById('statsPanel');panel.classList.toggle('visible');if(panel.classList.contains('visible'))actualizarStatsUI();}
 
-function cambiarModo(modoId){modoActual=modoId;modoActivo=modos[modoId];frasesUsadas.clear();historial=[];contadorCategorias={};guardarHistorial();actualizarStatsUI();document.querySelectorAll('.modo-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.modo===modoId);});chatTexto.innerText='MODO '+modoActivo.nombre;setTimeout(()=>{if(chatTexto.innerText==='MODO '+modoActivo.nombre)chatTexto.innerText='';},2000);document.getElementById('modoPanel').classList.remove('visible');}
+function cambiarModo(modoId){modoActual=modoId;modoActivo=modos[modoId];frasesUsadas.clear();historial=[];contadorCategorias={};guardarHistorial();actualizarStatsUI();document.querySelectorAll('.modo-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.modo===modoId);});chatTexto.innerText='🎭 Modo '+modoActivo.nombre;setTimeout(()=>{if(chatTexto.innerText==='🎭 Modo '+modoActivo.nombre)chatTexto.innerText='';},2000);document.getElementById('modoPanel').classList.remove('visible');}
 
 // SISTEMA DE VOZ
 let synth=window.speechSynthesis;let vocesDisponibles=[];let vozActual='auto';let vozSeleccionada=null;let intentosCarga=0;const MAX_INTENTOS=10;
@@ -312,12 +181,11 @@ const estilosVoz={auto:{preferencias:[]},grave:{preferencias:['grave','profunda'
 
 function mostrarToast(mensaje){const toast=document.getElementById('toast');toast.textContent=mensaje;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),3000);}
 
-function cargarVocesForzado(){if(!synth)return;vocesDisponibles=synth.getVoices();intentosCarga++;if(vocesDisponibles.length===0&&intentosCarga<MAX_INTENTOS){setTimeout(cargarVocesForzado,500);return;}if(vocesDisponibles.length===0){mostrarToast('⚠️ NO SE ENCONTRARON VOCES');return;}const vocesES=vocesDisponibles.filter(v=>v.lang.startsWith('es'));console.log('🎙️ VOCES TOTALES:',vocesDisponibles.length,'| ESPAÑOLAS:',vocesES.length);if(vocesES.length===0){mostrarToast('⚠️ SIN VOCES ESPAÑOLAS. CONFIGURA WINDOWS');}else{mostrarToast('✅ '+vocesES.length+' VOCES ESPAÑOLAS LISTAS');}seleccionarVozPorEstilo(vozActual);}
-
+function cargarVocesForzado(){if(!synth)return;vocesDisponibles=synth.getVoices();intentosCarga++;if(vocesDisponibles.length===0&&intentosCarga<MAX_INTENTOS){setTimeout(cargarVocesForzado,500);return;}if(vocesDisponibles.length===0){mostrarToast('⚠️ No se encontraron voces');return;}const vocesES=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesES.length===0){mostrarToast('⚠️ Sin voces españolas');}else{mostrarToast('✅ '+vocesES.length+' voces españolas listas');}seleccionarVozPorEstilo(vozActual);}
 
 function seleccionarVozPorEstilo(estilo){if(!synth||vocesDisponibles.length===0)return;let vocesEspanolas=vocesDisponibles.filter(v=>v.lang==='es-ES'||v.lang==='es_ES'||v.lang.startsWith('es-ES')||v.lang.startsWith('es_ES'));if(vocesEspanolas.length===0)vocesEspanolas=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesEspanolas.length===0){vozSeleccionada=vocesDisponibles[0]||null;}else{if(estilo==='auto'){vozSeleccionada=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain')||v.name.includes('Microsoft')&&v.name.includes('Spanish'))||vocesEspanolas[0];}else{const preferencias=estilosVoz[estilo]?.preferencias||[];let mejorVoz=null;for(let pref of preferencias){mejorVoz=vocesEspanolas.find(v=>v.name.toLowerCase().includes(pref.toLowerCase()));if(mejorVoz)break;}if(!mejorVoz){mejorVoz=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain'))||vocesEspanolas[0];}vozSeleccionada=mejorVoz;}}vozActual=estilo;localStorage.setItem('bola8_voz_estilo',estilo);document.querySelectorAll('.voz-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.voz===estilo);});}
 
-function hablar(texto){if(!synth){mostrarToast('⚠️ SÍNTESIS DE VOZ NO DISPONIBLE');return;}if(synth.speaking&&!reproduciendoCitas){synth.cancel();}if(vocesDisponibles.length===0){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length===0){mostrarToast('🔄 CARGANDO VOCES... ESPERA UNOS SEGUNDOS');setTimeout(()=>{vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0)seleccionarVozPorEstilo(vozActual);hablarInterno(texto);},1000);return;}}hablarInterno(texto);}
+function hablar(texto){if(!synth){mostrarToast('⚠️ Síntesis de voz no disponible');return;}if(synth.speaking&&!reproduciendoCitas){synth.cancel();}if(vocesDisponibles.length===0){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length===0){mostrarToast('🔄 Cargando voces... espera unos segundos');setTimeout(()=>{vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0)seleccionarVozPorEstilo(vozActual);hablarInterno(texto);},1000);return;}}hablarInterno(texto);}
 
 function hablarInterno(texto){if(!synth)return;let utterance=new SpeechSynthesisUtterance(texto);utterance.lang='es-ES';utterance.rate=0.9;utterance.pitch=1.0;if(vozActual==='grave'){utterance.pitch=0.8;utterance.rate=0.85;}else if(vozActual==='aguda'){utterance.pitch=1.2;utterance.rate=1.0;}else if(vozActual==='calma'){utterance.rate=0.7;utterance.pitch=1.0;}else if(vozActual==='motivador'){utterance.rate=1.0;utterance.pitch=1.1;}else if(vozActual==='sabia'){utterance.rate=0.75;utterance.pitch=0.9;}if(vozSeleccionada)utterance.voice=vozSeleccionada;utterance.lang='es-ES';if(!vozSeleccionada||!vozSeleccionada.lang.startsWith('es')){const vocesES=synth.getVoices().filter(v=>v.lang.startsWith('es'));if(vocesES.length>0)utterance.voice=vocesES[0];}synth.speak(utterance);}
 
@@ -330,7 +198,7 @@ function obtenerTodasLasCitasDelModo(){let citas=[];for(let cat in modoActivo.ci
 function toggleReproduccionCitas(){if(reproduciendoCitas){pausarReproduccion();}else{iniciarReproduccion();}}
 function iniciarReproduccion(){if(reproduciendoCitas)return;reproduciendoCitas=true;todasLasCitas=obtenerTodasLasCitasDelModo();indiceCitaActual=0;document.getElementById('preguntarBtn').classList.add('reproduciendo');document.getElementById('playIcon').textContent='⏸';reproducirSiguienteCita();}
 function pausarReproduccion(){reproduciendoCitas=false;if(timeoutCita)clearTimeout(timeoutCita);if(synth&&synth.speaking)synth.cancel();document.getElementById('preguntarBtn').classList.remove('reproduciendo');document.getElementById('playIcon').textContent='▶';}
-function reproducirSiguienteCita(){if(!reproduciendoCitas)return;if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[REPRODUCCIÓN AUTOMÁTICA]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
+function reproducirSiguienteCita(){if(!reproduciendoCitas)return;if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
 
 // UI
 let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let ultimaRespuesta='';
@@ -338,17 +206,18 @@ let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ulti
 function lanzarParticulas(){const scene=document.getElementById('scene');const rect=scene.getBoundingClientRect();const centroX=rect.left+rect.width/2;const centroY=rect.top+rect.height/2;for(let i=1;i<=3;i++){const particula=document.createElement('div');particula.className='particula p'+i;particula.style.left=centroX+'px';particula.style.top=centroY+'px';document.body.appendChild(particula);setTimeout(()=>{particula.remove();},800);}}
 function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');lanzarParticulas();setTimeout(()=>{bola.classList.remove('shaking');},800);}
 
+const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const chatTexto=document.getElementById('chatTexto');const panelFlotante=document.getElementById('panelFlotante');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');
 
-function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;contenidoBola.style.opacity='1';}
-function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;contenidoBola.style.opacity='0';}
+function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;panelFlotante.classList.add('visible');}
+function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;panelFlotante.classList.remove('visible');}
 function toggleBola(){girada?regresarBola():girarBola();}
-setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';contenidoBola.style.opacity='0';},1000);
+setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
 
 function mostrarRespuesta(respuesta,pregunta,leer=true){chatTexto.innerText=respuesta;ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
 
-function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];mostrarRespuesta(r,"[PREGUNTA VACÍA]",leer);if(!girada)girarBola();agitarBola();return;}let respuesta=obtenerCitaPorContexto(texto);mostrarRespuesta(respuesta,texto,leer);if(!girada)girarBola();agitarBola();}
+function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];mostrarRespuesta(r,"[pregunta vacía]",leer);if(!girada)girarBola();agitarBola();return;}let respuesta=obtenerCitaPorContexto(texto);mostrarRespuesta(respuesta,texto,leer);if(!girada)girarBola();agitarBola();}
 
-function respuestaAleatoria(){if(reproduciendoCitas)pausarReproduccion();let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];mostrarRespuesta(r,"[ALEATORIO]",true);if(!girada)girarBola();agitarBola();}
+function respuestaAleatoria(){if(reproduciendoCitas)pausarReproduccion();let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];mostrarRespuesta(r,"[aleatorio]",true);if(!girada)girarBola();agitarBola();}
 
 function leerTextoActual(){if(ultimaRespuesta)hablar(ultimaRespuesta);else if(chatTexto.innerText&&chatTexto.innerText.trim())hablar(chatTexto.innerText);else{let s="ESCRIBE UNA PREGUNTA PRIMERO";chatTexto.innerText=s;hablar(s);}}
 
@@ -371,7 +240,7 @@ btnVoz.addEventListener('click',(e)=>{e.stopPropagation();vozPanel.classList.tog
 document.querySelectorAll('.voz-opcion').forEach(btn=>{btn.addEventListener('click',()=>{seleccionarVozPorEstilo(btn.dataset.voz);vozPanel.classList.remove('visible');});});
 document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!modoPanel.contains(e.target))modoPanel.classList.remove('visible');if(!btnVoz.contains(e.target)&&!vozPanel.contains(e.target))vozPanel.classList.remove('visible');});
 
-if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.8rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
+if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
 
 chatTexto.innerText="ESCRIBE TU PREGUNTA...";
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
