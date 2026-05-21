@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#111111">
-    <title>🎱 Bola Mágica 8 - Con Memoria</title>
+    <title>🎱 Bola Mágica 8</title>
     <style>
         * {
             margin: 0;
@@ -22,6 +22,7 @@
             align-items: center;
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             padding: 16px;
+            position: relative;
         }
 
         .container {
@@ -96,6 +97,7 @@
             pointer-events: auto;
         }
 
+        /* Triángulo con vértice ABAJO */
         .triangulo {
             width: 100%;
             height: 100%;
@@ -108,113 +110,61 @@
             padding: 15% 10% 20% 10%;
             border: 1px solid rgba(80, 180, 255, 0.4);
             box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
         }
 
-        .chat-area {
+        /* Área de texto multifuncional */
+        .texto-multifuncional {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .texto-unificado {
-            width: 100%;
-            background: rgba(10, 25, 35, 0.9);
-            border: 1px solid rgba(80, 180, 255, 0.5);
+            background: rgba(10, 25, 35, 0.95);
+            border: 1px solid rgba(80, 180, 255, 0.6);
             border-radius: 20px;
-            padding: 14px 12px;
+            padding: 16px 14px;
             color: #d4eaff;
-            font-size: clamp(0.7rem, 3.5vw, 0.9rem);
+            font-size: clamp(0.75rem, 3.8vw, 0.95rem);
             font-family: inherit;
             text-align: center;
             resize: none;
             outline: none;
             backdrop-filter: blur(4px);
             word-break: break-word;
-            min-height: 100px;
-            max-height: 160px;
+            min-height: 140px;
+            max-height: 200px;
             overflow-y: auto;
+            line-height: 1.4;
         }
 
-        .botones-triangulo {
+        .texto-multifuncional:focus {
+            border-color: #6cf;
+            box-shadow: 0 0 10px rgba(100, 200, 255, 0.3);
+        }
+
+        /* Botones externos (fuera del triángulo) */
+        .botones-externos {
+            position: fixed;
+            bottom: 70px;
+            left: 0;
+            right: 0;
             display: flex;
-            gap: 12px;
             justify-content: center;
-            margin-top: 15px;
-            flex-wrap: wrap;
+            gap: 15px;
+            padding: 10px;
+            z-index: 150;
         }
 
-        .btn {
+        .btn-externo {
             background: #2a4a6a;
             border: none;
             color: #cceeff;
-            padding: 8px 18px;
+            padding: 10px 20px;
             border-radius: 40px;
-            font-size: clamp(0.6rem, 2.8vw, 0.7rem);
+            font-size: 0.8rem;
             cursor: pointer;
             font-weight: bold;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
         }
 
-        .micro-btn.grabando { background: #a33; animation: pulse 1s infinite; }
-        .speaker-btn { background: #4a6a8a; }
-        .stats-btn { background: #3a5a3a; }
-
-        @keyframes pulse { 0% { opacity: 0.7; } 100% { opacity: 1; } }
-
-        /* Panel de estadísticas */
-        .stats-panel {
-            position: fixed;
-            bottom: 60px;
-            left: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 12px;
-            margin: 10px;
-            border: 1px solid #4af;
-            z-index: 150;
-            transform: translateY(calc(100% + 10px));
-            transition: transform 0.3s ease;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        .stats-panel.visible { transform: translateY(0); }
-        .stats-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #ccf;
-            border-bottom: 1px solid #4af;
-            padding-bottom: 8px;
-        }
-        .stats-cerrar {
-            background: none;
-            border: none;
-            color: #f88;
-            font-size: 1.2rem;
-            cursor: pointer;
-        }
-        .stats-lista {
-            font-size: 0.7rem;
-            color: #aaf;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-        .stats-item {
-            padding: 5px;
-            border-bottom: 1px solid #2a4a6a;
-            font-family: monospace;
-        }
-        .stats-resumen {
-            margin-bottom: 10px;
-            padding: 8px;
-            background: #1a3a4a;
-            border-radius: 12px;
-            font-size: 0.7rem;
-        }
+        .btn-externo:active { transform: scale(0.96); }
 
         .info-externa {
             position: fixed;
@@ -240,10 +190,40 @@
             background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent 70%);
             pointer-events: none;
         }
+
+        /* Call to action */
+        .cta {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: transparent;
+            backdrop-filter: blur(8px);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: clamp(1rem, 5vw, 1.5rem);
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            z-index: 200;
+            pointer-events: none;
+            animation: fadeInOut 3s ease-out forwards;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            15% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            85% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.1); visibility: hidden; }
+        }
     </style>
 </head>
 <body>
 <div class="container">
+    <div class="cta" id="cta">✨ ¿Qué quieres hoy? ✨</div>
+
     <div class="scene" id="scene">
         <div class="bola" id="bola">
             <div class="cara front">
@@ -251,43 +231,44 @@
                 <div class="brillo"></div>
             </div>
             <div class="cara back" id="caraBack">
-                <div class="triangulo" id="triangulo">
-                    <div class="chat-area">
-                        <div class="texto-unificado" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
-                        <div class="botones-triangulo">
-                            <button class="btn" id="preguntarBtn">🔮 Preguntar</button>
-                            <button class="btn micro-btn" id="microBtn">🎤 Hablar</button>
-                            <button class="btn speaker-btn" id="speakerBtn">🔊 Leer</button>
-                            <button class="btn stats-btn" id="statsBtn">📊 Stats</button>
-                        </div>
-                    </div>
+                <div class="triangulo">
+                    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
                 </div>
                 <div class="brillo"></div>
             </div>
         </div>
     </div>
 </div>
-<div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | 🔊 Lee respuestas | 📊 Estadísticas de sesión</div>
+
+<!-- Botones externos (fuera del triángulo) -->
+<div class="botones-externos">
+    <button class="btn-externo" id="preguntarBtn">🔮 Preguntar</button>
+    <button class="btn-externo" id="microBtn">🎤 Hablar</button>
+    <button class="btn-externo" id="speakerBtn">🔊 Leer</button>
+    <button class="btn-externo" id="statsBtn">📊 Stats</button>
+</div>
+
+<div class="info-externa" id="infoExterna">📱 Toca la bola (lado 8) para girar | El texto se lee automáticamente</div>
 
 <!-- Panel de estadísticas -->
-<div class="stats-panel" id="statsPanel">
-    <div class="stats-header">
+<div class="stats-panel" id="statsPanel" style="position:fixed; bottom:120px; left:10px; right:10px; background:rgba(0,0,0,0.9); backdrop-filter:blur(10px); border-radius:20px; padding:12px; border:1px solid #4af; z-index:150; transform:translateY(calc(100% + 10px)); transition:transform 0.3s ease; max-height:60vh; overflow-y:auto;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; color:#ccf; border-bottom:1px solid #4af; padding-bottom:8px;">
         <span>📊 Estadísticas de tu sesión</span>
-        <button class="stats-cerrar" id="statsCerrar">✕</button>
+        <button id="statsCerrar" style="background:none; border:none; color:#f88; font-size:1.2rem; cursor:pointer;">✕</button>
     </div>
-    <div class="stats-resumen" id="statsResumen"></div>
-    <div class="stats-lista" id="statsLista"></div>
+    <div id="statsResumen" style="margin-bottom:10px; padding:8px; background:#1a3a4a; border-radius:12px; font-size:0.7rem;"></div>
+    <div id="statsLista" style="font-size:0.7rem; color:#aaf; max-height:200px; overflow-y:auto;"></div>
 </div>
 
 <script>
     // ============================================================
-    // BASE DE DATOS DE FRASES
+    // FRASES
     // ============================================================
     const frasesNormales = {
-        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es una locura que solo cura el amor.» — Lope de Vega","«Amar es desear lo que se tiene.» — San Agustín"],
-        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica, pero el descanso también.»","«No trabajes por dinero, haz que el dinero trabaje para ti.» — Kiyosaki"],
-        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo"],
-        dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett","«El dinero es un buen sirviente pero un mal amo.» — Bacon"],
+        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez","«El amor es una locura que solo cura el amor.» — Lope de Vega"],
+        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El trabajo dignifica, pero el descanso también.»"],
+        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»"],
+        dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
         familia: ["«La familia no es cuestión de sangre, sino de respeto y alegría.» — Bach","«La familia te quiere sin preguntar.»","«La familia es donde aprendemos a amar.» — Papa Francisco"],
         amigos: ["«Un amigo es quien lo sabe todo de ti y aún así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Scott","«La amistad duplica las alegrías y divide las angustias.» — Bacon"],
         exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es obtener lo que deseas; la felicidad, disfrutarlo.» — Emerson"],
@@ -298,20 +279,20 @@
         "«Los pingüinos usan esmoquin porque no tienen armario para chaquetas.» — Anónimo",
         "«Si un libro se aburre, cámbiale la pila.» — Alicia",
         "«El tiempo vuela como un coche sin ruedas.» — Proverbio marciano",
-        "«La Luna es un queso que nunca se acaba porque los ratones son astronautas.» — Teoría galáctica",
+        "«La Luna es un queso que nunca se acaba porque los ratones son astronautas.»",
         "«Las nubes no lloran, sudan emociones.» — Meteoro loco",
-        "«El silencio tiene eco si gritas muy fuerte hacia adentro.» — Poeta invisible",
-        "«Los árboles bailan cumbia cuando nadie mira.» — Botánica imaginaria",
-        "«El agua hierve al revés en el país de los espejos.» — Alicia vuelve",
-        "«Un tren puede silbar una canción de cuna si le cantas primero.» — Maquinista onírico",
-        "«El arcoíris es solo el bigote del sol.» — Astronomía disparatada",
-        "«Los calcetines desaparecen porque viajan al futuro a buscarse a sí mismos.» — Teoría del caos textil"
+        "«El silencio tiene eco si gritas muy fuerte hacia adentro.»",
+        "«Los árboles bailan cumbia cuando nadie mira.»",
+        "«El agua hierve al revés en el país de los espejos.»",
+        "«Un tren puede silbar una canción de cuna si le cantas primero.»",
+        "«El arcoíris es solo el bigote del sol.»",
+        "«Los calcetines desaparecen porque viajan al futuro a buscarse a sí mismos.»"
     ];
 
-    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"];
+    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes"];
 
     // ============================================================
-    // SISTEMA DE LOG Y MEMORIA (localStorage)
+    // SISTEMA DE LOG Y MEMORIA
     // ============================================================
     let sesionId = localStorage.getItem('bola8_sesion_id');
     if (!sesionId) {
@@ -319,11 +300,8 @@
         localStorage.setItem('bola8_sesion_id', sesionId);
     }
 
-    // Cargar o crear historial
     let historial = JSON.parse(localStorage.getItem('bola8_historial_' + sesionId)) || [];
     let frasesUsadas = new Set(historial.map(h => h.respuesta));
-    
-    // Contador de frases por categoría
     let contadorCategorias = JSON.parse(localStorage.getItem('bola8_categorias_' + sesionId)) || {};
 
     function guardarHistorial() {
@@ -338,26 +316,18 @@
             respuesta: respuesta,
             categoria: categoria
         });
-        // Mantener solo últimas 50 interacciones
         if (historial.length > 50) historial.pop();
-        
         frasesUsadas.add(respuesta);
         contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1;
-        
         guardarHistorial();
         actualizarStatsUI();
     }
 
-    // Obtener respuesta sin repetir recientes (evitar repetir en las últimas 5)
-    function obtenerRespuestaSinRepetir(pool, evitarRepetir = true) {
-        if (!evitarRepetir || pool.length === 0) return pool[Math.floor(Math.random() * pool.length)];
-        
-        // Filtrar frases no usadas recientemente (últimas 5)
+    function obtenerRespuestaSinRepetir(pool) {
+        if (pool.length === 0) return null;
         let candidatas = pool.filter(f => !frasesUsadas.has(f));
-        if (candidatas.length === 0) candidatas = pool; // Si todas están usadas, reiniciar
-        
-        const elegida = candidatas[Math.floor(Math.random() * candidatas.length)];
-        return elegida;
+        if (candidatas.length === 0) candidatas = pool;
+        return candidatas[Math.floor(Math.random() * candidatas.length)];
     }
 
     function obtenerRespuestaNormal() {
@@ -366,11 +336,11 @@
             if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
         }
         if (pool.length === 0) pool = frasesGenerales;
-        return obtenerRespuestaSinRepetir(pool, true);
+        return obtenerRespuestaSinRepetir(pool);
     }
 
     function obtenerRespuestaExtrana() {
-        return obtenerRespuestaSinRepetir(frasesExtranas, true);
+        return obtenerRespuestaSinRepetir(frasesExtranas);
     }
 
     function obtenerCategoriaDeRespuesta(respuesta) {
@@ -382,46 +352,36 @@
     }
 
     // ============================================================
-    // UI DE ESTADÍSTICAS
+    // UI ESTADÍSTICAS
     // ============================================================
     function actualizarStatsUI() {
         const statsResumen = document.getElementById('statsResumen');
         const statsLista = document.getElementById('statsLista');
-        
-        const totalPreguntas = historial.length;
-        const frasesUnicas = frasesUsadas.size;
-        
         statsResumen.innerHTML = `
-            <strong>📊 Resumen de sesión</strong><br>
-            🎱 Preguntas realizadas: ${totalPreguntas}<br>
-            💬 Frases únicas dichas: ${frasesUnicas}<br>
-            📁 Sesión ID: ${sesionId.substr(0, 16)}...<br>
+            <strong>📊 Resumen</strong><br>
+            🎱 Preguntas: ${historial.length}<br>
+            💬 Frases únicas: ${frasesUsadas.size}<br>
+            📁 Sesión: ${sesionId.substr(0, 16)}...
         `;
-        
-        if (totalPreguntas > 0) {
+        if (historial.length > 0) {
             statsLista.innerHTML = '<strong>📜 Últimas preguntas:</strong><br>';
             historial.slice(0, 10).forEach((item, idx) => {
                 const fecha = new Date(item.timestamp).toLocaleTimeString();
-                statsLista.innerHTML += `
-                    <div class="stats-item">
-                        ${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>
-                        → ${item.respuesta.substring(0, 60)}...
-                    </div>
-                `;
+                statsLista.innerHTML += `<div style="padding:5px; border-bottom:1px solid #2a4a6a;">${idx+1}. [${fecha}] "${item.pregunta.substring(0, 40)}..."<br>→ ${item.respuesta.substring(0, 60)}...</div>`;
             });
         } else {
-            statsLista.innerHTML = 'Aún no hay interacciones. ¡Haz una pregunta!';
+            statsLista.innerHTML = 'Aún no hay interacciones.';
         }
     }
 
     function toggleStats() {
         const panel = document.getElementById('statsPanel');
-        panel.classList.toggle('visible');
+        panel.style.transform = panel.style.transform === 'translateY(0px)' ? 'translateY(calc(100% + 10px))' : 'translateY(0px)';
         actualizarStatsUI();
     }
 
     // ============================================================
-    // RESTO DE FUNCIONALIDAD (bola, voz, micrófono, etc.)
+    // FUNCIONALIDAD PRINCIPAL
     // ============================================================
     let temasActivos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
     let reconocimiento = null;
@@ -455,18 +415,24 @@
     const bola = document.getElementById('bola');
     const scene = document.getElementById('scene');
     const caraBack = document.getElementById('caraBack');
-    const triangulo = document.getElementById('triangulo');
     const chatTexto = document.getElementById('chatTexto');
     const preguntarBtn = document.getElementById('preguntarBtn');
     const microBtn = document.getElementById('microBtn');
     const speakerBtn = document.getElementById('speakerBtn');
     const statsBtn = document.getElementById('statsBtn');
     const statsCerrar = document.getElementById('statsCerrar');
+    const cta = document.getElementById('cta');
+
+    function ocultarCta() {
+        if (cta && cta.style.visibility !== 'hidden') {
+            cta.style.opacity = '0';
+            cta.style.visibility = 'hidden';
+        }
+    }
 
     function girarBola() { bola.style.transform = 'rotateY(180deg)'; girada = true; }
     function regresarBola() { bola.style.transform = 'rotateY(0deg)'; girada = false; }
     function toggleBola() { girada ? regresarBola() : girarBola(); }
-    function expandirChat() { if (girada) { chatTexto.focus(); } }
 
     setTimeout(() => { bola.style.animation = 'none'; bola.style.transform = 'rotateY(0deg)'; }, 1000);
 
@@ -478,22 +444,24 @@
     }
 
     function procesarPregunta(texto, leerRespuesta = true) {
+        ocultarCta();
         if (!texto || !texto.trim()) {
-            const respuesta = obtenerRespuestaExtrana();
+            const respuesta = obtenerRespuestaExtrana() || frasesExtranas[0];
             mostrarRespuesta(respuesta, "[pregunta vacía]", leerRespuesta);
             if (!girada) girarBola();
             setTimeout(() => regresarBola(), 3500);
             return;
         }
-        const respuesta = obtenerRespuestaNormal();
+        const respuesta = obtenerRespuestaNormal() || frasesGenerales[0];
         mostrarRespuesta(respuesta, texto, leerRespuesta);
         if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3500);
     }
 
     function respuestaAleatoria() {
+        ocultarCta();
         const esExtrana = Math.random() < 0.5;
-        const respuesta = esExtrana ? obtenerRespuestaExtrana() : obtenerRespuestaNormal();
+        const respuesta = esExtrana ? (obtenerRespuestaExtrana() || frasesExtranas[0]) : (obtenerRespuestaNormal() || frasesGenerales[0]);
         mostrarRespuesta(respuesta, "[aleatorio: agitado]", true);
         if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3500);
@@ -521,7 +489,6 @@
         reconocimiento.lang = 'es-ES';
         reconocimiento.onstart = () => {
             grabando = true;
-            microBtn.classList.add('grabando');
             microBtn.textContent = '🔴...';
             chatTexto.innerText = "🎤 Escuchando...";
         };
@@ -539,7 +506,6 @@
     function detenerMicrofono() {
         if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
         grabando = false;
-        microBtn.classList.remove('grabando');
         microBtn.textContent = '🎤 Hablar';
         if (chatTexto.innerText === "🎤 Escuchando...") chatTexto.innerText = "";
     }
@@ -568,7 +534,7 @@
     // Eventos
     scene.addEventListener('click', (e) => {
         if (e.target === caraBack || caraBack.contains(e.target)) {
-            if (girada) expandirChat();
+            if (girada) chatTexto.focus();
         } else { toggleBola(); }
     });
     preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText, true));
@@ -576,7 +542,9 @@
     speakerBtn.addEventListener('click', leerTextoActual);
     statsBtn.addEventListener('click', toggleStats);
     statsCerrar.addEventListener('click', toggleStats);
-    chatTexto.focus();
+    chatTexto.addEventListener('focus', ocultarCta);
+    document.body.addEventListener('touchstart', ocultarCta);
+    document.body.addEventListener('click', ocultarCta);
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
         const btnPermiso = document.createElement('div');
@@ -586,10 +554,11 @@
         document.body.appendChild(btnPermiso);
     } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
 
-    // Mostrar estadísticas al inicio si ya hay historial
-    if (historial.length > 0) {
-        setTimeout(() => { toggleStats(); setTimeout(() => toggleStats(), 3000); }, 500);
-    }
+    // Mostrar bienvenida
+    chatTexto.innerText = "✨ ¿Qué quieres saber? ✨";
+    setTimeout(() => {
+        if (chatTexto.innerText === "✨ ¿Qué quieres saber? ✨") chatTexto.innerText = "";
+    }, 3000);
 </script>
 </body>
 </html>
