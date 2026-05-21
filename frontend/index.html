@@ -5,312 +5,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#111111">
-    <title>🎱 Bola Mágica 8</title>
+    <title>🎱 Bola Mágica 8 Esférica</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
-            min-height: 100vh;
-            background: linear-gradient(145deg, #2a2a2a 0%, #0a0a0a 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 16px;
-        }
-
-        .app {
-            max-width: 500px;
-            width: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Contenedor 3D para el giro */
-        .bola-3d {
-            width: 280px;
-            height: 280px;
-            perspective: 1200px;
-            margin: 20px auto;
-            cursor: pointer;
-        }
-
-        .bola-giro {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1);
-            border-radius: 50%;
-        }
-
-        /* Cara delantera: número 8 */
-        .cara-frontal, .cara-trasera {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            backface-visibility: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 20px 30px rgba(0,0,0,0.4), inset 0 -10px 20px rgba(0,0,0,0.3), inset 0 10px 15px rgba(255,255,255,0.2);
-        }
-
-        /* Cara frontal: la bola 8 clásica */
-        .cara-frontal {
-            background: radial-gradient(circle at 35% 35%, #2a2a2a, #0a0a0a);
-            transform: rotateY(0deg);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .numero-8 {
-            width: 120px;
-            height: 120px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3), inset 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .numero-8 span {
-            font-size: 5rem;
-            font-weight: 900;
-            color: #111;
-            font-family: 'Impact', 'Arial Black', sans-serif;
-            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
-        }
-
-        /* Cara trasera: la respuesta (triángulo) */
-        .cara-trasera {
-            background: radial-gradient(circle at 35% 35%, #2a2a2a, #0a0a0a);
-            transform: rotateY(180deg);
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .triangulo-respuesta {
-            width: 90%;
-            background: linear-gradient(145deg, #1a2a3a, #0a1a2a);
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            padding: 40px 15px 25px 15px;
-            text-align: center;
-            box-shadow: inset 0 0 15px rgba(0,255,255,0.1), 0 5px 10px rgba(0,0,0,0.3);
-            border: 1px solid rgba(100,200,255,0.3);
-        }
-
-        .texto-respuesta {
-            color: #ccf;
-            font-size: 0.9rem;
-            line-height: 1.4;
-            font-style: italic;
-            text-shadow: 0 0 5px rgba(0,255,255,0.3);
-            font-weight: 500;
-            min-height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            word-break: break-word;
-        }
-
-        .autor-respuesta {
-            color: #8ab;
-            font-size: 0.7rem;
-            margin-top: 10px;
-            font-style: normal;
-            border-top: 1px solid rgba(100,200,255,0.3);
-            padding-top: 8px;
-        }
-
-        /* Giro activado */
-        .girado {
-            transform: rotateY(180deg);
-        }
-
-        /* Otros elementos (filtros, chat, etc.) */
-        .filtros-acumulador {
-            background: rgba(0,0,0,0.6);
-            border-radius: 20px;
-            padding: 12px;
-            margin: 15px 0;
-            backdrop-filter: blur(8px);
-            border: 1px solid #444;
-        }
-
-        .filtros-titulo {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #aaa;
-            margin-bottom: 8px;
-        }
-
-        .filtros-lista {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .filtro-tag {
-            background: #222;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: #ddd;
-            border: 1px solid #555;
-        }
-
-        .filtro-tag .remove {
-            background: none;
-            border: none;
-            color: #f66;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .chat-area {
-            background: rgba(0,0,0,0.5);
-            border-radius: 20px;
-            padding: 15px;
-            margin: 15px 0;
-            max-height: 280px;
-            overflow-y: auto;
-            backdrop-filter: blur(4px);
-        }
-
-        .chat-mensaje {
-            padding: 10px 14px;
-            margin-bottom: 10px;
-            border-radius: 18px;
-            font-size: 0.85rem;
-        }
-
-        .chat-mensaje.bot {
-            background: #1e2a2a;
-            color: #ccf;
-            border-left: 3px solid #4af;
-        }
-
-        .chat-mensaje.usuario {
-            background: #2a2e3a;
-            color: #ffd;
-            text-align: right;
-            border-right: 3px solid #fa4;
-        }
-
-        .sugerencias {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin: 12px 0;
-        }
-
-        .sugerencia-btn {
-            background: #2a3a4a;
-            border: 1px solid #4af;
-            color: #ccf;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .sugerencia-btn:hover {
-            background: #3a5a7a;
-            transform: scale(1.02);
-        }
-
-        .input-area {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        input {
-            flex: 1;
-            padding: 12px;
-            border-radius: 40px;
-            border: 1px solid #555;
-            background: #1a1a2a;
-            color: #fff;
-            font-size: 0.9rem;
-            outline: none;
-        }
-
-        button {
-            background: #2a3a4a;
-            border: 1px solid #4af;
-            color: #ccf;
-            padding: 10px 18px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .microfono-btn.grabando {
-            background: #a33;
-            border-color: #f88;
-        }
-
-        .shake-hint {
-            text-align: center;
-            font-size: 0.7rem;
-            color: #888;
-            margin-top: 12px;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
-        .permisos-panel {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 10px;
-        }
-        .permiso-btn {
-            background: #2a3a4a;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            cursor: pointer;
-            color: #ccf;
-        }
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{font-family:'Segoe UI','Helvetica Neue',sans-serif;min-height:100vh;background:linear-gradient(145deg,#2a2a2a 0%,#0a0a0a 100%);display:flex;justify-content:center;align-items:center;padding:16px;}
+        .app{max-width:500px;width:100%;margin:0 auto;display:flex;flex-direction:column;align-items:center;}
+        
+        /* Contenedor 3D con perspectiva */
+        .escena-3d{width:280px;height:280px;perspective:1200px;margin:20px auto;cursor:pointer;}
+        .bola-3d{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform 0.8s cubic-bezier(0.4,0.2,0.2,1);border-radius:50%;box-shadow:0 20px 30px rgba(0,0,0,0.5);}
+        
+        /* Caras */
+        .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -15px 20px rgba(0,0,0,0.4),inset 0 15px 20px rgba(255,255,255,0.1);}
+        
+        /* Frontal: número 8 */
+        .frontal{background:radial-gradient(circle at 35% 35%,#2a2a2a,#0a0a0a);transform:rotateY(0deg);}
+        .circulo-blanco{width:120px;height:120px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 15px rgba(0,0,0,0.3),inset 0 2px 5px rgba(0,0,0,0.1);}
+        .circulo-blanco span{font-size:5rem;font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;text-shadow:2px 2px 0 rgba(0,0,0,0.2);}
+        
+        /* Trasera: triángulo respuesta */
+        .trasera{background:radial-gradient(circle at 35% 35%,#2a2a2a,#0a0a0a);transform:rotateY(180deg);flex-direction:column;}
+        .triangulo{width:90%;background:linear-gradient(145deg,#1a2a3a,#0a1a2a);clip-path:polygon(50% 0%,0% 100%,100% 100%);padding:40px 15px 25px 15px;text-align:center;border:1px solid rgba(100,200,255,0.3);}
+        .texto-respuesta{color:#ccf;font-size:0.85rem;line-height:1.4;font-style:italic;min-height:70px;display:flex;align-items:center;justify-content:center;text-shadow:0 0 3px rgba(0,255,255,0.3);}
+        .autor-respuesta{color:#8ab;font-size:0.7rem;margin-top:10px;border-top:1px solid rgba(100,200,255,0.3);padding-top:8px;}
+        
+        /* Giro esférico (se activa al hacer clic) */
+        .girado{transform:rotateY(180deg);}
+        
+        /* Efecto de brillo adicional (opcional) */
+        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.2),transparent 70%);pointer-events:none;}
+        
+        /* Resto de estilos (filtros, chat, etc.) */
+        .filtros-acumulador{background:rgba(0,0,0,0.6);border-radius:20px;padding:12px;margin:15px 0;backdrop-filter:blur(8px);border:1px solid #444;width:100%;}
+        .filtros-titulo{font-size:0.7rem;text-transform:uppercase;color:#aaa;margin-bottom:8px;}
+        .filtros-lista{display:flex;flex-wrap:wrap;gap:8px;}
+        .filtro-tag{background:#222;padding:5px 12px;border-radius:20px;font-size:0.75rem;display:inline-flex;align-items:center;gap:8px;color:#ddd;border:1px solid #555;}
+        .filtro-tag .remove{background:none;border:none;color:#f66;cursor:pointer;font-size:1rem;}
+        .chat-area{background:rgba(0,0,0,0.5);border-radius:20px;padding:15px;margin:15px 0;max-height:280px;overflow-y:auto;backdrop-filter:blur(4px);width:100%;}
+        .chat-mensaje{padding:10px 14px;margin-bottom:10px;border-radius:18px;font-size:0.85rem;}
+        .chat-mensaje.bot{background:#1e2a2a;color:#ccf;border-left:3px solid #4af;}
+        .chat-mensaje.usuario{background:#2a2e3a;color:#ffd;text-align:right;border-right:3px solid #fa4;}
+        .sugerencias{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0;}
+        .sugerencia-btn{background:#2a3a4a;border:1px solid #4af;color:#ccf;padding:6px 14px;border-radius:30px;font-size:0.75rem;cursor:pointer;}
+        .input-area{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;width:100%;}
+        input{flex:1;padding:12px;border-radius:40px;border:1px solid #555;background:#1a1a2a;color:#fff;font-size:0.9rem;outline:none;}
+        button{background:#2a3a4a;border:1px solid #4af;color:#ccf;padding:10px 18px;border-radius:40px;cursor:pointer;font-weight:bold;}
+        .microfono-btn.grabando{background:#a33;border-color:#f88;}
+        .shake-hint{text-align:center;font-size:0.7rem;color:#888;margin-top:12px;}
+        .permisos-panel{display:flex;gap:10px;justify-content:center;margin-bottom:10px;width:100%;}
+        .permiso-btn{background:#2a3a4a;padding:5px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;color:#ccf;}
     </style>
 </head>
 <body>
 <div class="app">
-    <!-- Bola 3D que gira -->
-    <div class="bola-3d" id="bola3d">
-        <div class="bola-giro" id="bolaGiro">
-            <!-- Cara frontal: número 8 -->
-            <div class="cara-frontal">
-                <div class="numero-8">
-                    <span>8</span>
-                </div>
+    <div class="escena-3d" id="escena3d">
+        <div class="bola-3d" id="bola3d">
+            <div class="cara frontal">
+                <div class="circulo-blanco"><span>8</span></div>
+                <div class="brillo"></div>
             </div>
-            <!-- Cara trasera: triángulo con respuesta -->
-            <div class="cara-trasera">
-                <div class="triangulo-respuesta">
-                    <div class="texto-respuesta" id="respuestaTexto">🔮 Haz una pregunta</div>
+            <div class="cara trasera">
+                <div class="triangulo">
+                    <div class="texto-respuesta" id="respuestaTexto">🎱 Haz una pregunta</div>
                     <div class="autor-respuesta" id="respuestaAutor">— Bola Mágica 8</div>
                 </div>
+                <div class="brillo"></div>
             </div>
         </div>
     </div>
@@ -326,9 +85,7 @@
     </div>
 
     <div class="chat-area" id="chatArea">
-        <div class="chat-mensaje bot">
-            🎱 ¡Bienvenido! Soy la Bola Mágica 8. Gira la bola tocándola, selecciona un tema o pregúntame.
-        </div>
+        <div class="chat-mensaje bot">🎱 ¡Bienvenido! Toca la bola para girarla en 3D como una esfera real.</div>
         <div class="sugerencias" id="sugerencias"></div>
     </div>
 
@@ -346,14 +103,14 @@
     // FRASES CÉLEBRES
     // ============================================================
     const respuestasPorFiltro = {
-        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente, y ni el corazón más necio se equivoca.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
-        trabajo: ["«Elige un trabajo que te guste y no tendrás que trabajar ni un día.» — Confucio","«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
-        futuro: ["«El futuro pertenece a los que creen en la belleza de sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.» — Terminator 2"],
-        dinero: ["«El dinero no trae la felicidad, pero la compra.» — Anónimo","«No es rico el que más tiene, sino el que menos necesita.» — Anónimo","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Warren Buffett"],
-        familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el único lugar donde te quieren sin preguntar.» — Anónimo","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco"],
-        amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Elbert Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon"],
-        exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutarlo.» — Emerson"],
-        vida: ["«La vida es lo que pasa mientras estás haciendo otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi"]
+        amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
+        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
+        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»"],
+        dinero: ["«El dinero no trae la felicidad, pero la compra.»","«No es rico el que más tiene, sino el que menos necesita.»","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
+        familia: ["«La familia no es cuestión de sangre, sino de respeto y alegría.» — Bach","«La familia te quiere sin preguntar.»","«La familia es donde aprendemos a amar.» — Papa Francisco"],
+        amigos: ["«Un amigo es quien lo sabe todo de ti y aún así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Scott","«La amistad duplica las alegrías y divide las angustias.» — Bacon"],
+        exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es obtener lo que deseas; la felicidad, disfrutarlo.» — Emerson"],
+        vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta: para mantener el equilibrio, sigue adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi"]
     };
     const respuestasGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"];
 
@@ -362,11 +119,10 @@
     let grabando = false;
     let ultimoAgite = 0;
     let ultimaX=0, ultimaY=0, ultimaZ=0;
-    let bolaGirada = false;
+    let girada = false;
 
-    // Elementos
+    const escena3d = document.getElementById('escena3d');
     const bola3d = document.getElementById('bola3d');
-    const bolaGiro = document.getElementById('bolaGiro');
     const respuestaTexto = document.getElementById('respuestaTexto');
     const respuestaAutor = document.getElementById('respuestaAutor');
     const filtrosAcumulador = document.getElementById('filtrosAcumulador');
@@ -381,33 +137,21 @@
     const permisoMicrofonoBtn = document.getElementById('permisoMicrofonoBtn');
     const permisoMovimientoBtn = document.getElementById('permisoMovimientoBtn');
 
-    // Función para girar la bola
-    function girarBola() {
-        bolaGiro.classList.add('girado');
-        bolaGirada = true;
-    }
+    function girarBola() { bola3d.classList.add('girado'); girada = true; }
+    function regresarBola() { bola3d.classList.remove('girado'); girada = false; }
+    function toggleBola() { girada ? regresarBola() : girarBola(); }
 
-    function regresarBola() {
-        bolaGiro.classList.remove('girado');
-        bolaGirada = false;
-    }
-
-    function toggleBola() {
-        if (bolaGirada) regresarBola();
-        else girarBola();
-    }
-
-    // Obtener respuesta
     function obtenerRespuesta() {
-        let respuestas = [];
-        for (let f of filtrosActivos) if (respuestasPorFiltro[f]) respuestas.push(...respuestasPorFiltro[f]);
-        if (respuestas.length === 0) respuestas = respuestasGenerales;
-        return respuestas[Math.floor(Math.random() * respuestas.length)];
+        let opciones = [];
+        for (let f of filtrosActivos) if (respuestasPorFiltro[f]) opciones.push(...respuestasPorFiltro[f]);
+        if (opciones.length === 0) opciones = respuestasGenerales;
+        return opciones[Math.floor(Math.random() * opciones.length)];
     }
 
     function actualizarUI(respuesta) {
-        respuestaTexto.innerHTML = respuesta.split(' — ')[0];
-        respuestaAutor.innerHTML = '— ' + (respuesta.split(' — ')[1] || 'Bola Mágica 8');
+        const partes = respuesta.split(' — ');
+        respuestaTexto.innerHTML = partes[0];
+        respuestaAutor.innerHTML = '— ' + (partes[1] || 'Bola Mágica 8');
     }
 
     function procesarPregunta(texto) {
@@ -417,7 +161,7 @@
         agregarMensaje(`❓ "${texto}"`, true);
         agregarMensaje(respuesta, false);
         inputPregunta.value = '';
-        if (!bolaGirada) girarBola();
+        if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3000);
     }
 
@@ -426,7 +170,7 @@
         actualizarUI(respuesta);
         agregarMensaje(`🎲 Sabiduría aleatoria:`, false);
         agregarMensaje(respuesta, false);
-        if (!bolaGirada) girarBola();
+        if (!girada) girarBola();
         setTimeout(() => regresarBola(), 3000);
     }
 
@@ -438,7 +182,6 @@
         chatArea.scrollTop = chatArea.scrollHeight;
     }
 
-    // Filtros UI
     function actualizarFiltrosUI() {
         if (filtrosActivos.length === 0) { filtrosAcumulador.style.display = 'none'; return; }
         filtrosAcumulador.style.display = 'block';
@@ -462,10 +205,7 @@
         sugerenciasDiv.innerHTML = '';
         const todos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
         const disponibles = todos.filter(f => !filtrosActivos.includes(f));
-        if (disponibles.length === 0) {
-            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los temas activados. Elimina alguno.</span>';
-            return;
-        }
+        if (disponibles.length === 0) { sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los temas activados.</span>'; return; }
         const nombres = {amor:'💕 Amor', trabajo:'💼 Trabajo', futuro:'🔮 Futuro', dinero:'💰 Dinero', familia:'👪 Familia', amigos:'👥 Amigos', exito:'🏆 Éxito', vida:'🌿 Vida'};
         disponibles.forEach(f => {
             const btn = document.createElement('button');
@@ -523,7 +263,7 @@
     }
 
     // Eventos
-    bola3d.addEventListener('click', () => { toggleBola(); });
+    escena3d.addEventListener('click', toggleBola);
     enviarBtn.addEventListener('click', () => procesarPregunta(inputPregunta.value));
     inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') procesarPregunta(inputPregunta.value); });
     microfonoBtn.addEventListener('click', toggleMicrofono);
@@ -538,7 +278,7 @@
 
     actualizarFiltrosUI();
     regenerarSugerencias();
-    agregarMensaje("🎱 Toca la bola para girarla y ver la respuesta en el triángulo mágico.");
+    agregarMensaje("🎱 Toca la bola: ahora gira como una ESFERA 3D real, como si la dieras la vuelta en el espacio.");
 </script>
 </body>
 </html>
