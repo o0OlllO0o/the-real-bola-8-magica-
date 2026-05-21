@@ -145,7 +145,6 @@
         @keyframes borderPulse{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.8;transform:scale(1.06);}}
         @keyframes pulse{0%{opacity:0.7;transform:scale(1);}100%{opacity:1;transform:scale(1.05);}}
         
-        .btn-modo,.btn-voz,.btn-reload-voz{
             position:fixed;top:16px;left:16px;
             background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;
             width:44px;height:44px;border-radius:44px;font-size:1.3rem;
@@ -153,8 +152,6 @@
             display:flex;align-items:center;justify-content:center;transition:all 0.2s;
         }
         .btn-voz{left:68px;}
-        .btn-reload-voz{left:120px;font-size:1rem;background:rgba(20,20,20,0.9);border-color:#e74c3c;}
-        .btn-modo:active,.btn-voz:active,.btn-reload-voz:active{transform:scale(0.95);}
         
         .modo-panel,.voz-panel{
             position:fixed;top:70px;left:16px;
@@ -239,7 +236,6 @@
 
 <div class="btn-modo" id="btnModo" title="MODO">🎭</div>
 <div class="btn-voz" id="btnVoz" title="VOZ">🎙️</div>
-<div class="btn-reload-voz" id="btnReloadVoz" title="RECARGAR VOCES">🔃</div>
 
 <div class="modo-panel" id="modoPanel">
     <div class="modo-opcion activo" data-modo="clasico"><span>🔮</span>CLÁSICO</div>
@@ -318,7 +314,6 @@ function mostrarToast(mensaje){const toast=document.getElementById('toast');toas
 
 function cargarVocesForzado(){if(!synth)return;vocesDisponibles=synth.getVoices();intentosCarga++;if(vocesDisponibles.length===0&&intentosCarga<MAX_INTENTOS){setTimeout(cargarVocesForzado,500);return;}if(vocesDisponibles.length===0){mostrarToast('⚠️ NO SE ENCONTRARON VOCES');return;}const vocesES=vocesDisponibles.filter(v=>v.lang.startsWith('es'));console.log('🎙️ VOCES TOTALES:',vocesDisponibles.length,'| ESPAÑOLAS:',vocesES.length);if(vocesES.length===0){mostrarToast('⚠️ SIN VOCES ESPAÑOLAS. CONFIGURA WINDOWS');}else{mostrarToast('✅ '+vocesES.length+' VOCES ESPAÑOLAS LISTAS');}seleccionarVozPorEstilo(vozActual);}
 
-function recargarVoces(){intentosCarga=0;vocesDisponibles=[];if(synth){const voces=synth.getVoices();if(voces.length>0){vocesDisponibles=voces;seleccionarVozPorEstilo(vozActual);mostrarToast('🔄 VOCES RECARGADAS: '+voces.filter(v=>v.lang.startsWith('es')).length+' ESPAÑOLAS');}else{cargarVocesForzado();mostrarToast('🔄 RECARGANDO VOCES...');}}}
 
 function seleccionarVozPorEstilo(estilo){if(!synth||vocesDisponibles.length===0)return;let vocesEspanolas=vocesDisponibles.filter(v=>v.lang==='es-ES'||v.lang==='es_ES'||v.lang.startsWith('es-ES')||v.lang.startsWith('es_ES'));if(vocesEspanolas.length===0)vocesEspanolas=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesEspanolas.length===0){vozSeleccionada=vocesDisponibles[0]||null;}else{if(estilo==='auto'){vozSeleccionada=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain')||v.name.includes('Microsoft')&&v.name.includes('Spanish'))||vocesEspanolas[0];}else{const preferencias=estilosVoz[estilo]?.preferencias||[];let mejorVoz=null;for(let pref of preferencias){mejorVoz=vocesEspanolas.find(v=>v.name.toLowerCase().includes(pref.toLowerCase()));if(mejorVoz)break;}if(!mejorVoz){mejorVoz=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain'))||vocesEspanolas[0];}vozSeleccionada=mejorVoz;}}vozActual=estilo;localStorage.setItem('bola8_voz_estilo',estilo);document.querySelectorAll('.voz-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.voz===estilo);});}
 
@@ -343,7 +338,6 @@ let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ulti
 function lanzarParticulas(){const scene=document.getElementById('scene');const rect=scene.getBoundingClientRect();const centroX=rect.left+rect.width/2;const centroY=rect.top+rect.height/2;for(let i=1;i<=3;i++){const particula=document.createElement('div');particula.className='particula p'+i;particula.style.left=centroX+'px';particula.style.top=centroY+'px';document.body.appendChild(particula);setTimeout(()=>{particula.remove();},800);}}
 function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');lanzarParticulas();setTimeout(()=>{bola.classList.remove('shaking');},800);}
 
-const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const chatTexto=document.getElementById('chatTexto');const contenidoBola=document.getElementById('contenidoBola');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');const btnReloadVoz=document.getElementById('btnReloadVoz');
 
 function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;contenidoBola.style.opacity='1';}
 function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;contenidoBola.style.opacity='0';}
@@ -375,7 +369,6 @@ btnModo.addEventListener('click',(e)=>{e.stopPropagation();modoPanel.classList.t
 document.querySelectorAll('.modo-opcion').forEach(btn=>{btn.addEventListener('click',()=>{if(reproduciendoCitas)pausarReproduccion();cambiarModo(btn.dataset.modo);});});
 btnVoz.addEventListener('click',(e)=>{e.stopPropagation();vozPanel.classList.toggle('visible');modoPanel.classList.remove('visible');});
 document.querySelectorAll('.voz-opcion').forEach(btn=>{btn.addEventListener('click',()=>{seleccionarVozPorEstilo(btn.dataset.voz);vozPanel.classList.remove('visible');});});
-btnReloadVoz.addEventListener('click',(e)=>{e.stopPropagation();recargarVoces();});
 document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!modoPanel.contains(e.target))modoPanel.classList.remove('visible');if(!btnVoz.contains(e.target)&&!vozPanel.contains(e.target))vozPanel.classList.remove('visible');});
 
 if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.8rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
