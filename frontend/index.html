@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#111111">
-    <title>🎱 Bola Mágica 8</title>
+    <title>🎱 Bola Mágica 8 - Esfera Real</title>
     <style>
         * {
             margin: 0;
@@ -22,42 +22,43 @@
             align-items: center;
             font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
             padding: 16px;
+            overflow-x: hidden;
         }
 
-        /* Contenedor centrado */
         .container {
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1500px;
+            perspective: 1800px;
         }
 
-        /* Escena 3D - bola grande */
+        /* Escena 3D */
         .scene {
             width: min(85vw, 85vh, 450px);
             height: min(85vw, 85vh, 450px);
             position: relative;
             cursor: pointer;
+            transform-style: preserve-3d;
         }
 
-        /* Esfera que rota */
+        /* Esfera real con geometría 3D */
         .sphere {
             width: 100%;
             height: 100%;
             position: relative;
             transform-style: preserve-3d;
             animation: rotateIn 1.2s ease-out;
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+            transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
             border-radius: 50%;
         }
 
         @keyframes rotateIn {
             0% { transform: rotateY(0deg) rotateX(0deg); }
-            100% { transform: rotateY(360deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(15deg); }
         }
 
-        /* Caras de la esfera */
+        /* Cada cara de la esfera (con relieve 3D real) */
         .face {
             position: absolute;
             width: 100%;
@@ -67,10 +68,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 -25px 35px rgba(0,0,0,0.6), inset 0 25px 30px rgba(255,255,255,0.1), 0 20px 30px rgba(0,0,0,0.5);
+            box-shadow: inset 0 -30px 40px rgba(0,0,0,0.6), 
+                        inset 0 30px 35px rgba(255,255,255,0.1), 
+                        0 25px 35px rgba(0,0,0,0.5);
         }
 
-        /* Cara frontal: número 8 clásico */
+        /* Cara frontal: número 8 */
         .face.front {
             background: radial-gradient(circle at 35% 35%, #2a2a2a, #080808);
             transform: rotateY(0deg);
@@ -84,7 +87,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5), inset 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .number-8 span {
@@ -92,9 +95,10 @@
             font-weight: 900;
             color: #111;
             font-family: 'Impact', 'Arial Black', sans-serif;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
         }
 
-        /* Cara trasera: triángulo invertido REAL (vértice ARRIBA) */
+        /* Cara trasera: triángulo mágico */
         .face.back {
             background: radial-gradient(circle at 35% 35%, #1a2a2a, #0a0a1a);
             transform: rotateY(180deg);
@@ -102,8 +106,8 @@
             padding: 12%;
         }
 
-        /* Triángulo con vértice arriba, base abajo */
-        .triangle-real {
+        /* Triángulo real (vértice arriba) */
+        .triangle-magic {
             width: 100%;
             height: 100%;
             background: linear-gradient(145deg, #0a1a2a, #051015);
@@ -113,81 +117,80 @@
             align-items: center;
             justify-content: center;
             padding: 20% 12% 15% 12%;
-            border: 1px solid rgba(80, 180, 255, 0.3);
-            box-shadow: inset 0 0 25px rgba(0, 80, 160, 0.2), 0 5px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(80, 180, 255, 0.4);
+            box-shadow: inset 0 0 30px rgba(0, 80, 160, 0.3), 0 5px 15px rgba(0,0,0,0.4);
         }
 
         /* Área de respuesta */
         .answer-area {
             width: 100%;
             text-align: center;
-            margin-bottom: 15%;
+            margin-bottom: 12%;
         }
 
         .frase {
             color: #d4eaff;
-            font-size: clamp(0.75rem, 4vw, 1rem);
+            font-size: clamp(0.7rem, 3.8vw, 0.95rem);
             line-height: 1.4;
             font-style: italic;
-            text-shadow: 0 0 4px rgba(80, 180, 255, 0.3);
+            text-shadow: 0 0 5px rgba(80, 180, 255, 0.4);
             font-weight: 500;
             word-break: break-word;
         }
 
         .autor {
             color: #8ab3cc;
-            font-size: clamp(0.6rem, 3vw, 0.75rem);
+            font-size: clamp(0.55rem, 2.8vw, 0.7rem);
             margin-top: 8px;
             border-top: 1px solid rgba(80, 180, 255, 0.3);
             padding-top: 6px;
         }
 
-        /* Campo de texto dentro del triángulo */
-        .input-area-triangle {
+        /* Campo de texto */
+        .input-area {
             width: 100%;
             margin-top: 5%;
         }
 
-        .input-area-triangle input {
+        .input-area input {
             width: 100%;
             padding: 12px 10px;
             border-radius: 50px;
             border: none;
-            background: rgba(25, 45, 65, 0.9);
+            background: rgba(25, 45, 65, 0.95);
             color: #fff;
-            font-size: clamp(0.7rem, 3.5vw, 0.85rem);
+            font-size: clamp(0.65rem, 3.2vw, 0.8rem);
             text-align: center;
             outline: none;
             font-family: inherit;
-            backdrop-filter: blur(4px);
         }
 
-        .input-area-triangle input::placeholder {
+        .input-area input::placeholder {
             color: #8ab3cc;
             font-style: italic;
         }
 
-        /* Botones dentro del triángulo (solo los esenciales) */
-        .buttons-minimal {
+        /* Botones */
+        .buttons {
             display: flex;
             gap: 12px;
             margin-top: 15px;
             justify-content: center;
         }
 
-        .btn-minimal {
+        .btn {
             background: #2a4a6a;
             border: none;
             color: #cceeff;
             padding: 8px 16px;
             border-radius: 40px;
-            font-size: clamp(0.65rem, 3vw, 0.75rem);
+            font-size: clamp(0.6rem, 2.8vw, 0.7rem);
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s;
         }
 
-        .btn-minimal:active { transform: scale(0.96); }
+        .btn:active { transform: scale(0.96); }
 
         .micro-btn {
             background: #3a5a7a;
@@ -203,16 +206,14 @@
             100% { opacity: 1; }
         }
 
-        /* Estado (mensajes sutiles) */
-        .estado-sutil {
-            font-size: clamp(0.55rem, 2.5vw, 0.65rem);
+        .estado {
+            font-size: clamp(0.5rem, 2.2vw, 0.6rem);
             color: #8ab3cc;
             margin-top: 12px;
             text-align: center;
             opacity: 0.8;
         }
 
-        /* Instrucción de agitado fuera de la bola */
         .info-externa {
             position: fixed;
             bottom: 15px;
@@ -224,6 +225,20 @@
             background: rgba(0,0,0,0.5);
             padding: 6px;
             backdrop-filter: blur(4px);
+            z-index: 100;
+        }
+
+        /* Brillo especular para efecto esférico real */
+        .specular {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 70%);
+            pointer-events: none;
+            z-index: 10;
         }
     </style>
 </head>
@@ -231,26 +246,26 @@
 <div class="container">
     <div class="scene" id="scene">
         <div class="sphere" id="sphere">
-            <!-- Cara frontal: número 8 -->
             <div class="face front">
                 <div class="number-8"><span>8</span></div>
+                <div class="specular"></div>
             </div>
-            <!-- Cara trasera: triángulo invertido real (vértice arriba) -->
             <div class="face back">
-                <div class="triangle-real">
+                <div class="triangle-magic">
                     <div class="answer-area">
                         <div class="frase" id="frase">🎱 Pregúntame...</div>
                         <div class="autor" id="autor">— Bola Mágica 8</div>
                     </div>
-                    <div class="input-area-triangle">
+                    <div class="input-area">
                         <input type="text" id="preguntaInput" placeholder="Escribe tu pregunta..." autocomplete="off">
                     </div>
-                    <div class="buttons-minimal">
-                        <button class="btn-minimal" id="preguntarBtn">🔮 Preguntar</button>
-                        <button class="btn-minimal micro-btn" id="microBtn">🎤 Hablar</button>
+                    <div class="buttons">
+                        <button class="btn" id="preguntarBtn">🔮 Preguntar</button>
+                        <button class="btn micro-btn" id="microBtn">🎤 Hablar</button>
                     </div>
-                    <div class="estado-sutil" id="estadoMsg"></div>
+                    <div class="estado" id="estadoMsg"></div>
                 </div>
+                <div class="specular"></div>
             </div>
         </div>
     </div>
@@ -259,9 +274,9 @@
 
 <script>
     // ============================================================
-    // BASE DE DATOS DE FRASES (con temas ocultos pero activos)
+    // FRASES CÉLEBRES NORMALES
     // ============================================================
-    const frasesPorTema = {
+    const frasesNormales = {
         amor: ["«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
         trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El 90% del éxito es presentarse.» — Woody Allen","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"],
         futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro no está escrito, somos nosotros quienes lo creamos.»"],
@@ -271,11 +286,29 @@
         exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito es obtener lo que deseas; la felicidad, disfrutarlo.» — Emerson"],
         vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta: para mantener el equilibrio, sigue adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi"]
     };
-    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«El sentido común es el menos común de los sentidos.» — Voltaire"];
 
-    // Temas activos (sin interfaz visible, pero funcionales)
+    // ============================================================
+    // FRASES EXTRAÑAS Y SURREALISTAS (para cuando no hay pregunta)
+    // ============================================================
+    const frasesExtranas = [
+        "«Los pingüinos usan esmoquin porque no tienen armario para chaquetas.» — Anónimo",
+        "«Si un libro se aburre, cámbiale la pila.» — Alicia en el País de las Sorpresas",
+        "«El tiempo vuela como un coche sin ruedas.» — Proverbio marciano",
+        "«La Luna es un queso que nunca se acaba porque los ratones son astronautas.» — Teoría galáctica",
+        "«Las nubes no lloran, sudan emociones.» — Meteoro loco",
+        "«El silencio tiene eco si gritas muy fuerte hacia adentro.» — Poeta invisible",
+        "«Los árboles bailan cumbia cuando nadie mira.» — Botánica imaginaria",
+        "«El agua hierve al revés en el país de los espejos.» — Alicia vuelve",
+        "«Un tren puede silbar una canción de cuna si le cantas primero.» — Maquinista onírico",
+        "«El arcoíris es solo el bigote del sol.» — Astronomía disparatada",
+        "«Cuando ríes, las hormigas organizan una fiesta en tu ombligo.» — Microbiología poética",
+        "«Los calcetines desaparecen porque viajan al futuro a buscarse a sí mismos.» — Teoría del caos textil"
+    ];
+
+    const frasesGenerales = ["«La sabiduría comienza en la reflexión.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes"];
+
+    // Todos los temas activos (sin interfaz visible)
     let temasActivos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
-
     let reconocimiento = null;
     let grabando = false;
     let girada = false;
@@ -293,7 +326,7 @@
     const estadoMsg = document.getElementById('estadoMsg');
 
     // ============================================================
-    // BOLA 3D
+    // BOLA 3D REAL
     // ============================================================
     function girarBola() { sphere.style.transform = 'rotateY(180deg) rotateX(0deg)'; girada = true; }
     function regresarBola() { sphere.style.transform = 'rotateY(0deg) rotateX(0deg)'; girada = false; }
@@ -304,13 +337,17 @@
     // ============================================================
     // RESPUESTAS
     // ============================================================
-    function obtenerRespuesta() {
+    function obtenerRespuestaNormal() {
         let pool = [];
         for (let tema of temasActivos) {
-            if (frasesPorTema[tema]) pool.push(...frasesPorTema[tema]);
+            if (frasesNormales[tema]) pool.push(...frasesNormales[tema]);
         }
         if (pool.length === 0) pool = frasesGenerales;
         return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function obtenerRespuestaExtrana() {
+        return frasesExtranas[Math.floor(Math.random() * frasesExtranas.length)];
     }
 
     function mostrarRespuesta(respuesta) {
@@ -322,23 +359,30 @@
     }
 
     function procesarPregunta(texto) {
-        if (!texto.trim()) {
-            estadoMsg.innerHTML = '❓';
-            setTimeout(() => { if (estadoMsg.innerHTML === '❓') estadoMsg.innerHTML = ''; }, 1000);
+        // Si no hay texto o solo espacios, responder con frase extraña
+        if (!texto || !texto.trim()) {
+            const respuesta = obtenerRespuestaExtrana();
+            mostrarRespuesta(respuesta);
+            preguntaInput.value = '';
+            if (!girada) girarBola();
+            setTimeout(() => regresarBola(), 3800);
             return;
         }
-        const respuesta = obtenerRespuesta();
+        // Si hay texto, responder con frase célebre normal según temas
+        const respuesta = obtenerRespuestaNormal();
         mostrarRespuesta(respuesta);
         preguntaInput.value = '';
         if (!girada) girarBola();
-        setTimeout(() => regresarBola(), 3500);
+        setTimeout(() => regresarBola(), 3800);
     }
 
     function respuestaAleatoria() {
-        const respuesta = obtenerRespuesta();
+        // Aleatorio: mezcla entre normal y extraña (50% cada una)
+        const esExtrana = Math.random() < 0.5;
+        const respuesta = esExtrana ? obtenerRespuestaExtrana() : obtenerRespuestaNormal();
         mostrarRespuesta(respuesta);
         if (!girada) girarBola();
-        setTimeout(() => regresarBola(), 3500);
+        setTimeout(() => regresarBola(), 3800);
     }
 
     // ============================================================
@@ -396,7 +440,7 @@
                 if (fuerza > 25) { ultimoAgite = ahora; respuestaAleatoria(); }
                 ultimaX = x; ultimaY = y; ultimaZ = z;
             });
-            document.getElementById('infoExterna').innerHTML = '📱 Agita la bola para respuesta aleatoria';
+            document.getElementById('infoExterna').innerHTML = '📱 Agita la bola para respuesta aleatoria (normal o extraña)';
         }
     }
 
@@ -418,7 +462,7 @@
         const btnPermiso = document.createElement('div');
         btnPermiso.innerText = '🎯 Activar agitado';
         btnPermiso.style.position = 'fixed';
-        btnPermiso.style.bottom = '50px';
+        btnPermiso.style.bottom = '55px';
         btnPermiso.style.left = '50%';
         btnPermiso.style.transform = 'translateX(-50%)';
         btnPermiso.style.background = '#2a4a6a';
