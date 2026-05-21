@@ -5,49 +5,252 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1f2e">
-    <title>🔮 Bola Mágica 8 · Frases Célebres</title>
+    <title>🔮 Bola Mágica 8 · Estilo Cómic</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:linear-gradient(145deg,#1a1f2e 0%,#0a0d16 100%);color:#eee;padding:16px;}
+        body{
+            font-family: 'Comic Neue', 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', cursive, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #1a1f2e 0%, #0a0d16 100%);
+            color: #1a1a2e;
+            padding: 16px;
+        }
         .app{max-width:600px;margin:0 auto;}
-        .bola-header{text-align:center;margin-bottom:20px;}
-        .contenedor-bola{background:radial-gradient(circle at 30% 25%,#2c3e50,#000000);border-radius:50%;padding:20px;box-shadow:0 25px 40px rgba(0,0,0,0.5);transition:all 0.3s ease;cursor:pointer;}
-        .contenedor-bola.agitando{animation:shake 0.5s ease-in-out;background:radial-gradient(circle at 30% 25%,#3a5a6e,#000000);}
+        
+        /* Bola mágica con brillo */
+        .bola-header{text-align:center;margin-bottom:20px;position:relative;}
+        .contenedor-bola{
+            background: radial-gradient(circle at 35% 30%, #2c3e50, #0a0a1a);
+            border-radius: 50%;
+            padding: 20px;
+            box-shadow: 0 25px 40px rgba(0,0,0,0.5), inset 0 2px 5px rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid rgba(255,215,0,0.3);
+        }
+        .contenedor-bola.agitando{animation:shake 0.5s ease-in-out;background:radial-gradient(circle at 35% 30%, #3a5a6e, #0a0a1a);}
         @keyframes shake{0%{transform:translate(0,0) rotate(0deg);}20%{transform:translate(-6px,3px) rotate(-3deg);}40%{transform:translate(6px,-3px) rotate(3deg);}60%{transform:translate(-3px,2px) rotate(-2deg);}80%{transform:translate(3px,-2px) rotate(2deg);}100%{transform:translate(0,0) rotate(0deg);}}
-        .cristal-bola{background:rgba(20,30,45,0.7);backdrop-filter:blur(5px);border-radius:50%;padding:25px 15px;min-height:220px;display:flex;flex-direction:column;justify-content:center;text-align:center;}
-        .cita{font-size:1.2rem;line-height:1.4;font-style:italic;color:#f8f3e8;margin-bottom:10px;}
-        .autor{font-size:0.9rem;color:#e6c89a;}
-        .filtros-acumulador{background:rgba(0,0,0,0.3);border-radius:20px;padding:12px;margin:15px 0;}
-        .filtros-titulo{font-size:0.75rem;text-transform:uppercase;opacity:0.6;margin-bottom:8px;}
+        
+        /* El triángulo/bocadillo de cómic */
+        .bocadillo-wrapper{
+            position: relative;
+            margin: -30px 0 20px 0;
+            z-index: 10;
+        }
+        .bocadillo{
+            background: #FFF9C4;
+            background: linear-gradient(145deg, #FFF9C4, #FFE082);
+            border-radius: 30px 30px 30px 15px;
+            padding: 20px 18px;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.8);
+            border: 2px solid #D4A017;
+            position: relative;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+            transition: all 0.3s ease;
+        }
+        /* Pico del bocadillo (triángulo que apunta a la bola) */
+        .bocadillo::before{
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 25px solid #FFE082;
+            filter: drop-shadow(2px -2px 0 rgba(0,0,0,0.1));
+            z-index: 1;
+        }
+        .bocadillo::after{
+            content: '';
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 17px solid transparent;
+            border-right: 17px solid transparent;
+            border-bottom: 22px solid #FFF9C4;
+            z-index: 2;
+        }
+        .cita{
+            font-size: 1.2rem;
+            line-height: 1.4;
+            font-weight: bold;
+            color: #2c1810;
+            text-shadow: 1px 1px 0 rgba(255,255,200,0.8);
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .autor{
+            font-size: 0.85rem;
+            color: #8B5A2B;
+            text-align: right;
+            font-style: italic;
+            border-top: 1px dashed #D4A017;
+            padding-top: 8px;
+            margin-top: 5px;
+            font-family: inherit;
+        }
+        
+        /* Filtros acumuladores estilo cómic */
+        .filtros-acumulador{
+            background: rgba(0,0,0,0.4);
+            border-radius: 20px;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #FFD700;
+            backdrop-filter: blur(4px);
+        }
+        .filtros-titulo{
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-weight: bold;
+        }
         .filtros-lista{display:flex;flex-wrap:wrap;gap:8px;}
-        .filtro-tag{background:#2c3e50;padding:6px 12px;border-radius:20px;font-size:0.8rem;display:inline-flex;align-items:center;gap:8px;}
-        .filtro-tag .remove{background:none;border:none;color:#e6c89a;cursor:pointer;font-size:1rem;padding:0 4px;}
-        .chat-area{background:rgba(255,255,255,0.05);border-radius:20px;padding:15px;margin:15px 0;max-height:300px;overflow-y:auto;}
-        .chat-mensaje{background:#2a2a3a;border-radius:18px;padding:12px 16px;margin-bottom:12px;font-size:0.9rem;}
-        .chat-mensaje.bot{background:#2c3e50;border-bottom-left-radius:4px;}
-        .chat-mensaje.usuario{background:#e6c89a;color:#1e2a36;text-align:right;border-bottom-right-radius:4px;}
+        .filtro-tag{
+            background: #FFE082;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #2c1810;
+            font-weight: bold;
+            border: 1px solid #D4A017;
+        }
+        .filtro-tag .remove{
+            background: none;
+            border: none;
+            color: #8B0000;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+        
+        /* Chat estilo cómic */
+        .chat-area{
+            background: rgba(0,0,0,0.3);
+            border-radius: 25px;
+            padding: 15px;
+            margin: 15px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #FFD700;
+        }
+        .chat-mensaje{
+            background: #2a2a3a;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            font-family: 'Comic Neue', monospace;
+        }
+        .chat-mensaje.bot{
+            background: #FFF9C4;
+            color: #2c1810;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #D4A017;
+        }
+        .chat-mensaje.usuario{
+            background: #2c3e50;
+            color: #FFE082;
+            text-align: right;
+            border-bottom-right-radius: 4px;
+            border: 1px solid #FFD700;
+        }
+        
+        /* Botones cómic */
         .sugerencias{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
-        .sugerencia-btn{background:#3a4a5e;border:none;color:#fff;padding:8px 16px;border-radius:30px;font-size:0.85rem;cursor:pointer;}
+        .sugerencia-btn{
+            background: #FFE082;
+            border: 2px solid #D4A017;
+            color: #2c1810;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .sugerencia-btn:hover{transform: scale(1.02); background: #FFD54F;}
+        
         .input-area{display:flex;gap:10px;margin-top:15px;flex-wrap:wrap;}
-        input{flex:1;padding:12px;border-radius:30px;border:none;background:#2a2a3a;color:#fff;font-size:0.9rem;outline:none;min-width:120px;}
-        button{background:#e6c89a;border:none;color:#1e2a36;font-weight:bold;padding:12px 20px;border-radius:30px;cursor:pointer;}
-        .microfono-btn{background:#5a7a9e;color:#fff;}
-        .microfono-btn.grabando{background:#e74c3c;animation:pulse 1s infinite;}
+        input{
+            flex:1;
+            padding: 12px 18px;
+            border-radius: 50px;
+            border: 2px solid #D4A017;
+            background: #FFF9C4;
+            color: #2c1810;
+            font-size: 0.9rem;
+            outline: none;
+            font-family: inherit;
+        }
+        input::placeholder{color: #8B5A2B; opacity: 0.6;}
+        button{
+            background: #FFE082;
+            border: 2px solid #D4A017;
+            color: #2c1810;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        button:hover{transform: scale(1.02); background: #FFD54F;}
+        .microfono-btn{background: #5a7a9e; color: #FFF9C4; border-color: #FFD700;}
+        .microfono-btn.grabando{background: #e74c3c; animation:pulse 1s infinite;}
         @keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
-        .shake-hint{text-align:center;font-size:0.7rem;opacity:0.5;margin-top:15px;}
-        .activar-shake{background:#5a7a9e;margin-top:10px;padding:8px;border-radius:20px;font-size:0.75rem;text-align:center;cursor:pointer;}
+        
+        .shake-hint{text-align:center;font-size:0.7rem;opacity:0.7;margin-top:15px;color:#FFD700;}
+        .activar-shake{
+            background: #5a7a9e;
+            margin-top:10px;
+            padding:8px;
+            border-radius:20px;
+            font-size:0.75rem;
+            text-align:center;
+            cursor:pointer;
+            border:1px solid #FFD700;
+            color:#FFF9C4;
+        }
         .permisos-panel{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;justify-content:center;}
-        .permiso-btn{background:#3a4a5e;padding:6px 12px;border-radius:20px;font-size:0.7rem;cursor:pointer;}
+        .permiso-btn{
+            background: #3a4a5e;
+            padding:6px 12px;
+            border-radius:20px;
+            font-size:0.7rem;
+            cursor:pointer;
+            border:1px solid #FFD700;
+            color:#FFE082;
+        }
     </style>
 </head>
 <body>
 <div class="app">
+    <!-- Bola mágica -->
     <div class="bola-header">
         <div class="contenedor-bola" id="bola">
-            <div class="cristal-bola">
-                <p class="cita" id="cita">🔮 Frases célebres con sabiduría...</p>
-                <p class="autor" id="autor">— Bola Mágica 8</p>
-            </div>
+            <!-- Contenido vacío porque el texto va en el bocadillo -->
+        </div>
+    </div>
+    
+    <!-- Bocadillo de cómic (aquí va la respuesta) -->
+    <div class="bocadillo-wrapper">
+        <div class="bocadillo" id="bocadillo">
+            <div class="cita" id="cita">🔮 ¡Agita la bola o pregúntame algo!</div>
+            <div class="autor" id="autor">— Bola Mágica 8</div>
         </div>
     </div>
     
@@ -57,13 +260,13 @@
     </div>
     
     <div class="filtros-acumulador" id="filtrosAcumulador" style="display:none;">
-        <div class="filtros-titulo">🎯 Filtros activos:</div>
+        <div class="filtros-titulo">🎯 Filtros activos (toca ✕ para eliminar):</div>
         <div class="filtros-lista" id="filtrosLista"></div>
     </div>
     
     <div class="chat-area" id="chatArea">
-        <div class="chat-mensaje bot" id="chatInicial">
-            🔮 ¡Bienvenido! Soy la Bola Mágica de la Sabiduría. Selecciona un tema o pregúntame lo que quieras.
+        <div class="chat-mensaje bot">
+            🔮 ¡Bienvenido! Soy la Bola Mágica del Sarcasmo y la Verdad. Selecciona un tema o pregúntame lo que quieras.
         </div>
         <div class="sugerencias" id="sugerencias"></div>
     </div>
@@ -79,67 +282,51 @@
 
 <script>
     // ============================================================
-    // BASE DE DATOS DE FRASES CÉLEBRES (Actualizada)
+    // FRASES CÉLEBRES Y DIVERTIDAS
     // ============================================================
     const respuestasPorFiltro = {
         amor: [
             "«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Gottfried Leibniz",
             "«El amor no se mira, se siente, y ni el corazón más necio se equivoca.» — Joaquín Sabina",
-            "«Amar no es mirarse el uno al otro, es mirar juntos en la misma dirección.» — Antoine de Saint-Exupéry",
-            "«El amor es una locura que solo cura el amor.» — Lope de Vega",
             "«El amor es como el viento, no lo ves pero lo sientes.» — Nicholas Sparks",
-            "«El amor no tiene cura, pero es la única cura para todos los males.» — Leonard Cohen",
-            "«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — Gabriel García Márquez"
+            "«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — Gabriel García Márquez",
+            "«El amor es una locura que solo cura el amor.» — Lope de Vega"
         ],
         trabajo: [
             "«Elige un trabajo que te guste y no tendrás que trabajar ni un día de tu vida.» — Confucio",
-            "«El trabajo dignifica, pero el descanso también.» — Proverbio moderno",
+            "«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen",
             "«No trabajes por dinero, haz que el dinero trabaje para ti.» — Robert Kiyosaki",
-            "«El éxito en el trabajo se logra haciendo lo que amas y amando lo que haces.» — Steve Jobs",
-            "«El trabajo en equipo es la capacidad de trabajar juntos hacia una visión común.» — Andrew Carnegie",
             "«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"
         ],
         futuro: [
             "«El futuro pertenece a los que creen en la belleza de sus sueños.» — Eleanor Roosevelt",
             "«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker",
-            "«No te preocupes por el futuro, ocúpate del presente y el futuro llegará solo.» — Lao Tsé",
-            "«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo",
             "«El futuro no está escrito, no hay destino, somos nosotros quienes lo creamos.» — Terminator 2"
         ],
         dinero: [
             "«El dinero no trae la felicidad, pero la compra.» — Anónimo inteligente",
             "«No es rico el que más tiene, sino el que menos necesita.» — Anónimo",
             "«El dinero es un buen sirviente pero un mal amo.» — Francis Bacon",
-            "«La riqueza consiste no en tener grandes posesiones, sino en tener pocas necesidades.» — Epicteto",
-            "«El dinero crece en el árbol del esfuerzo, pero hay que regarlo con inteligencia.» — Warren Buffett",
             "«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Warren Buffett"
         ],
         familia: [
             "«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach",
-            "«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II",
-            "«La familia es el primer lugar donde aprendemos a amar y a ser amados.» — Papa Francisco",
-            "«La familia es como una rama, los hijos como frutos, todos del mismo árbol.» — Proverbio chino",
-            "«La familia es el único lugar donde te quieren sin preguntar y te esperan sin avisar.» — Anónimo"
+            "«La familia es el único lugar donde te quieren sin preguntar y te esperan sin avisar.» — Anónimo",
+            "«La familia es el primer lugar donde aprendemos a amar y a ser amados.» — Papa Francisco"
         ],
         amigos: [
             "«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Elbert Hubbard",
             "«Los amigos son la familia que eliges.» — Jess C. Scott",
-            "«La amistad duplica las alegrías y divide las angustias por la mitad.» — Francis Bacon",
-            "«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller",
-            "«Un verdadero amigo es el que llega cuando todos se han ido.» — Walter Winchell"
+            "«La amistad duplica las alegrías y divide las angustias por la mitad.» — Francis Bacon"
         ],
         exito: [
             "«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Albert Schweitzer",
             "«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Winston Churchill",
-            "«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutar lo que se obtiene.» — Ralph Waldo Emerson",
-            "«El éxito no es definitivo, el fracaso no es fatal: lo que cuenta es el coraje para continuar.» — Winston Churchill",
-            "«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen"
+            "«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutar lo que se obtiene.» — Ralph Waldo Emerson"
         ],
         vida: [
             "«La vida es lo que pasa mientras estás haciendo otros planes.» — John Lennon",
-            "«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou",
             "«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Albert Einstein",
-            "«La vida es aquello que te va sucediendo mientras te empeñas en hacer otros planes.» — John Lennon",
             "«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Mahatma Gandhi"
         ]
     };
@@ -149,23 +336,18 @@
         "«Solo sé que no sé nada.» — Sócrates",
         "«Pienso, luego existo.» — René Descartes",
         "«El sentido común es el menos común de los sentidos.» — Voltaire",
-        "«La paciencia es amarga, pero sus frutos son dulces.» — Jean-Jacques Rousseau",
-        "«El hombre es un lobo para el hombre.» — Thomas Hobbes",
-        "«Donde hay educación no hay distinción de clases.» — Confucio"
+        "«La paciencia es amarga, pero sus frutos son dulces.» — Jean-Jacques Rousseau"
     ];
     
-    // Estado
     let filtrosActivos = [];
     let reconocimiento = null;
     let grabando = false;
-    let shakeActivado = false;
     let ultimoAgite = 0;
     let ultimaX=0, ultimaY=0, ultimaZ=0;
     
-    // Elementos DOM
     const bola = document.getElementById('bola');
-    const cita = document.getElementById('cita');
-    const autor = document.getElementById('autor');
+    const citaDiv = document.getElementById('cita');
+    const autorDiv = document.getElementById('autor');
     const filtrosAcumulador = document.getElementById('filtrosAcumulador');
     const filtrosLista = document.getElementById('filtrosLista');
     const chatArea = document.getElementById('chatArea');
@@ -213,16 +395,16 @@
             sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los temas activados. Elimina alguno para cambiar.</span>';
             return;
         }
+        const nombres = {amor:'💕 Amor', trabajo:'💼 Trabajo', futuro:'🔮 Futuro', dinero:'💰 Dinero', familia:'👪 Familia', amigos:'👥 Amigos', exito:'🏆 Éxito', vida:'🌿 Vida'};
         disponibles.forEach(filtro => {
             const btn = document.createElement('button');
             btn.className = 'sugerencia-btn';
-            const nombres = {amor:'💕 Amor', trabajo:'💼 Trabajo', futuro:'🔮 Futuro', dinero:'💰 Dinero', familia:'👪 Familia', amigos:'👥 Amigos', exito:'🏆 Éxito', vida:'🌿 Vida'};
-            btn.textContent = nombres[filtro] || filtro;
+            btn.textContent = nombres[filtro];
             btn.addEventListener('click', () => {
                 if (!filtrosActivos.includes(filtro)) {
                     filtrosActivos.push(filtro);
                     actualizarFiltrosUI();
-                    agregarMensaje(`✅ Añadido tema: ${nombres[filtro] || filtro}`);
+                    agregarMensaje(`✅ Añadido tema: ${nombres[filtro]}`);
                     regenerarSugerencias();
                 }
             });
@@ -236,27 +418,19 @@
             if (respuestasPorFiltro[filtro]) respuestasPosibles.push(...respuestasPorFiltro[filtro]);
         }
         if (respuestasPosibles.length === 0) respuestasPosibles = respuestasGenerales;
-        const elegida = respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
-        return elegida;
+        return respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
     }
     
-    function vibrar() {
-        if (window.navigator && window.navigator.vibrate) {
-            window.navigator.vibrate(200);
-        }
-    }
+    function vibrar() { if (window.navigator?.vibrate) window.navigator.vibrate(200); }
     
     function mostrarRespuesta(pregunta) {
-        if (!pregunta.trim()) { 
-            cita.textContent = "🔮 Escribe o habla una pregunta..."; 
-            return false;
-        }
-        cita.textContent = "🔮 La bola está meditando... 🔮";
+        if (!pregunta.trim()) { citaDiv.textContent = "🔮 Escribe o habla una pregunta..."; return false; }
+        citaDiv.textContent = "🔮 La bola está meditando... 🔮";
         vibrar();
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
-            cita.textContent = respuesta;
-            autor.textContent = filtrosActivos.length ? `— Bola Mágica · Temas: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
+            citaDiv.textContent = respuesta;
+            autorDiv.textContent = filtrosActivos.length ? `— Bola Mágica · Filtros: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
             agregarMensaje(`❓ "${pregunta}"`, true);
             agregarMensaje(respuesta, false);
             inputPregunta.value = '';
@@ -265,12 +439,12 @@
     }
     
     function agitarAleatorio() {
-        cita.textContent = "🔮 La bola se agita... 🔮";
+        citaDiv.textContent = "🔮 La bola se agita... 🔮";
         vibrar();
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
-            cita.textContent = respuesta;
-            autor.textContent = filtrosActivos.length ? `— Bola Mágica · Temas: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
+            citaDiv.textContent = respuesta;
+            autorDiv.textContent = filtrosActivos.length ? `— Bola Mágica · Filtros: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
             agregarMensaje(`🎲 Sabiduría aleatoria:`, false);
             agregarMensaje(respuesta, false);
         }, 400);
@@ -279,14 +453,11 @@
     function animarAgitar() {
         bola.classList.add('agitando');
         setTimeout(() => bola.classList.remove('agitando'), 500);
-        if (inputPregunta.value.trim()) {
-            mostrarRespuesta(inputPregunta.value);
-        } else {
-            agitarAleatorio();
-        }
+        if (inputPregunta.value.trim()) mostrarRespuesta(inputPregunta.value);
+        else agitarAleatorio();
     }
     
-    // Microfono
+    // MICRÓFONO
     function iniciarMicrofono() {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             agregarMensaje("❌ Tu navegador no soporta reconocimiento de voz.");
@@ -309,26 +480,14 @@
             agregarMensaje(`🎤 Dijiste: "${texto}"`, true);
             mostrarRespuesta(texto);
         };
-        reconocimiento.onerror = (event) => {
-            agregarMensaje(`❌ Error de micrófono: ${event.error}`);
-            detenerMicrofono();
-        };
+        reconocimiento.onerror = (event) => { agregarMensaje(`❌ Error de micrófono: ${event.error}`); detenerMicrofono(); };
         reconocimiento.onend = () => detenerMicrofono();
         reconocimiento.start();
     }
+    function detenerMicrofono() { if (reconocimiento) try { reconocimiento.stop(); } catch(e) {} grabando = false; microfonoBtn.classList.remove('grabando'); microfonoBtn.textContent = '🎤 Hablar'; }
+    function toggleMicrofono() { grabando ? detenerMicrofono() : iniciarMicrofono(); }
     
-    function detenerMicrofono() {
-        if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
-        grabando = false;
-        microfonoBtn.classList.remove('grabando');
-        microfonoBtn.textContent = '🎤 Hablar';
-    }
-    
-    function toggleMicrofono() {
-        grabando ? detenerMicrofono() : iniciarMicrofono();
-    }
-    
-    // Movimiento
+    // MOVIMIENTO
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', function(e) {
@@ -346,36 +505,20 @@
                 }
                 ultimaX = x; ultimaY = y; ultimaZ = z;
             });
-            shakeActivado = true;
             shakeHint.textContent = "📱 ¡Agitado activado! Agita la bola";
             if(activarShakeBtn) activarShakeBtn.style.display = 'none';
             if(permisoMovimientoBtn) permisoMovimientoBtn.style.display = 'none';
         }
     }
-    
     function solicitarPermisoMovimiento() {
         if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-            DeviceMotionEvent.requestPermission()
-                .then(response => {
-                    if (response === 'granted') iniciarDeteccionMovimiento();
-                    else shakeHint.textContent = "📱 Permiso denegado. Usa el botón.";
-                })
-                .catch(() => shakeHint.textContent = "📱 Error al pedir permiso.");
-        } else {
-            iniciarDeteccionMovimiento();
-        }
+            DeviceMotionEvent.requestPermission().then(response => { if (response === 'granted') iniciarDeteccionMovimiento(); else shakeHint.textContent = "📱 Permiso denegado."; }).catch(() => shakeHint.textContent = "📱 Error al pedir permiso.");
+        } else { iniciarDeteccionMovimiento(); }
     }
-    
     function solicitarPermisoMicrofono() {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(() => {
-                agregarMensaje("✅ Micrófono activado. Puedes usar el botón 🎤");
-                permisoMicrofonoBtn.style.display = 'none';
-            })
-            .catch(err => agregarMensaje("❌ No se pudo acceder al micrófono."));
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(() => { agregarMensaje("✅ Micrófono activado."); permisoMicrofonoBtn.style.display = 'none'; }).catch(err => agregarMensaje("❌ No se pudo acceder al micrófono."));
     }
     
-    // Eventos
     microfonoBtn.addEventListener('click', toggleMicrofono);
     enviarBtn.addEventListener('click', animarAgitar);
     inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') animarAgitar(); });
@@ -388,15 +531,12 @@
         permisoMovimientoBtn.style.display = 'block';
         activarShakeBtn.addEventListener('click', solicitarPermisoMovimiento);
         permisoMovimientoBtn.addEventListener('click', solicitarPermisoMovimiento);
-    } else if (window.DeviceMotionEvent) {
-        iniciarDeteccionMovimiento();
-    } else {
-        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado.";
-    }
+    } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
+    else shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado.";
     
     actualizarFiltrosUI();
     regenerarSugerencias();
-    agregarMensaje("📚 Ahora con frases célebres reales de grandes pensadores, filósofos y artistas.");
+    agregarMensaje("📚 Frases célebres de grandes pensadores, ¡en estilo cómic!");
 </script>
 </body>
 </html>
