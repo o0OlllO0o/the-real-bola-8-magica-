@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: bola-magica-8-api
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 18
