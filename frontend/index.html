@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#1a1f2e">
+    <title>🔮 Bola Mágica 8 · Asistente de Sabiduría</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:linear-gradient(145deg,#1a1f2e 0%,#0a0d16 100%);color:#eee;padding:16px;}
+        .app{max-width:600px;margin:0 auto;}
+        .bola-header{text-align:center;margin-bottom:20px;}
+        .contenedor-bola{background:radial-gradient(circle at 30% 25%,#2c3e50,#000000);border-radius:50%;padding:20px;box-shadow:0 25px 40px rgba(0,0,0,0.5);transition:all 0.3s ease;cursor:pointer;}
+        .contenedor-bola.agitando{animation:shake 0.5s ease-in-out;background:radial-gradient(circle at 30% 25%,#3a5a6e,#000000);}
+        @keyframes shake{0%{transform:translate(0,0) rotate(0deg);}20%{transform:translate(-6px,3px) rotate(-3deg);}40%{transform:translate(6px,-3px) rotate(3deg);}60%{transform:translate(-3px,2px) rotate(-2deg);}80%{transform:translate(3px,-2px) rotate(2deg);}100%{transform:translate(0,0) rotate(0deg);}}
+        .cristal-bola{background:rgba(20,30,45,0.7);backdrop-filter:blur(5px);border-radius:50%;padding:25px 15px;min-height:220px;display:flex;flex-direction:column;justify-content:center;text-align:center;}
+        .cita{font-size:1.2rem;line-height:1.4;font-style:italic;color:#f8f3e8;margin-bottom:10px;}
+        .autor{font-size:0.9rem;color:#e6c89a;}
+        .filtros-acumulador{background:rgba(0,0,0,0.3);border-radius:20px;padding:12px;margin:15px 0;}
+        .filtros-titulo{font-size:0.75rem;text-transform:uppercase;opacity:0.6;margin-bottom:8px;}
+        .filtros-lista{display:flex;flex-wrap:wrap;gap:8px;}
+        .filtro-tag{background:#2c3e50;padding:6px 12px;border-radius:20px;font-size:0.8rem;display:inline-flex;align-items:center;gap:8px;}
+        .filtro-tag .remove{background:none;border:none;color:#e6c89a;cursor:pointer;font-size:1rem;padding:0 4px;}
+        .chat-area{background:rgba(255,255,255,0.05);border-radius:20px;padding:15px;margin:15px 0;}
+        .chat-mensaje{background:#2a2a3a;border-radius:18px;padding:12px 16px;margin-bottom:12px;font-size:0.9rem;}
+        .chat-mensaje.bot{background:#2c3e50;border-bottom-left-radius:4px;}
+        .chat-mensaje.usuario{background:#e6c89a;color:#1e2a36;text-align:right;border-bottom-right-radius:4px;}
+        .sugerencias{display:flex;flex-wrap:wrap;gap:10px;margin:15px 0;}
+        .sugerencia-btn{background:#3a4a5e;border:none;color:#fff;padding:8px 16px;border-radius:30px;font-size:0.85rem;cursor:pointer;}
+        .input-area{display:flex;gap:10px;margin-top:15px;}
+        input{flex:1;padding:12px;border-radius:30px;border:none;background:#2a2a3a;color:#fff;font-size:0.9rem;outline:none;}
+        button{background:#e6c89a;border:none;color:#1e2a36;font-weight:bold;padding:12px 20px;border-radius:30px;cursor:pointer;}
+        .shake-hint{text-align:center;font-size:0.7rem;opacity:0.5;margin-top:15px;}
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="bola-header">
+        <div class="contenedor-bola" id="bola">
+            <div class="cristal-bola">
+                <p class="cita" id="cita">🔮 Selecciona filtros o escribe...</p>
+                <p class="autor" id="autor">— Asistente Mágico</p>
+            </div>
+        </div>
+    </div>
+    <div class="filtros-acumulador" id="filtrosAcumulador" style="display:none;">
+        <div class="filtros-titulo">🎯 Filtros activos:</div>
+        <div class="filtros-lista" id="filtrosLista"></div>
+    </div>
+    <div class="chat-area" id="chatArea">
+        <div class="chat-mensaje bot" id="chatInicial">
+            🔮 ¡Hola! Soy la Bola Mágica. ¿Con quién compartirás esta sabiduría?
+        </div>
+        <div class="sugerencias" id="sugerencias"></div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." autocomplete="off">
+        <button id="enviarBtn">🔮 Preguntar</button>
+    </div>
+    <div class="shake-hint" id="shakeHint">📱 Agita la bola para respuesta aleatoria</div>
+</div>
+<script>
+    const respuestasPorFiltro = {
+        familia: ["La familia es como un buen guiso: a veces sale mal, pero siempre alimenta el alma 🍲","El amor familiar es el único que no necesita WiFi para funcionar","Tu familia te apoya... aunque no entiendan nada de lo que haces","Reunión familiar = amor + preguntas incómodas + comida 🛡️","La sangre tira más que el cable del cargador"],
+        solo: ["La soledad es tu mejor maestra... y no cobra matrícula 🧘","Estar solo es como tener el mando de la tele siempre para ti","La mejor compañía eres tú mismo","La independencia es como la batería: cuando estás solo, dura más 🔋","A solas con tus pensamientos... espero que sean buena gente"],
+        mascotas: ["Tu mascota te quiere incondicionalmente. Sobre todo si tienes comida 🐕","Los perros te miran como si fueras un héroe. Los gatos, como su sirviente","La lealtad de un animal es más pura que la mayoría de los humanos 🐱","Pasea a tu mascota. Ella te pasea el alma","Ellos no entienden tus problemas, pero entienden cuando estás tristes"],
+        pareja: ["El amor es como las plantas: hay que regarlo, pero sin ahogarlo 💑","La pareja perfecta no existe. La que se ríe de tus chistes malos, esa sí","Discutir por la manta es parte del plan. El amor también es compartir frío ❄️","El amor dura lo que un cargador nuevo... si lo cuidas, mucho más","Las relaciones son como el software: necesitan actualizaciones constantes"],
+        amigos: ["Los amigos son la familia que eliges... y que te aguanta las borracheras 🍻","Un amigo es quien te ayuda a mover el sofá... y se queda a ver la tele","La amistad es como el WiFi gratis: no siempre la encuentras, pero cuando la tienes es oro","Los verdaderos amigos son los que te dicen 'tienes algo en el diente'","Amigos: esas personas que conocen tu música rara y no te juzgan 🎵"]
+    };
+    const respuestasGenerales = ["La sabiduría está en escuchar más de lo que hablas... pero yo soy una bola","El universo conspira a tu favor... cuando se acuerda","La respuesta está dentro de ti. Y también dentro de este código","La vida es como una cebolla: tiene capas, y a veces te hace llorar 🧅","No hay preguntas tontas, solo respuestas surrealistas como esta"];
+    
+    let filtrosActivos = [];
+    const bola = document.getElementById('bola');
+    const cita = document.getElementById('cita');
+    const autor = document.getElementById('autor');
+    const filtrosAcumulador = document.getElementById('filtrosAcumulador');
+    const filtrosLista = document.getElementById('filtrosLista');
+    const chatArea = document.getElementById('chatArea');
+    const sugerenciasDiv = document.getElementById('sugerencias');
+    const inputPregunta = document.getElementById('pregunta');
+    const enviarBtn = document.getElementById('enviarBtn');
+    const shakeHint = document.getElementById('shakeHint');
+    
+    function actualizarFiltrosUI() {
+        if (filtrosActivos.length === 0) { filtrosAcumulador.style.display = 'none'; return; }
+        filtrosAcumulador.style.display = 'block';
+        filtrosLista.innerHTML = '';
+        filtrosActivos.forEach(filtro => {
+            const tag = document.createElement('div');
+            tag.className = 'filtro-tag';
+            tag.innerHTML = `${filtro} <button class="remove" data-filtro="${filtro}">✕</button>`;
+            filtrosLista.appendChild(tag);
+        });
+        document.querySelectorAll('.filtro-tag .remove').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                filtrosActivos = filtrosActivos.filter(f => f !== btn.dataset.filtro);
+                actualizarFiltrosUI();
+                regenerarSugerencias();
+            });
+        });
+    }
+    
+    function agregarMensaje(texto, esUsuario = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-mensaje ${esUsuario ? 'usuario' : 'bot'}`;
+        msgDiv.textContent = texto;
+        chatArea.insertBefore(msgDiv, sugerenciasDiv);
+    }
+    
+    function regenerarSugerencias() {
+        sugerenciasDiv.innerHTML = '';
+        const todos = ['familia', 'solo', 'mascotas', 'pareja', 'amigos'];
+        const disponibles = todos.filter(f => !filtrosActivos.includes(f));
+        if (disponibles.length === 0) {
+            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los filtros activados. Elimina alguno para añadir más.</span>';
+            return;
+        }
+        disponibles.forEach(filtro => {
+            const btn = document.createElement('button');
+            btn.className = 'sugerencia-btn';
+            btn.textContent = filtro;
+            btn.addEventListener('click', () => {
+                if (!filtrosActivos.includes(filtro)) {
+                    filtrosActivos.push(filtro);
+                    actualizarFiltrosUI();
+                    agregarMensaje(`✅ Añadido filtro: ${filtro}`);
+                    regenerarSugerencias();
+                }
+            });
+            sugerenciasDiv.appendChild(btn);
+        });
+    }
+    
+    function obtenerRespuesta() {
+        let respuestasPosibles = [];
+        for (let filtro of filtrosActivos) {
+            if (respuestasPorFiltro[filtro]) respuestasPosibles.push(...respuestasPorFiltro[filtro]);
+        }
+        if (respuestasPosibles.length === 0) respuestasPosibles = respuestasGenerales;
+        return respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
+    }
+    
+    function mostrarRespuesta(pregunta) {
+        if (!pregunta.trim()) { cita.textContent = "🔮 Escribe una pregunta primero..."; return; }
+        cita.textContent = "🔮 La bola está meditando... 🔮";
+        setTimeout(() => {
+            const respuesta = obtenerRespuesta();
+            cita.textContent = `"${respuesta}"`;
+            autor.textContent = filtrosActivos.length ? `— Bola Mágica (${filtrosActivos.join(', ')})` : '— Bola Mágica';
+            agregarMensaje(`❓ "${pregunta}"`, true);
+            agregarMensaje(respuesta, false);
+            inputPregunta.value = '';
+        }, 400);
+    }
+    
+    function animarAgitar() {
+        bola.classList.add('agitando');
+        setTimeout(() => bola.classList.remove('agitando'), 500);
+        if (inputPregunta.value.trim()) mostrarRespuesta(inputPregunta.value);
+        else { cita.textContent = "¡Escribe una pregunta primero!"; setTimeout(() => cita.textContent = "🔮 Selecciona filtros o escribe...", 2000); }
+    }
+    
+    enviarBtn.addEventListener('click', () => mostrarRespuesta(inputPregunta.value));
+    inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') mostrarRespuesta(inputPregunta.value); });
+    bola.addEventListener('click', animarAgitar);
+    
+    if (window.DeviceMotionEvent) {
+        let ultimaX=0, ultimaY=0, ultimaZ=0, ultimoAgite=0;
+        window.addEventListener('devicemotion', function(e) {
+            const ahora=Date.now();
+            if(ahora-ultimoAgite<800) return;
+            const acc=e.accelerationIncludingGravity;
+            if(!acc) return;
+            const fuerza=Math.abs((acc.x||0)-ultimaX)+Math.abs((acc.y||0)-ultimaY)+Math.abs((acc.z||0)-ultimaZ);
+            if(fuerza>25){ ultimoAgite=ahora; animarAgitar(); }
+            ultimaX=acc.x||0; ultimaY=acc.y||0; ultimaZ=acc.z||0;
+        });
+    }
+    
+    actualizarFiltrosUI();
+    regenerarSugerencias();
+</script>
+</body>
+</html>
