@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <title>🎱 Bola Mágica 8 - Sabiduría Contextual</title>
+    <title>🎱 Bola Mágica 8 - Modos de Sabiduría</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;}
@@ -23,21 +23,31 @@
         .transformable-container{width:100%;height:100%;display:flex;align-items:center;justify-content:center;position:relative;}
         .triangulo-shape{width:85%;height:75%;background:#0a0a0a;clip-path:polygon(50% 8%, 6% 92%, 94% 92%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14% 8% 18% 8%;border:1px solid rgba(80,180,255,0.3);border-radius:10px;box-shadow:inset 0 0 20px rgba(80,160,255,0.08), 0 5px 15px rgba(0,0,0,0.3);transition:all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);}
         .triangulo-shape.cuadrado{width:92%;height:88%;clip-path:polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);border-radius:20px;padding:16px;background:#0a0a0a;}
-        
-        /* Contenedor del texto con botón de reproducción */
         .texto-container{width:100%;position:relative;}
         .texto-multifuncional{width:100%;background:#0a0a0a;border:1px solid rgba(80,180,255,0.4);border-radius:16px;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.7rem,3.5vw,0.9rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:100%;height:auto;line-height:1.4;transition:all 0.3s ease;padding-right:40px;}
         .texto-multifuncional:focus{border-color:#8cf;box-shadow:0 0 10px rgba(100,160,255,0.3);}
-        
-        /* Botón de reproducción dentro del cuadrado */
         .reproducir-btn{position:absolute;bottom:12px;right:12px;background:#1a2a3a;border:1px solid #3a5a7a;color:#cceeff;width:32px;height:32px;border-radius:32px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;cursor:pointer;transition:all 0.2s;z-index:10;}
         .reproducir-btn:active{transform:scale(0.95);background:#2a4a6a;}
         
+        /* Botones principales */
         .botones-principales{position:fixed;bottom:70px;left:0;right:0;display:flex;justify-content:center;gap:12px;padding:10px;z-index:150;flex-wrap:wrap;}
         .btn-principal{background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 20px;border-radius:40px;font-size:0.75rem;cursor:pointer;font-weight:bold;backdrop-filter:blur(8px);transition:all 0.2s;}
         .btn-principal:active{transform:scale(0.96);background:#2a2a2a;}
+        
+        /* Botón selector de modos */
+        .btn-modo{position:fixed;top:16px;left:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;padding:8px 16px;border-radius:40px;font-size:0.7rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;gap:6px;}
+        .btn-modo:active{transform:scale(0.96);background:#2a2a2a;}
+        
         .btn-stats{position:fixed;top:16px;right:16px;background:#1a1a1a;border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);transition:all 0.2s;}
         .btn-stats:active{transform:scale(0.95);background:#2a2a2a;}
+        
+        /* Panel de selección de modos */
+        .modo-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;min-width:160px;}
+        .modo-panel.visible{transform:translateX(0);}
+        .modo-opcion{padding:10px 12px;margin:4px 0;border-radius:12px;cursor:pointer;color:#cceeff;font-size:0.75rem;transition:all 0.2s;}
+        .modo-opcion:hover{background:#2a4a6a;}
+        .modo-opcion.activo{background:#3a5a7a;border-left:3px solid #8cf;}
+        
         .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
         .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08), transparent 70%);pointer-events:none;}
         .cta{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:transparent;backdrop-filter:blur(12px);padding:16px 32px;border-radius:60px;font-size:clamp(1.5rem,8vw,2.5rem);font-weight:900;letter-spacing:2px;color:#FFFFFF;text-shadow:0 0 20px rgba(0,0,0,0.9),2px 2px 4px rgba(0,0,0,0.5);white-space:nowrap;z-index:200;pointer-events:none;animation:fadeInOut 3s ease-out forwards;border:1px solid rgba(255,255,255,0.2);font-family:'Impact','Arial Black','Segoe UI',sans-serif;}
@@ -75,6 +85,15 @@
     </div>
 </div>
 
+<!-- Selector de modos -->
+<div class="btn-modo" id="btnModo">🔮 CAMBIAR MODO</div>
+<div class="modo-panel" id="modoPanel">
+    <div class="modo-opcion" data-modo="clasico">🔮 Clásico (Sabios universales)</div>
+    <div class="modo-opcion" data-modo="feminista">🚺 Feminista (Mujeres inspiradoras)</div>
+    <div class="modo-opcion" data-modo="humor">😂 Humor (Agudeza y sarcasmo)</div>
+    <div class="modo-opcion" data-modo="sabiduria">🌿 Sabiduría (Filósofos estoicos)</div>
+</div>
+
 <div class="btn-stats" id="statsBtn">📊</div>
 
 <div class="botones-principales">
@@ -82,7 +101,7 @@
     <button class="btn-principal" id="microBtn">🎤 HABLAR</button>
 </div>
 
-<div class="info-externa">📱 Toca la bola para girar | La respuesta se queda visible | 🔊 para repetir</div>
+<div class="info-externa">📱 Toca la bola | 🔮 CAMBIAR MODO para diferentes estilos de citas</div>
 <div class="stats-panel" id="statsPanel">
     <div class="stats-header"><span>📊 ESTADÍSTICAS</span><button class="stats-cerrar" id="statsCerrar">✕</button></div>
     <div class="stats-resumen" id="statsResumen"></div>
@@ -91,21 +110,96 @@
 
 <script>
     // ============================================================
-    // CITAS CÉLEBRES VERIFICADAS
+    // MODO CLÁSICO (Citas célebres universales)
     // ============================================================
-    const citasPorTema = {
-        amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
-        trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El trabajo dignifica.» — Proverbio italiano","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El éxito en el trabajo no es cuestión de suerte, sino de perseverancia.» — Edison"],
-        futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo"],
-        dinero: ["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«No es rico el que más tiene, sino el que menos necesita.» — Proverbio","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
-        familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«La familia es como la rama, los hijos como frutos.» — Proverbio chino","«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II"],
-        amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller"],
-        exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutarlo.» — Emerson","«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen"],
-        vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi","«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou"],
-        sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«La paciencia es amarga, pero sus frutos son dulces.» — Rousseau","«El sentido común es el menos común de los sentidos.» — Voltaire"]
+    const modoClasico = {
+        nombre: "Clásico",
+        citas: {
+            amor: ["«El amor es una amistad que se enciende.» — Aristóteles","«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Leibniz","«El amor es la fuerza más humilde, pero la más poderosa.» — Gandhi","«El amor no se mira, se siente.» — Sabina","«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — García Márquez"],
+            trabajo: ["«Elige un trabajo que te guste y no trabajarás ni un día.» — Confucio","«El trabajo dignifica.» — Proverbio italiano","«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs","«El éxito en el trabajo no es cuestión de suerte, sino de perseverancia.» — Edison"],
+            futuro: ["«El futuro pertenece a los que creen en sus sueños.» — Eleanor Roosevelt","«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker","«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo"],
+            dinero: ["«El dinero no da la felicidad, pero procura una sensación tan parecida...» — Woody Allen","«No es rico el que más tiene, sino el que menos necesita.» — Proverbio","«El dinero es un buen siervo pero un mal amo.» — Francis Bacon","«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Buffett"],
+            familia: ["«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach","«La familia es el primer lugar donde aprendemos a amar.» — Papa Francisco","«La familia es como la rama, los hijos como frutos.» — Proverbio chino","«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II"],
+            amigos: ["«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Hubbard","«Los amigos son la familia que eliges.» — Jess C. Scott","«La amistad duplica las alegrías y divide las angustias.» — Francis Bacon","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller"],
+            exito: ["«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Schweitzer","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill","«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutarlo.» — Emerson","«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen"],
+            vida: ["«La vida es lo que pasa mientras haces otros planes.» — John Lennon","«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Einstein","«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Gandhi","«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou"],
+            sabiduria: ["«Solo sé que no sé nada.» — Sócrates","«Pienso, luego existo.» — Descartes","«La paciencia es amarga, pero sus frutos son dulces.» — Rousseau","«El sentido común es el menos común de los sentidos.» — Voltaire"]
+        }
     };
-    const respuestasSurrealistas = ["«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.»","«Si un libro te aburre, cámbiale el final. Tú eres el lector.»","«El tiempo vuela. Tú eres el piloto.»"];
 
+    // ============================================================
+    // MODO FEMINISTA (Mujeres inspiradoras)
+    // ============================================================
+    const modoFeminista = {
+        nombre: "Feminista",
+        citas: {
+            amor: ["«El amor no tiene que ver con poseer, sino con respetar.» — Simone de Beauvoir","«Amar a alguien es aprender a decir adiós.» — Virginia Woolf","«El amor verdadero no exige, solo ofrece.» — Madre Teresa de Calcuta"],
+            trabajo: ["«Nadie hace carrera sin sacrificios. Tú decides cuáles.» — Coco Chanel","«El trabajo bien hecho es el mejor homenaje a una misma.» — Frida Kahlo","«El éxito no es casualidad, es trabajo duro y perseverancia.» — Serena Williams"],
+            futuro: ["«El futuro depende de lo que hagamos hoy.» — Rosa Parks","«Soñar es necesario para construir el mañana.» — Rigoberta Menchú","«El cambio vendrá cuando las mujeres alcemos la voz.» — Malala Yousafzai"],
+            dinero: ["«La independencia económica es la base de la libertad.» — Simone de Beauvoir","«El dinero es un medio, no un fin. Úsalo con conciencia.» — Oprah Winfrey","«No hay riqueza mayor que la libertad de decidir sobre tu vida.» — Isabel Allende"],
+            familia: ["«La familia no es solo la que te da la sangre, sino la que te da amor.» — Maya Angelou","«El hogar es donde te quieren sin condiciones.» — Madre Teresa","«Familia es quien te sostiene cuando caes.» — Michelle Obama"],
+            amigos: ["«La amistad entre mujeres es un pacto de sororidad.» — Elena Poniatowska","«Una amiga es la que te dice la verdad aunque duela.» — Gloria Steinem","«Las amigas son el sostén del alma.» — Frida Kahlo"],
+            exito: ["«El éxito es hacer lo que amas y amar lo que haces.» — Marie Curie","«Triunfar es levantarse una vez más de lo que caes.» — Eleanor Roosevelt","«El éxito femenino es inspirar a otras a ser libres.» — Chimamanda Ngozi Adichie"],
+            vida: ["«Vivir es la cosa más rara del mundo porque la mayoría solo existe.» — Oscar Wilde (admirador del feminismo)","«La vida es un desafío, acéptalo.» — Madre Teresa","«La vida te da sorpresas, pero tú decides cómo recibirlas.» — Frida Kahlo"],
+            sabiduria: ["«La sabiduría comienza con la valentía de ser uno mismo.» — Virginia Woolf","«Sabia es la que aprende de sus errores.» — Coco Chanel","«La inteligencia sin humildad no es sabiduría.» — Simone de Beauvoir"]
+        }
+    };
+
+    // ============================================================
+    // MODO HUMOR (Citas graciosas y agudas)
+    ============================================================
+    const modoHumor = {
+        nombre: "Humor",
+        citas: {
+            amor: ["«El amor es una idiotez que se comete a dos.» — Groucho Marx","«El matrimonio es una aventura, como ir a la guerra.» — G.K. Chesterton","«Antes del amor, éramos más felices. Después, tenemos algo de qué hablar.» — Woody Allen"],
+            trabajo: ["«Me encanta el trabajo. Puedo estar horas mirándolo.» — Jerome K. Jerome","«El trabajo nunca mata a nadie, pero ¿para qué arriesgarse?» — Anónimo","«La mejor manera de hacer algo es no hacerlo.» — Homero Simpson (popular)"],
+            futuro: ["«Predigo el futuro, pero solo después de que ocurra.» — Anónimo","«El futuro es como el horizonte: siempre se aleja.» — Groucho Marx","«Mañana será otro día, pero con los mismos problemas.» — Mafalda"],
+            dinero: ["«El dinero no da la felicidad, pero compra un helado y casi es lo mismo.» — Anónimo","«He sido pobre y he sido rico. Rico es mejor.» — Sophie Tucker","«El dinero no puede comprar la felicidad, pero alquila una muy parecida.» — Woody Allen"],
+            familia: ["«La familia es una tiranía doméstica.» — George Bernard Shaw","«Las familias felices se parecen; las infelices lo son cada una a su manera.» — Tolstói","«Tu familia te conoce mejor que nadie. Y aun así te quieren.» — Anónimo"],
+            amigos: ["«Un amigo es alguien que te conoce y te quiere a pesar de ello.» — Anónimo","«Los amigos son como los pañuelos: cuantos más, mejor, pero se pierden.» — Groucho Marx","«Amigo es el que llega cuando todos se han ido.» — Proverbio"],
+            exito: ["«El 90% del éxito es simplemente presentarse.» — Woody Allen","«El éxito es relativo. Cuanto más éxito, más familiares te reclaman.» — Anónimo","«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Churchill"],
+            vida: ["«La vida es una obra de teatro que no permite ensayos.» — George Bernard Shaw","«La vida es una bicicleta con los frenos rotos.» — Charles Bukowski","«La vida es muy dura... sobre todo si eres tonto.» — Anónimo"],
+            sabiduria: ["«No me he equivocado, solo he encontrado 1000 formas de no hacerlo.» — Edison","«La sabiduría llega con los años, pero a veces llega sola.» — Anónimo","«Cuanto más sé, menos entiendo.» — Anónimo"]
+        }
+    };
+
+    // ============================================================
+    // MODO SABIDURÍA (Filósofos estoicos)
+    // ============================================================
+    const modoSabiduria = {
+        nombre: "Sabiduría",
+        citas: {
+            amor: ["«El amor es la fuerza más poderosa para transformar el alma.» — Séneca","«Amar es desear que el otro sea feliz, incluso sin ti.» — Epicteto","«El amor verdadero es aquel que acepta la imperfección.» — Marco Aurelio"],
+            trabajo: ["«El trabajo bien hecho es su propia recompensa.» — Marco Aurelio","«La excelencia no es un acto, sino un hábito.» — Aristóteles","«Haz cada cosa como si fuera la última de tu vida.» — Marco Aurelio"],
+            futuro: ["«No sufras por lo que aún no ha ocurrido.» — Epicteto","«El futuro no está en tus manos, solo el presente.» — Séneca","«Vive cada día como si fuera el último.» — Marco Aurelio"],
+            dinero: ["«La riqueza no consiste en tener muchas posesiones, sino en tener pocas necesidades.» — Séneca","«El dinero no es malo, pero amar el dinero es la raíz de todos los males.» — Séneca","«No es pobre el que poco tiene, sino el que mucho desea.» — Séneca"],
+            familia: ["«La familia es el primer lugar donde se aprende la virtud.» — Aristóteles","«El amor familiar es la base de toda sociedad justa.» — Séneca","«Honra a tus padres, es el mayor deber.» — Epicteto"],
+            amigos: ["«El amigo es otro yo.» — Aristóteles","«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Epicteto","«La amistad verdadera es un alma en dos cuerpos.» — Aristóteles"],
+            exito: ["«El éxito es hacer lo correcto en el momento correcto.» — Marco Aurelio","«La verdadera victoria es vencerse a sí mismo.» — Platón","«El éxito está en la virtud, no en la riqueza.» — Séneca"],
+            vida: ["«La vida es breve, el arte es largo.» — Hipócrates","«No es que tengamos poco tiempo, es que perdemos mucho.» — Séneca","«Vive conforme a la naturaleza.» — Marco Aurelio"],
+            sabiduria: ["«La sabiduría comienza con el asombro.» — Sócrates","«Solo sé que no sé nada.» — Sócrates","«La verdadera sabiduría está en reconocer la propia ignorancia.» — Sócrates"]
+        }
+    };
+
+    // Mapeo de modos
+    const modos = {
+        clasico: modoClasico,
+        feminista: modoFeminista,
+        humor: modoHumor,
+        sabiduria: modoSabiduria
+    };
+    
+    let modoActual = 'clasico';
+    let modoActivo = modos[modoActual];
+
+    // Respuestas surrealistas comunes a todos los modos
+    const respuestasSurrealistas = [
+        "«Los pingüinos usan esmoquin porque es el único traje que no les queda grande.»",
+        "«Si un libro te aburre, cámbiale el final. Tú eres el lector.»",
+        "«El tiempo vuela. Tú eres el piloto.»"
+    ];
+
+    // Palabras clave para detección de contexto
     const palabrasClave = {
         amor: ["amor", "pareja", "corazón", "novio", "novia", "casar", "romance", "beso"],
         trabajo: ["trabajo", "oficina", "jefe", "empresa", "ascender", "curro", "empleo"],
@@ -122,14 +216,14 @@
         for (let [tema, palabras] of Object.entries(palabrasClave)) {
             for (let palabra of palabras) if (texto.includes(palabra)) return tema;
         }
-        return null;
+        return 'sabiduria';
     }
 
     function obtenerCitaPorContexto(pregunta) {
-        const tema = detectarTema(pregunta) || 'sabiduria';
-        let citas = citasPorTema[tema] || citasPorTema.sabiduria;
-        let candidatas = citas.filter(c => !frasesUsadas.has(c));
-        if (candidatas.length === 0) candidatas = citas;
+        const tema = detectarTema(pregunta);
+        let citasDisponibles = modoActivo.citas[tema] || modoActivo.citas.sabiduria;
+        let candidatas = citasDisponibles.filter(c => !frasesUsadas.has(c));
+        if (candidatas.length === 0) candidatas = citasDisponibles;
         return candidatas[Math.floor(Math.random() * candidatas.length)];
     }
 
@@ -142,9 +236,30 @@
 
     function guardarHistorial() { localStorage.setItem('bola8_historial_' + sesionId, JSON.stringify(historial)); localStorage.setItem('bola8_categorias_' + sesionId, JSON.stringify(contadorCategorias)); }
     function registrarInteraccion(pregunta, respuesta, categoria) { historial.unshift({ timestamp: new Date().toISOString(), pregunta, respuesta, categoria }); if (historial.length > 50) historial.pop(); frasesUsadas.add(respuesta); contadorCategorias[categoria] = (contadorCategorias[categoria] || 0) + 1; guardarHistorial(); actualizarStatsUI(); }
-    function obtenerCategoriaDeCita(cita) { for (let [cat, citas] of Object.entries(citasPorTema)) if (citas.includes(cita)) return cat; return 'sabiduria'; }
-    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
+    function obtenerCategoriaDeCita(cita) { for (let [cat, citas] of Object.entries(modoActivo.citas)) if (citas.includes(cita)) return cat; return 'sabiduria'; }
+    function actualizarStatsUI() { document.getElementById('statsResumen').innerHTML = `<strong>📊 RESUMEN</strong><br>🎱 PREGUNTAS: ${historial.length}<br>💬 CITAS ÚNICAS: ${frasesUsadas.size}<br>🎭 MODO: ${modoActivo.nombre}`; let html = '<strong>📜 ÚLTIMAS PREGUNTAS:</strong><br>'; historial.slice(0, 10).forEach((item, i) => { html += `<div class="stats-item">${i+1}. [${new Date(item.timestamp).toLocaleTimeString()}] "${item.pregunta.substring(0, 35)}..."<br>→ ${item.respuesta.substring(0, 50)}...</div>`; }); document.getElementById('statsLista').innerHTML = html || 'AÚN NO HAY INTERACCIONES.'; }
     function toggleStats() { const panel = document.getElementById('statsPanel'); panel.classList.toggle('visible'); if (panel.classList.contains('visible')) actualizarStatsUI(); }
+    
+    function cambiarModo(modoId) {
+        modoActual = modoId;
+        modoActivo = modos[modoId];
+        // Limpiar memoria de frases usadas al cambiar de modo (opcional)
+        frasesUsadas.clear();
+        historial = [];
+        contadorCategorias = {};
+        guardarHistorial();
+        actualizarStatsUI();
+        // Actualizar UI del selector
+        document.querySelectorAll('.modo-opcion').forEach(el => {
+            if (el.dataset.modo === modoId) el.classList.add('activo');
+            else el.classList.remove('activo');
+        });
+        // Mostrar notificación
+        chatTexto.innerText = `🔮 Modo ${modoActivo.nombre} activado`;
+        setTimeout(() => { if (chatTexto.innerText === `🔮 Modo ${modoActivo.nombre} activado`) chatTexto.innerText = ""; }, 2000);
+        // Cerrar panel
+        document.getElementById('modoPanel').classList.remove('visible');
+    }
 
     // Funcionalidad principal
     let reconocimiento = null, grabando = false, girada = false, ultimoAgite = 0, ultimaX = 0, ultimaY = 0, ultimaZ = 0;
@@ -166,6 +281,8 @@
     const microBtn = document.getElementById('microBtn');
     const statsBtn = document.getElementById('statsBtn');
     const statsCerrar = document.getElementById('statsCerrar');
+    const btnModo = document.getElementById('btnModo');
+    const modoPanel = document.getElementById('modoPanel');
     const cta = document.getElementById('cta');
 
     function ocultarCta() { if (cta && cta.style.visibility !== 'hidden') { cta.style.opacity = '0'; cta.style.visibility = 'hidden'; } }
@@ -187,18 +304,16 @@
             let r = respuestasSurrealistas[Math.floor(Math.random() * respuestasSurrealistas.length)]; 
             mostrarRespuesta(r, "[pregunta vacía]", leer); 
             if (!girada) girarBola(); 
-            // NO regresar automáticamente
             return; 
         } 
         let respuesta = obtenerCitaPorContexto(texto); 
         mostrarRespuesta(respuesta, texto, leer); 
         if (!girada) girarBola(); 
-        // NO regresar automáticamente
     }
     
     function respuestaAleatoria() { 
         ocultarCta(); 
-        let r = citasPorTema.sabiduria[Math.floor(Math.random() * citasPorTema.sabiduria.length)];
+        let r = modoActivo.citas.sabiduria[Math.floor(Math.random() * modoActivo.citas.sabiduria.length)];
         mostrarRespuesta(r, "[aleatorio]", true); 
         if (!girada) girarBola(); 
     }
@@ -212,22 +327,19 @@
     function iniciarDeteccionMovimiento() { if (window.DeviceMotionEvent) { window.addEventListener('devicemotion', (e) => { let ahora = Date.now(); if (ahora - ultimoAgite < 800) return; let acc = e.accelerationIncludingGravity; if (!acc) return; let fuerza = Math.abs((acc.x||0)-ultimaX) + Math.abs((acc.y||0)-ultimaY) + Math.abs((acc.z||0)-ultimaZ); if (fuerza > 25) { ultimoAgite = ahora; respuestaAleatoria(); } ultimaX = acc.x||0; ultimaY = acc.y||0; ultimaZ = acc.z||0; }); } }
     function solicitarPermisoMovimiento() { if (typeof DeviceMotionEvent.requestPermission === 'function') { DeviceMotionEvent.requestPermission().then(r => { if (r === 'granted') iniciarDeteccionMovimiento(); }); } else iniciarDeteccionMovimiento(); }
 
-    sceneEl.addEventListener('click', (e) => { 
-        // Si el clic es en el botón de reproducir, no hacer nada con la bola
-        if (e.target === reproducirBtn || reproducirBtn.contains(e.target)) return;
-        if (e.target === caraBack || caraBack.contains(e.target)) { 
-            if (girada) chatTexto.focus(); 
-        } else { toggleBola(); } 
-    });
-    
+    sceneEl.addEventListener('click', (e) => { if (e.target === reproducirBtn || reproducirBtn.contains(e.target)) return; if (e.target === caraBack || caraBack.contains(e.target)) { if (girada) chatTexto.focus(); } else { toggleBola(); } });
     preguntarBtn.addEventListener('click', () => procesarPregunta(chatTexto.innerText, true));
     microBtn.addEventListener('click', toggleMicrofono);
     reproducirBtn.addEventListener('click', leerTextoActual);
     statsBtn.addEventListener('click', toggleStats);
     statsCerrar.addEventListener('click', toggleStats);
+    btnModo.addEventListener('click', () => modoPanel.classList.toggle('visible'));
+    document.querySelectorAll('.modo-opcion').forEach(btn => {
+        btn.addEventListener('click', () => cambiarModo(btn.dataset.modo));
+    });
     chatTexto.addEventListener('focus', ocultarCta);
     document.body.addEventListener('touchstart', ocultarCta);
-    document.body.addEventListener('click', ocultarCta);
+    document.body.addEventListener('click', (e) => { if (!btnModo.contains(e.target) && !modoPanel.contains(e.target)) modoPanel.classList.remove('visible'); });
 
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') { let btn = document.createElement('div'); btn.innerText = '🎯 ACTIVAR AGITADO'; btn.style.cssText = 'position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a'; btn.onclick = solicitarPermisoMovimiento; document.body.appendChild(btn); } else if (window.DeviceMotionEvent) iniciarDeteccionMovimiento();
 
