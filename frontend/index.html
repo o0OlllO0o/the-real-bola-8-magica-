@@ -70,7 +70,7 @@
     
     <div class="input-area">
         <input type="text" id="pregunta" placeholder="Escribe tu pregunta..." autocomplete="off">
-        <button id="enviarBtn">🔮 Preguntar</button>
+        <button id="enviarBtn">🔮 Preguntar / Agitar</button>
         <button id="microfonoBtn" class="microfono-btn">🎤 Hablar</button>
     </div>
     <div class="shake-hint" id="shakeHint">📱 Agita la bola para respuesta aleatoria</div>
@@ -177,9 +177,20 @@
         return respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
     }
     
+    // Función para vibración (si está disponible)
+    function vibrar() {
+        if (window.navigator && window.navigator.vibrate) {
+            window.navigator.vibrate(200);
+        }
+    }
+    
     function mostrarRespuesta(pregunta) {
-        if (!pregunta.trim()) { cita.textContent = "🔮 Escribe o habla una pregunta..."; return; }
+        if (!pregunta.trim()) { 
+            cita.textContent = "🔮 Escribe o habla una pregunta..."; 
+            return false;
+        }
         cita.textContent = "🔮 La bola está meditando... 🔮";
+        vibrar(); // Vibración al recibir respuesta
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
             cita.textContent = `"${respuesta}"`;
@@ -188,13 +199,34 @@
             agregarMensaje(respuesta, false);
             inputPregunta.value = '';
         }, 400);
+        return true;
+    }
+    
+    // Función que simula AGITAR: respuesta aleatoria sin pregunta
+    function agitarAleatorio() {
+        cita.textContent = "🔮 La bola se agita... 🔮";
+        vibrar(); // Vibración al agitar
+        setTimeout(() => {
+            const respuesta = obtenerRespuesta();
+            cita.textContent = `"${respuesta}"`;
+            autor.textContent = filtrosActivos.length ? `— Bola Mágica (${filtrosActivos.join(', ')})` : '— Bola Mágica';
+            agregarMensaje(`🎲 La bola se agitó aleatoriamente`, false);
+            agregarMensaje(respuesta, false);
+        }, 400);
     }
     
     function animarAgitar() {
         bola.classList.add('agitando');
         setTimeout(() => bola.classList.remove('agitando'), 500);
-        if (inputPregunta.value.trim()) mostrarRespuesta(inputPregunta.value);
-        else { cita.textContent = "¡Escribe o habla una pregunta primero!"; setTimeout(() => cita.textContent = "🔮 Selecciona filtros, escribe o habla...", 2000); }
+        
+        // Comportamiento inteligente del botón:
+        // Si hay texto en el input -> responde a la pregunta
+        // Si no hay texto -> simula agitado aleatorio
+        if (inputPregunta.value.trim()) {
+            mostrarRespuesta(inputPregunta.value);
+        } else {
+            agitarAleatorio();
+        }
     }
     
     // ============================================================
@@ -274,7 +306,10 @@
                 const fuerza = Math.abs(x - ultimaX) + Math.abs(y - ultimaY) + Math.abs(z - ultimaZ);
                 if (fuerza > 25) {
                     ultimoAgite = ahora;
-                    animarAgitar();
+                    // Cuando se agita físicamente, comportamiento aleatorio
+                    bola.classList.add('agitando');
+                    setTimeout(() => bola.classList.remove('agitando'), 500);
+                    agitarAleatorio();
                 }
                 ultimaX = x; ultimaY = y; ultimaZ = z;
             });
@@ -321,8 +356,8 @@
     
     // Eventos UI
     microfonoBtn.addEventListener('click', toggleMicrofono);
-    enviarBtn.addEventListener('click', () => mostrarRespuesta(inputPregunta.value));
-    inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') mostrarRespuesta(inputPregunta.value); });
+    enviarBtn.addEventListener('click', animarAgitar);
+    inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') animarAgitar(); });
     bola.addEventListener('click', animarAgitar);
     permisoMicrofonoBtn.addEventListener('click', solicitarPermisoMicrofono);
     
@@ -346,7 +381,7 @@
     // Mensaje de bienvenida con instrucciones
     setTimeout(() => {
         agregarMensaje("🎤 Puedes usar el micrófono para hablar tu pregunta");
-        agregarMensaje("📱 En móvil, agita la bola después de activar permisos");
+        agregarMensaje("📱 El botón 'Preguntar/Agitar' hace ambas cosas: si escribes pregunta, responde; si no, da una respuesta aleatoria como si agitaras");
     }, 1000);
 </script>
 </body>
