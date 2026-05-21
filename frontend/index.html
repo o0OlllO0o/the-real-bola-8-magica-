@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#1a1f2e">
-    <title>🔮 Bola Mágica 8 · Voz y Movimiento</title>
+    <title>🔮 Bola Mágica 8 · Frases Célebres</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100vh;background:linear-gradient(145deg,#1a1f2e 0%,#0a0d16 100%);color:#eee;padding:16px;}
@@ -45,8 +45,8 @@
     <div class="bola-header">
         <div class="contenedor-bola" id="bola">
             <div class="cristal-bola">
-                <p class="cita" id="cita">🔮 Selecciona filtros, escribe o habla...</p>
-                <p class="autor" id="autor">— Asistente Mágico</p>
+                <p class="cita" id="cita">🔮 Frases célebres con sabiduría...</p>
+                <p class="autor" id="autor">— Bola Mágica 8</p>
             </div>
         </div>
     </div>
@@ -63,7 +63,7 @@
     
     <div class="chat-area" id="chatArea">
         <div class="chat-mensaje bot" id="chatInicial">
-            🔮 ¡Hola! Soy la Bola Mágica. ¿Con quién compartirás esta sabiduría?
+            🔮 ¡Bienvenido! Soy la Bola Mágica de la Sabiduría. Selecciona un tema o pregúntame lo que quieras.
         </div>
         <div class="sugerencias" id="sugerencias"></div>
     </div>
@@ -79,16 +79,80 @@
 
 <script>
     // ============================================================
-    // BASE DE DATOS DE RESPUESTAS
+    // BASE DE DATOS DE FRASES CÉLEBRES (Actualizada)
     // ============================================================
     const respuestasPorFiltro = {
-        familia: ["La familia es como un buen guiso: a veces sale mal, pero siempre alimenta el alma 🍲","El amor familiar es el único que no necesita WiFi","Tu familia te apoya... aunque no entiendan nada","Reunión familiar = amor + preguntas incómodas + comida 🛡️","La sangre tira más que el cable del cargador"],
-        solo: ["La soledad es tu mejor maestra... y no cobra matrícula 🧘","Estar solo es tener el mando de la tele siempre para ti","La mejor compañía eres tú mismo","La independencia es como la batería: dura más 🔋","A solas con tus pensamientos... espero que sean buena gente"],
-        mascotas: ["Tu mascota te quiere incondicionalmente. Sobre todo si tienes comida 🐕","Los perros te miran como si fueras un héroe. Los gatos, como su sirviente","La lealtad de un animal es más pura que la humana 🐱","Pasea a tu mascota. Ella te pasea el alma","Ellos no entienden tus problemas, pero entienden cuando estás tristes"],
-        pareja: ["El amor es como las plantas: hay que regarlo, sin ahogarlo 💑","La pareja perfecta no existe. La que se ríe de tus chistes malos","Discutir por la manta es parte del plan. El amor también es frío ❄️","El amor dura como un cargador nuevo... si lo cuidas, mucho más","Las relaciones son como el software: necesitan actualizaciones"],
-        amigos: ["Los amigos son la familia que eliges... y que te aguanta 🍻","Un amigo te ayuda a mover el sofá... y se queda a ver la tele","La amistad es como el WiFi gratis: cuando la tienes es oro","Los verdaderos amigos te dicen 'tienes algo en el diente'","Amigos: esos que conocen tu música rara y no te juzgan 🎵"]
+        amor: [
+            "«Amar es encontrar en la felicidad de otro tu propia felicidad.» — Gottfried Leibniz",
+            "«El amor no se mira, se siente, y ni el corazón más necio se equivoca.» — Joaquín Sabina",
+            "«Amar no es mirarse el uno al otro, es mirar juntos en la misma dirección.» — Antoine de Saint-Exupéry",
+            "«El amor es una locura que solo cura el amor.» — Lope de Vega",
+            "«El amor es como el viento, no lo ves pero lo sientes.» — Nicholas Sparks",
+            "«El amor no tiene cura, pero es la única cura para todos los males.» — Leonard Cohen",
+            "«Te quiero no por quien eres, sino por quien soy cuando estoy contigo.» — Gabriel García Márquez"
+        ],
+        trabajo: [
+            "«Elige un trabajo que te guste y no tendrás que trabajar ni un día de tu vida.» — Confucio",
+            "«El trabajo dignifica, pero el descanso también.» — Proverbio moderno",
+            "«No trabajes por dinero, haz que el dinero trabaje para ti.» — Robert Kiyosaki",
+            "«El éxito en el trabajo se logra haciendo lo que amas y amando lo que haces.» — Steve Jobs",
+            "«El trabajo en equipo es la capacidad de trabajar juntos hacia una visión común.» — Andrew Carnegie",
+            "«La única manera de hacer un gran trabajo es amar lo que haces.» — Steve Jobs"
+        ],
+        futuro: [
+            "«El futuro pertenece a los que creen en la belleza de sus sueños.» — Eleanor Roosevelt",
+            "«El mejor modo de predecir el futuro es creándolo.» — Peter Drucker",
+            "«No te preocupes por el futuro, ocúpate del presente y el futuro llegará solo.» — Lao Tsé",
+            "«El futuro tiene muchos nombres: para los débiles es lo inalcanzable; para los temerosos, lo desconocido; para los valientes, la oportunidad.» — Victor Hugo",
+            "«El futuro no está escrito, no hay destino, somos nosotros quienes lo creamos.» — Terminator 2"
+        ],
+        dinero: [
+            "«El dinero no trae la felicidad, pero la compra.» — Anónimo inteligente",
+            "«No es rico el que más tiene, sino el que menos necesita.» — Anónimo",
+            "«El dinero es un buen sirviente pero un mal amo.» — Francis Bacon",
+            "«La riqueza consiste no en tener grandes posesiones, sino en tener pocas necesidades.» — Epicteto",
+            "«El dinero crece en el árbol del esfuerzo, pero hay que regarlo con inteligencia.» — Warren Buffett",
+            "«Gana dinero mientras duermes, o trabajarás hasta que te mueras.» — Warren Buffett"
+        ],
+        familia: [
+            "«La familia no es un asunto de sangre, sino de respeto y alegría.» — Richard Bach",
+            "«El amor de familia es el combustible que nos permite afrontar la vida.» — Juan Pablo II",
+            "«La familia es el primer lugar donde aprendemos a amar y a ser amados.» — Papa Francisco",
+            "«La familia es como una rama, los hijos como frutos, todos del mismo árbol.» — Proverbio chino",
+            "«La familia es el único lugar donde te quieren sin preguntar y te esperan sin avisar.» — Anónimo"
+        ],
+        amigos: [
+            "«Un amigo es alguien que lo sabe todo de ti y aun así te quiere.» — Elbert Hubbard",
+            "«Los amigos son la familia que eliges.» — Jess C. Scott",
+            "«La amistad duplica las alegrías y divide las angustias por la mitad.» — Francis Bacon",
+            "«Caminar con un amigo en la oscuridad es mejor que caminar solo en la luz.» — Helen Keller",
+            "«Un verdadero amigo es el que llega cuando todos se han ido.» — Walter Winchell"
+        ],
+        exito: [
+            "«El éxito no es la clave de la felicidad. La felicidad es la clave del éxito.» — Albert Schweitzer",
+            "«El éxito es aprender a ir de fracaso en fracaso sin desesperarse.» — Winston Churchill",
+            "«El éxito consiste en obtener lo que se desea; la felicidad, en disfrutar lo que se obtiene.» — Ralph Waldo Emerson",
+            "«El éxito no es definitivo, el fracaso no es fatal: lo que cuenta es el coraje para continuar.» — Winston Churchill",
+            "«El 90% del éxito se debe simplemente a presentarse.» — Woody Allen"
+        ],
+        vida: [
+            "«La vida es lo que pasa mientras estás haciendo otros planes.» — John Lennon",
+            "«No se mide la vida por el número de veces que respiras, sino por los momentos que te dejan sin aliento.» — Maya Angelou",
+            "«La vida es como una bicicleta, para mantener el equilibrio debes seguir adelante.» — Albert Einstein",
+            "«La vida es aquello que te va sucediendo mientras te empeñas en hacer otros planes.» — John Lennon",
+            "«Vive como si fueras a morir mañana, aprende como si fueras a vivir siempre.» — Mahatma Gandhi"
+        ]
     };
-    const respuestasGenerales = ["La sabiduría está en escuchar más de lo que hablas... pero yo soy una bola","El universo conspira a tu favor... cuando se acuerda","La respuesta está dentro de ti. Y también dentro de este código","La vida es como una cebolla: tiene capas, y a veces te hace llorar 🧅","No hay preguntas tontas, solo respuestas surrealistas"];
+    
+    const respuestasGenerales = [
+        "«La sabiduría comienza en la reflexión.» — Sócrates",
+        "«Solo sé que no sé nada.» — Sócrates",
+        "«Pienso, luego existo.» — René Descartes",
+        "«El sentido común es el menos común de los sentidos.» — Voltaire",
+        "«La paciencia es amarga, pero sus frutos son dulces.» — Jean-Jacques Rousseau",
+        "«El hombre es un lobo para el hombre.» — Thomas Hobbes",
+        "«Donde hay educación no hay distinción de clases.» — Confucio"
+    ];
     
     // Estado
     let filtrosActivos = [];
@@ -114,9 +178,6 @@
     const permisoMicrofonoBtn = document.getElementById('permisoMicrofonoBtn');
     const permisoMovimientoBtn = document.getElementById('permisoMovimientoBtn');
     
-    // ============================================================
-    // FUNCIONES PRINCIPALES
-    // ============================================================
     function actualizarFiltrosUI() {
         if (filtrosActivos.length === 0) { filtrosAcumulador.style.display = 'none'; return; }
         filtrosAcumulador.style.display = 'block';
@@ -146,21 +207,22 @@
     
     function regenerarSugerencias() {
         sugerenciasDiv.innerHTML = '';
-        const todos = ['familia', 'solo', 'mascotas', 'pareja', 'amigos'];
+        const todos = ['amor', 'trabajo', 'futuro', 'dinero', 'familia', 'amigos', 'exito', 'vida'];
         const disponibles = todos.filter(f => !filtrosActivos.includes(f));
         if (disponibles.length === 0) {
-            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los filtros activados. Elimina alguno.</span>';
+            sugerenciasDiv.innerHTML = '<span style="opacity:0.6;">✅ Todos los temas activados. Elimina alguno para cambiar.</span>';
             return;
         }
         disponibles.forEach(filtro => {
             const btn = document.createElement('button');
             btn.className = 'sugerencia-btn';
-            btn.textContent = filtro;
+            const nombres = {amor:'💕 Amor', trabajo:'💼 Trabajo', futuro:'🔮 Futuro', dinero:'💰 Dinero', familia:'👪 Familia', amigos:'👥 Amigos', exito:'🏆 Éxito', vida:'🌿 Vida'};
+            btn.textContent = nombres[filtro] || filtro;
             btn.addEventListener('click', () => {
                 if (!filtrosActivos.includes(filtro)) {
                     filtrosActivos.push(filtro);
                     actualizarFiltrosUI();
-                    agregarMensaje(`✅ Añadido filtro: ${filtro}`);
+                    agregarMensaje(`✅ Añadido tema: ${nombres[filtro] || filtro}`);
                     regenerarSugerencias();
                 }
             });
@@ -174,10 +236,10 @@
             if (respuestasPorFiltro[filtro]) respuestasPosibles.push(...respuestasPorFiltro[filtro]);
         }
         if (respuestasPosibles.length === 0) respuestasPosibles = respuestasGenerales;
-        return respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
+        const elegida = respuestasPosibles[Math.floor(Math.random() * respuestasPosibles.length)];
+        return elegida;
     }
     
-    // Función para vibración (si está disponible)
     function vibrar() {
         if (window.navigator && window.navigator.vibrate) {
             window.navigator.vibrate(200);
@@ -190,11 +252,11 @@
             return false;
         }
         cita.textContent = "🔮 La bola está meditando... 🔮";
-        vibrar(); // Vibración al recibir respuesta
+        vibrar();
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
-            cita.textContent = `"${respuesta}"`;
-            autor.textContent = filtrosActivos.length ? `— Bola Mágica (${filtrosActivos.join(', ')})` : '— Bola Mágica';
+            cita.textContent = respuesta;
+            autor.textContent = filtrosActivos.length ? `— Bola Mágica · Temas: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
             agregarMensaje(`❓ "${pregunta}"`, true);
             agregarMensaje(respuesta, false);
             inputPregunta.value = '';
@@ -202,15 +264,14 @@
         return true;
     }
     
-    // Función que simula AGITAR: respuesta aleatoria sin pregunta
     function agitarAleatorio() {
         cita.textContent = "🔮 La bola se agita... 🔮";
-        vibrar(); // Vibración al agitar
+        vibrar();
         setTimeout(() => {
             const respuesta = obtenerRespuesta();
-            cita.textContent = `"${respuesta}"`;
-            autor.textContent = filtrosActivos.length ? `— Bola Mágica (${filtrosActivos.join(', ')})` : '— Bola Mágica';
-            agregarMensaje(`🎲 La bola se agitó aleatoriamente`, false);
+            cita.textContent = respuesta;
+            autor.textContent = filtrosActivos.length ? `— Bola Mágica · Temas: ${filtrosActivos.join(', ')}` : '— Bola Mágica 8';
+            agregarMensaje(`🎲 Sabiduría aleatoria:`, false);
             agregarMensaje(respuesta, false);
         }, 400);
     }
@@ -218,10 +279,6 @@
     function animarAgitar() {
         bola.classList.add('agitando');
         setTimeout(() => bola.classList.remove('agitando'), 500);
-        
-        // Comportamiento inteligente del botón:
-        // Si hay texto en el input -> responde a la pregunta
-        // Si no hay texto -> simula agitado aleatorio
         if (inputPregunta.value.trim()) {
             mostrarRespuesta(inputPregunta.value);
         } else {
@@ -229,72 +286,49 @@
         }
     }
     
-    // ============================================================
-    // MICRÓFONO (Reconocimiento de Voz)
-    // ============================================================
+    // Microfono
     function iniciarMicrofono() {
         if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
             agregarMensaje("❌ Tu navegador no soporta reconocimiento de voz.");
             return;
         }
-        
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         reconocimiento = new SpeechRecognition();
         reconocimiento.lang = 'es-ES';
         reconocimiento.continuous = false;
         reconocimiento.interimResults = false;
-        
         reconocimiento.onstart = () => {
             grabando = true;
             microfonoBtn.classList.add('grabando');
             microfonoBtn.textContent = '🔴 Grabando...';
             agregarMensaje("🎤 Escuchando... habla ahora");
         };
-        
         reconocimiento.onresult = (event) => {
             const texto = event.results[0][0].transcript;
             inputPregunta.value = texto;
             agregarMensaje(`🎤 Dijiste: "${texto}"`, true);
             mostrarRespuesta(texto);
         };
-        
         reconocimiento.onerror = (event) => {
-            console.error('Error:', event.error);
             agregarMensaje(`❌ Error de micrófono: ${event.error}`);
             detenerMicrofono();
         };
-        
-        reconocimiento.onend = () => {
-            detenerMicrofono();
-        };
-        
+        reconocimiento.onend = () => detenerMicrofono();
         reconocimiento.start();
     }
     
     function detenerMicrofono() {
-        if (reconocimiento) {
-            try { reconocimiento.stop(); } catch(e) {}
-        }
+        if (reconocimiento) try { reconocimiento.stop(); } catch(e) {}
         grabando = false;
         microfonoBtn.classList.remove('grabando');
         microfonoBtn.textContent = '🎤 Hablar';
     }
     
     function toggleMicrofono() {
-        if (grabando) {
-            detenerMicrofono();
-        } else {
-            if (reconocimiento) {
-                try { reconocimiento.start(); } catch(e) { iniciarMicrofono(); }
-            } else {
-                iniciarMicrofono();
-            }
-        }
+        grabando ? detenerMicrofono() : iniciarMicrofono();
     }
     
-    // ============================================================
-    // MOVIMIENTO (Giroscopio / Agitado)
-    // ============================================================
+    // Movimiento
     function iniciarDeteccionMovimiento() {
         if (window.DeviceMotionEvent) {
             window.addEventListener('devicemotion', function(e) {
@@ -306,7 +340,6 @@
                 const fuerza = Math.abs(x - ultimaX) + Math.abs(y - ultimaY) + Math.abs(z - ultimaZ);
                 if (fuerza > 25) {
                     ultimoAgite = ahora;
-                    // Cuando se agita físicamente, comportamiento aleatorio
                     bola.classList.add('agitando');
                     setTimeout(() => bola.classList.remove('agitando'), 500);
                     agitarAleatorio();
@@ -324,46 +357,33 @@
         if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
             DeviceMotionEvent.requestPermission()
                 .then(response => {
-                    if (response === 'granted') {
-                        iniciarDeteccionMovimiento();
-                    } else {
-                        shakeHint.textContent = "📱 Permiso denegado. Usa el botón.";
-                    }
+                    if (response === 'granted') iniciarDeteccionMovimiento();
+                    else shakeHint.textContent = "📱 Permiso denegado. Usa el botón.";
                 })
-                .catch(err => {
-                    console.error(err);
-                    shakeHint.textContent = "📱 Error al pedir permiso. Usa el botón.";
-                });
+                .catch(() => shakeHint.textContent = "📱 Error al pedir permiso.");
         } else {
             iniciarDeteccionMovimiento();
         }
     }
     
-    // ============================================================
-    // PERMISOS INICIALES
-    // ============================================================
     function solicitarPermisoMicrofono() {
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(() => {
                 agregarMensaje("✅ Micrófono activado. Puedes usar el botón 🎤");
                 permisoMicrofonoBtn.style.display = 'none';
             })
-            .catch(err => {
-                agregarMensaje("❌ No se pudo acceder al micrófono. Usa el teclado.");
-                console.error(err);
-            });
+            .catch(err => agregarMensaje("❌ No se pudo acceder al micrófono."));
     }
     
-    // Eventos UI
+    // Eventos
     microfonoBtn.addEventListener('click', toggleMicrofono);
     enviarBtn.addEventListener('click', animarAgitar);
     inputPregunta.addEventListener('keypress', (e) => { if (e.key === 'Enter') animarAgitar(); });
     bola.addEventListener('click', animarAgitar);
     permisoMicrofonoBtn.addEventListener('click', solicitarPermisoMicrofono);
     
-    // Configurar agitado según plataforma
     if (window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function') {
-        shakeHint.textContent = "📱 iOS: toca 'Activar agitado' para usar el giroscopio";
+        shakeHint.textContent = "📱 iOS: toca 'Activar agitado'";
         activarShakeBtn.style.display = 'block';
         permisoMovimientoBtn.style.display = 'block';
         activarShakeBtn.addEventListener('click', solicitarPermisoMovimiento);
@@ -371,18 +391,12 @@
     } else if (window.DeviceMotionEvent) {
         iniciarDeteccionMovimiento();
     } else {
-        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado. Usa botón o voz.";
+        shakeHint.textContent = "🔮 Tu dispositivo no soporta agitado.";
     }
     
-    // Inicializar
     actualizarFiltrosUI();
     regenerarSugerencias();
-    
-    // Mensaje de bienvenida con instrucciones
-    setTimeout(() => {
-        agregarMensaje("🎤 Puedes usar el micrófono para hablar tu pregunta");
-        agregarMensaje("📱 El botón 'Preguntar/Agitar' hace ambas cosas: si escribes pregunta, responde; si no, da una respuesta aleatoria como si agitaras");
-    }, 1000);
+    agregarMensaje("📚 Ahora con frases célebres reales de grandes pensadores, filósofos y artistas.");
 </script>
 </body>
 </html>
