@@ -241,4 +241,37 @@ async function hablarTexto(texto) {
     utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
 }
+
+async function obtenerVozEspanola() {
+    const voces = await cargarVoces();
+    
+    const ranking = [
+        "es-ES", "es_ES", "español españa", "spanish spain",
+        "es-MX", "es_MX", "español méxico", "spanish mexico",
+        "es-CO", "es_CO", "es-AR", "es_AR",
+        "es", "spanish", "español"
+    ];
+    
+    for (const termino of ranking) {
+        const voz = voces.find(v => 
+            v.lang.toLowerCase().includes(termino.toLowerCase()) && 
+            !v.name.toLowerCase().includes("english")
+        );
+        if (voz) return voz;
+    }
+    
+    return voces.find(v => v.lang.startsWith("es")) || voces[0];
+}
+
+async function hablarTexto(texto) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const voz = await obtenerVozEspanola();
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.voice = voz;
+    utterance.lang = voz.lang;
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+}
 </script>
