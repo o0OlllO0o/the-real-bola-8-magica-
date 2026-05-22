@@ -85,7 +85,8 @@
         
         .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
-    </style>
+    #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
+</style>
 </head>
 <body>
 <div class="container">
@@ -204,7 +205,7 @@ function reproducirSiguienteCita(){if(!reproduciendoCitas)return;window.citasRep
 let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let ultimaRespuesta='';
 
 function lanzarParticulas(){const scene=document.getElementById('scene');const rect=scene.getBoundingClientRect();const centroX=rect.left+rect.width/2;const centroY=rect.top+rect.height/2;for(let i=1;i<=3;i++){const particula=document.createElement('div');particula.className='particula p'+i;particula.style.left=centroX+'px';particula.style.top=centroY+'px';document.body.appendChild(particula);setTimeout(()=>{particula.remove();},800);}}
-function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');lanzarParticulas();setTimeout(()=>{bola.classList.remove('shaking');},800);}
+function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');setTimeout(()=>{bola.classList.remove('shaking');},800);}
 
 const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const chatTexto=document.getElementById('chatTexto');const panelFlotante=document.getElementById('panelFlotante');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');
 
