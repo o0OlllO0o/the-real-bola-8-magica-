@@ -244,6 +244,64 @@ if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='funct
 
 chatTexto.innerText="ESCRIBE TU PREGUNTA...";
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
+
+// MEJORAS V2
+var _pp = procesarPregunta;
+procesarPregunta = function(texto, leer) {
+    if (reproduciendoCitas) pausarReproduccion();
+    if (!texto || !texto.trim()) {
+        let r = respuestasSurrealistas[Math.floor(Math.random() * respuestasSurrealistas.length)];
+        if (!girada) girarBola();
+        agitarBola();
+        setTimeout(function() { mostrarRespuesta(r, "[pregunta vacía]", leer); }, 700);
+        return;
+    }
+    let respuesta = obtenerCitaPorContexto(texto);
+    if (!girada) girarBola();
+    agitarBola();
+    setTimeout(function() { mostrarRespuesta(respuesta, texto, leer); }, 700);
+};
+document.addEventListener("DOMContentLoaded", function() {
+    var p = document.getElementById("playBtn");
+    if (!p) return;
+    var iv = null, r = 0;
+    function stop() { clearInterval(iv); iv = null; r = 0; p.textContent = "▶"; }
+    function go() {
+        r = Math.floor(Math.random() * 3) + 1;
+        p.textContent = "⏸";
+        if (typeof hacerPregunta === "function") hacerPregunta();
+        r--;
+        iv = setInterval(function() {
+            if (r <= 0) { stop(); return; }
+            if (typeof hacerPregunta === "function") hacerPregunta();
+            r--;
+        }, 4000);
+    }
+    var n = p.cloneNode(true);
+    p.parentNode.replaceChild(n, p);
+    n.addEventListener("click", function(e) { e.preventDefault(); e.stopPropagation(); iv ? stop() : go(); });
+});
+if (window.speechSynthesis) {
+    var _voz = null;
+    setInterval(function() {
+        var voces = speechSynthesis.getVoices();
+        if (voces.length === 0) return;
+        var nombres = ["Monica", "Helena", "Paulina", "Microsoft Helena"];
+        for (var i = 0; i < nombres.length; i++) {
+            var v = voces.find(function(x) { return x.name.includes(nombres[i]) && x.lang.includes("es"); });
+            if (v) { _voz = v; break; }
+        }
+        if (!_voz) _voz = voces.find(function(x) { return x.lang.startsWith("es"); }) || voces[0];
+    }, 1000);
+    var _hablar = window.hablar || function() {};
+    window.hablar = function(texto) {
+        speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(texto);
+        if (_voz) { u.voice = _voz; u.lang = "es-ES"; }
+        u.rate = 0.95;
+        speechSynthesis.speak(u);
+    };
+}
 </script>
 <script src="mejoras.js"></script>
 </body>
