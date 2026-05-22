@@ -85,6 +85,23 @@
         
         .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
+button {
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    background: transparent !important;
+    border: none !important;
+    color: inherit !important;
+    font: inherit !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    outline: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+}
+button:focus, button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
     </style>
 </head>
 <body>
@@ -248,3 +265,42 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 <script src="citas-modos-personalizadas.js"></script>
 </body>
 </html>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const playBtn = document.getElementById('playBtn');
+    let interval = null;
+    let restantes = 0;
+    
+    function stop() {
+        clearInterval(interval);
+        interval = null;
+        restantes = 0;
+        if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
+    }
+    
+    function start() {
+        restantes = Math.floor(Math.random() * 3) + 1;
+        if (playBtn) { playBtn.textContent = '⏸'; playBtn.classList.add('playing'); }
+        if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
+        else if (typeof hacerPregunta === 'function') hacerPregunta();
+        restantes--;
+        interval = setInterval(function() {
+            if (restantes <= 0) { stop(); return; }
+            if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
+            else if (typeof hacerPregunta === 'function') hacerPregunta();
+            restantes--;
+        }, 4000);
+    }
+    
+    if (playBtn) {
+        const nuevo = playBtn.cloneNode(true);
+        playBtn.parentNode.replaceChild(nuevo, playBtn);
+        nuevo.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            interval ? stop() : start();
+        });
+    }
+});
+</script>
