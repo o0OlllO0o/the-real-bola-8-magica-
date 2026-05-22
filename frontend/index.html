@@ -192,7 +192,7 @@ function hablarInterno(texto){if(!synth)return;let utterance=new SpeechSynthesis
 if(synth){vozActual=localStorage.getItem('bola8_voz_estilo')||'auto';vocesDisponibles=synth.getVoices();if(vocesDisponibles.length===0){cargarVocesForzado();}else{seleccionarVozPorEstilo(vozActual);}synth.onvoiceschanged=function(){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0)seleccionarVozPorEstilo(vozActual);};setInterval(()=>{if(vocesDisponibles.length===0||intentosCarga<MAX_INTENTOS){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0&&intentosCarga>=MAX_INTENTOS)seleccionarVozPorEstilo(vozActual);}},2000);}
 
 // REPRODUCTOR
-let reproduciendoCitas=false;let indiceCitaActual=0;let todasLasCitas=[];let timeoutCita=null;
+let reproduciendoCitas=false,indiceCitaActual=0,todasLasCitas=[],timeoutCita=null,citasReproducir=0,citasReproducidas=0;
 
 function obtenerTodasLasCitasDelModo(){let citas=[];for(let cat in modoActivo.citas){citas=citas.concat(modoActivo.citas[cat]);}for(let i=citas.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[citas[i],citas[j]]=[citas[j],citas[i]];}return citas;}
 function toggleReproduccionCitas(){if(reproduciendoCitas){pausarReproduccion();}else{iniciarReproduccion();}}
