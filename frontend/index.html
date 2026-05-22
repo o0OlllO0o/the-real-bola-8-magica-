@@ -87,12 +87,13 @@
         .toast.visible{opacity:1;}
     #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
 #chatTexto{transition:opacity 0.5s,transform 0.5s,filter 0.5s;}#chatTexto.vapor{opacity:0!important;transform:scale(0.7)!important;filter:blur(12px)!important;}
+#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(0.7rem,3vw,1rem);color:#fff;text-shadow:0 0 10px rgba(0,0,0,0.8),0 0 20px rgba(0,0,0,0.5);background:rgba(0,0,0,0.5);padding:10px 16px;border-radius:12px;max-width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 </style>
 </head>
 <body>
 <div class="container">
     <div class="scene" id="scene">
-        <div class="bola" id="bola">
+        <div class="bola" id="bola"><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
@@ -249,7 +250,7 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 
 
-var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");chatTexto.innerText=_msgBienvenida;document.addEventListener("click",function _iniciarVoz(){if(typeof hablar==="function"){hablar(_msgBienvenida);}document.removeEventListener("click",_iniciarVoz);},{once:true});
+var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){msgDiv.classList.add("visible");},1500);setTimeout(function(){msgDiv.classList.remove("visible");},8000);chatTexto.innerText=_msgBienvenida;document.addEventListener("click",function _iniciarVoz(){if(typeof hablar==="function"){hablar(_msgBienvenida);}document.removeEventListener("click",_iniciarVoz);},{once:true});
 </script>
 </body>
 </html>
