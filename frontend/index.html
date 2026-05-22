@@ -249,7 +249,7 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 
 
-setTimeout(function(){var m="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");chatTexto.innerText=m;if(typeof hablar==="function"){setTimeout(function(){hablar(m);},800);}},2000);
+var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");chatTexto.innerText=_msgBienvenida;document.addEventListener("click",function _iniciarVoz(){if(typeof hablar==="function"){hablar(_msgBienvenida);}document.removeEventListener("click",_iniciarVoz);},{once:true});
 </script>
 </body>
 </html>
