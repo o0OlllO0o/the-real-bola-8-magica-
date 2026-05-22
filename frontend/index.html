@@ -198,7 +198,7 @@ function obtenerTodasLasCitasDelModo(){let citas=[];for(let cat in modoActivo.ci
 function toggleReproduccionCitas(){if(reproduciendoCitas){pausarReproduccion();}else{iniciarReproduccion();}}
 function iniciarReproduccion(){if(reproduciendoCitas)return;reproduciendoCitas=true;todasLasCitas=obtenerTodasLasCitasDelModo();indiceCitaActual=0;document.getElementById('preguntarBtn').classList.add('reproduciendo');document.getElementById('playIcon').textContent='⏸';reproducirSiguienteCita();}
 function pausarReproduccion(){reproduciendoCitas=false;if(timeoutCita)clearTimeout(timeoutCita);if(synth&&synth.speaking)synth.cancel();document.getElementById('preguntarBtn').classList.remove('reproduciendo');document.getElementById('playIcon').textContent='▶';}
-function reproducirSiguienteCita(){if(!reproduciendoCitas)return;if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
+function reproducirSiguienteCita(){if(!reproduciendoCitas)return;citasReproducidas++;if(citasReproducidas>citasReproducir){pausarReproduccion();return;}if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
 
 // UI
 let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let ultimaRespuesta='';
@@ -245,75 +245,8 @@ if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='funct
 chatTexto.innerText="ESCRIBE TU PREGUNTA...";
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
 
-// MEJORAS V2
-var _pp = procesarPregunta;
-procesarPregunta = function(texto, leer) {
-    if (reproduciendoCitas) pausarReproduccion();
-    if (!texto || !texto.trim()) {
-        let r = respuestasSurrealistas[Math.floor(Math.random() * respuestasSurrealistas.length)];
-        if (!girada) girarBola();
-        agitarBola();
-        setTimeout(function() { mostrarRespuesta(r, "[pregunta vacía]", leer); }, 700);
-        return;
-    }
-    let respuesta = obtenerCitaPorContexto(texto);
-    if (!girada) girarBola();
-    agitarBola();
-    setTimeout(function() { mostrarRespuesta(respuesta, texto, leer); }, 700);
-};
-document.addEventListener("DOMContentLoaded", function() {
-    var p = document.getElementById("playBtn");
-    if (!p) return;
-    var iv = null, r = 0;
-    function stop() { clearInterval(iv); iv = null; r = 0; p.textContent = "▶"; }
-    function go() {
-        r = Math.floor(Math.random() * 3) + 1;
-        p.textContent = "⏸";
-        if (typeof hacerPregunta === "function") hacerPregunta();
-        r--;
-        iv = setInterval(function() {
-            if (r <= 0) { stop(); return; }
-            if (typeof hacerPregunta === "function") hacerPregunta();
-            r--;
-        }, 4000);
-    }
-    var n = p.cloneNode(true);
-    p.parentNode.replaceChild(n, p);
-    n.addEventListener("click", function(e) { e.preventDefault(); e.stopPropagation(); iv ? stop() : go(); });
-});
-if (window.speechSynthesis) {
-    var _voz = null;
-    setInterval(function() {
-        var voces = speechSynthesis.getVoices();
-        if (voces.length === 0) return;
-        var nombres = ["Monica", "Helena", "Paulina", "Microsoft Helena"];
-        for (var i = 0; i < nombres.length; i++) {
-            var v = voces.find(function(x) { return x.name.includes(nombres[i]) && x.lang.includes("es"); });
-            if (v) { _voz = v; break; }
-        }
-        if (!_voz) _voz = voces.find(function(x) { return x.lang.startsWith("es"); }) || voces[0];
-    }, 1000);
-    var _hablar = window.hablar || function() {};
-    window.hablar = function(texto) {
-        speechSynthesis.cancel();
-        var u = new SpeechSynthesisUtterance(texto);
-        if (_voz) { u.voice = _voz; u.lang = "es-ES"; }
-        u.rate = 0.95;
-        speechSynthesis.speak(u);
-    };
-}
 
-// === MEJORAS ===
-document.addEventListener("DOMContentLoaded",function(){
-var p=document.getElementById("playBtn");if(!p)return;
-var iv=null,r=0;
-function stop(){clearInterval(iv);iv=null;r=0;p.textContent="▶";}
-function go(){r=Math.floor(Math.random()*3)+1;p.textContent="⏸";if(typeof hacerPregunta==="function")hacerPregunta();r--;iv=setInterval(function(){if(r<=0){stop();return;}if(typeof hacerPregunta==="function")hacerPregunta();r--;},4000);}
-var n=p.cloneNode(true);p.parentNode.replaceChild(n,p);
-n.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();iv?stop():go();});
-});
-var _voz=null;setInterval(function(){var v=speechSynthesis.getVoices();if(!v.length)return;var nm=["Monica","Helena","Paulina","Microsoft Helena"];for(var i=0;i<nm.length;i++){var x=v.find(function(y){return y.name.includes(nm[i])&&y.lang.includes("es");});if(x){_voz=x;break;}}if(!_voz)_voz=v.find(function(y){return y.lang.startsWith("es");})||v[0];},1000);
-var _h=window.hablar||function(){};window.hablar=function(t){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);if(_voz){u.voice=_voz;u.lang="es-ES";}u.rate=0.95;speechSynthesis.speak(u);};
+
 </script>
 </body>
 </html>
