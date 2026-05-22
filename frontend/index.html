@@ -85,23 +85,6 @@
         
         .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
-button {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    background: transparent !important;
-    border: none !important;
-    color: inherit !important;
-    font: inherit !important;
-    cursor: pointer !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    outline: none !important;
-    -webkit-tap-highlight-color: transparent !important;
-}
-button:focus, button:active {
-    outline: none !important;
-    box-shadow: none !important;
-}
     </style>
 </head>
 <body>
@@ -198,180 +181,69 @@ const estilosVoz={auto:{preferencias:[]},grave:{preferencias:['grave','profunda'
 
 function mostrarToast(mensaje){const toast=document.getElementById('toast');toast.textContent=mensaje;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),3000);}
 
-async function cargarVoces() {
-    return new Promise((resolve) => {
-        const intentar = () => {
-            const voces = speechSynthesis.getVoices();
-            if (voces.length > 0) { resolve(voces); return; }
-            setTimeout(intentar, 300);
-        };
-        speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
-        intentar();
-    });
-}
+function cargarVocesForzado(){if(!synth)return;vocesDisponibles=synth.getVoices();intentosCarga++;if(vocesDisponibles.length===0&&intentosCarga<MAX_INTENTOS){setTimeout(cargarVocesForzado,500);return;}if(vocesDisponibles.length===0){mostrarToast('⚠️ No se encontraron voces');return;}const vocesES=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesES.length===0){mostrarToast('⚠️ Sin voces españolas');}else{mostrarToast('✅ '+vocesES.length+' voces españolas listas');}seleccionarVozPorEstilo(vozActual);}
 
-async function obtenerVozEspanola() {
-    const voces = await cargarVoces();
-    const nombresEspana = ["Monica", "Helena", "Paulina", "Laura", "Sara", "Microsoft Helena", "Microsoft Laura"];
-    for (const nombre of nombresEspana) {
-        const voz = voces.find(v => v.name.includes(nombre) && v.lang.includes("es"));
-        if (voz) return voz;
-    }
-    const ranking = ["es-ES", "es_ES", "es-MX", "es_CO", "es-AR", "es"];
-    for (const term of ranking) {
-        const voz = voces.find(v => v.lang.includes(term));
-        if (voz) return voz;
-    }
-    return voces.find(v => v.lang.startsWith("es")) || voces[0];
-}
+function seleccionarVozPorEstilo(estilo){if(!synth||vocesDisponibles.length===0)return;let vocesEspanolas=vocesDisponibles.filter(v=>v.lang==='es-ES'||v.lang==='es_ES'||v.lang.startsWith('es-ES')||v.lang.startsWith('es_ES'));if(vocesEspanolas.length===0)vocesEspanolas=vocesDisponibles.filter(v=>v.lang.startsWith('es'));if(vocesEspanolas.length===0){vozSeleccionada=vocesDisponibles[0]||null;}else{if(estilo==='auto'){vozSeleccionada=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain')||v.name.includes('Microsoft')&&v.name.includes('Spanish'))||vocesEspanolas[0];}else{const preferencias=estilosVoz[estilo]?.preferencias||[];let mejorVoz=null;for(let pref of preferencias){mejorVoz=vocesEspanolas.find(v=>v.name.toLowerCase().includes(pref.toLowerCase()));if(mejorVoz)break;}if(!mejorVoz){mejorVoz=vocesEspanolas.find(v=>v.name.includes('España')||v.name.includes('Spain'))||vocesEspanolas[0];}vozSeleccionada=mejorVoz;}}vozActual=estilo;localStorage.setItem('bola8_voz_estilo',estilo);document.querySelectorAll('.voz-opcion').forEach(el=>{el.classList.toggle('activo',el.dataset.voz===estilo);});}
 
-async function hablarTexto(texto) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const voz = await obtenerVozEspanola();
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.voice = voz;
-    utterance.lang = "es-ES";
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    utterance.volume = window.volumenGlobal || 0.8;
-    window.speechSynthesis.speak(utterance);
-}
+function hablar(texto){if(!synth){mostrarToast('⚠️ Síntesis de voz no disponible');return;}if(synth.speaking&&!reproduciendoCitas){synth.cancel();}if(vocesDisponibles.length===0){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length===0){mostrarToast('🔄 Cargando voces... espera unos segundos');setTimeout(()=>{vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0)seleccionarVozPorEstilo(vozActual);hablarInterno(texto);},1000);return;}}hablarInterno(texto);}
 
-async function obtenerVozEspanola() {
-    const voces = await cargarVoces();
-    
-    const ranking = [
-        "es-ES", "es_ES", "español españa", "spanish spain",
-        "es-MX", "es_MX", "español méxico", "spanish mexico",
-        "es-CO", "es_CO", "es-AR", "es_AR",
-        "es", "spanish", "español"
-    ];
-    
-    for (const termino of ranking) {
-        const voz = voces.find(v => 
-            v.lang.toLowerCase().includes(termino.toLowerCase()) && 
-            !v.name.toLowerCase().includes("english")
-        );
-        if (voz) return voz;
-    }
-    
-    return voces.find(v => v.lang.startsWith("es")) || voces[0];
-}
+function hablarInterno(texto){if(!synth)return;let utterance=new SpeechSynthesisUtterance(texto);utterance.lang='es-ES';utterance.rate=0.9;utterance.pitch=1.0;if(vozActual==='grave'){utterance.pitch=0.8;utterance.rate=0.85;}else if(vozActual==='aguda'){utterance.pitch=1.2;utterance.rate=1.0;}else if(vozActual==='calma'){utterance.rate=0.7;utterance.pitch=1.0;}else if(vozActual==='motivador'){utterance.rate=1.0;utterance.pitch=1.1;}else if(vozActual==='sabia'){utterance.rate=0.75;utterance.pitch=0.9;}if(vozSeleccionada)utterance.voice=vozSeleccionada;utterance.lang='es-ES';if(!vozSeleccionada||!vozSeleccionada.lang.startsWith('es')){const vocesES=synth.getVoices().filter(v=>v.lang.startsWith('es'));if(vocesES.length>0)utterance.voice=vocesES[0];}synth.speak(utterance);}
 
-async function hablarTexto(texto) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const voz = await obtenerVozEspanola();
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.voice = voz;
-    utterance.lang = voz.lang;
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    window.speechSynthesis.speak(utterance);
-}
+if(synth){vozActual=localStorage.getItem('bola8_voz_estilo')||'auto';vocesDisponibles=synth.getVoices();if(vocesDisponibles.length===0){cargarVocesForzado();}else{seleccionarVozPorEstilo(vozActual);}synth.onvoiceschanged=function(){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0)seleccionarVozPorEstilo(vozActual);};setInterval(()=>{if(vocesDisponibles.length===0||intentosCarga<MAX_INTENTOS){vocesDisponibles=synth.getVoices();if(vocesDisponibles.length>0&&intentosCarga>=MAX_INTENTOS)seleccionarVozPorEstilo(vozActual);}},2000);}
 
-async function obtenerVozEspanola() {
-    const voces = await cargarVoces();
-    
-    const ranking = [
-        "es-ES", "es_ES", "español españa", "spanish spain",
-        "es-MX", "es_MX", "español méxico", "spanish mexico",
-        "es-CO", "es_CO", "es-AR", "es_AR",
-        "es", "spanish", "español"
-    ];
-    
-    for (const termino of ranking) {
-        const voz = voces.find(v => 
-            v.lang.toLowerCase().includes(termino.toLowerCase()) && 
-            !v.name.toLowerCase().includes("english")
-        );
-        if (voz) return voz;
-    }
-    
-    return voces.find(v => v.lang.startsWith("es")) || voces[0];
-}
+// REPRODUCTOR
+let reproduciendoCitas=false;let indiceCitaActual=0;let todasLasCitas=[];let timeoutCita=null;
 
-async function hablarTexto(texto) {
-    if (!window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const voz = await obtenerVozEspanola();
-    const utterance = new SpeechSynthesisUtterance(texto);
-    utterance.voice = voz;
-    utterance.lang = voz.lang;
-    utterance.rate = 0.95;
-    utterance.pitch = 1;
-    window.speechSynthesis.speak(utterance);
-}
+function obtenerTodasLasCitasDelModo(){let citas=[];for(let cat in modoActivo.citas){citas=citas.concat(modoActivo.citas[cat]);}for(let i=citas.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[citas[i],citas[j]]=[citas[j],citas[i]];}return citas;}
+function toggleReproduccionCitas(){if(reproduciendoCitas){pausarReproduccion();}else{iniciarReproduccion();}}
+function iniciarReproduccion(){if(reproduciendoCitas)return;reproduciendoCitas=true;todasLasCitas=obtenerTodasLasCitasDelModo();indiceCitaActual=0;document.getElementById('preguntarBtn').classList.add('reproduciendo');document.getElementById('playIcon').textContent='⏸';reproducirSiguienteCita();}
+function pausarReproduccion(){reproduciendoCitas=false;if(timeoutCita)clearTimeout(timeoutCita);if(synth&&synth.speaking)synth.cancel();document.getElementById('preguntarBtn').classList.remove('reproduciendo');document.getElementById('playIcon').textContent='▶';}
+function reproducirSiguienteCita(){if(!reproduciendoCitas)return;if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
+
+// UI
+let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let ultimaRespuesta='';
+
+function lanzarParticulas(){const scene=document.getElementById('scene');const rect=scene.getBoundingClientRect();const centroX=rect.left+rect.width/2;const centroY=rect.top+rect.height/2;for(let i=1;i<=3;i++){const particula=document.createElement('div');particula.className='particula p'+i;particula.style.left=centroX+'px';particula.style.top=centroY+'px';document.body.appendChild(particula);setTimeout(()=>{particula.remove();},800);}}
+function agitarBola(){const bola=document.getElementById('bola');bola.classList.add('shaking');lanzarParticulas();setTimeout(()=>{bola.classList.remove('shaking');},800);}
+
+const bola=document.getElementById('bola');const sceneEl=document.getElementById('scene');const chatTexto=document.getElementById('chatTexto');const panelFlotante=document.getElementById('panelFlotante');const reproducirBtn=document.getElementById('reproducirBtn');const preguntarBtn=document.getElementById('preguntarBtn');const microBtn=document.getElementById('microBtn');const statsBtn=document.getElementById('statsBtn');const statsCerrar=document.getElementById('statsCerrar');const btnModo=document.getElementById('btnModo');const modoPanel=document.getElementById('modoPanel');const btnVoz=document.getElementById('btnVoz');const vozPanel=document.getElementById('vozPanel');
+
+function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;panelFlotante.classList.add('visible');}
+function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;panelFlotante.classList.remove('visible');}
+function toggleBola(){girada?regresarBola():girarBola();}
+setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
+
+function mostrarRespuesta(respuesta,pregunta,leer=true){chatTexto.innerText=respuesta;ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
+
+function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];mostrarRespuesta(r,"[pregunta vacía]",leer);if(!girada)girarBola();agitarBola();return;}let respuesta=obtenerCitaPorContexto(texto);mostrarRespuesta(respuesta,texto,leer);if(!girada)girarBola();agitarBola();}
+
+function respuestaAleatoria(){if(reproduciendoCitas)pausarReproduccion();let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];mostrarRespuesta(r,"[aleatorio]",true);if(!girada)girarBola();agitarBola();}
+
+function leerTextoActual(){if(ultimaRespuesta)hablar(ultimaRespuesta);else if(chatTexto.innerText&&chatTexto.innerText.trim())hablar(chatTexto.innerText);else{let s="ESCRIBE UNA PREGUNTA PRIMERO";chatTexto.innerText=s;hablar(s);}}
+
+function iniciarMicrofono(){if(reproduciendoCitas)pausarReproduccion();if(!('webkitSpeechRecognition'in window)){chatTexto.innerText="❌ VOZ NO SOPORTADA";return;}const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;reconocimiento=new SpeechRecognition();reconocimiento.lang='es-ES';reconocimiento.onstart=()=>{grabando=true;microBtn.classList.add('grabando');chatTexto.innerText="🎙 ESCUCHANDO...";};reconocimiento.onresult=(e)=>{let texto=e.results[0][0].transcript;chatTexto.innerText=texto;procesarPregunta(texto,true);detenerMicrofono();};reconocimiento.onerror=()=>detenerMicrofono();reconocimiento.onend=()=>detenerMicrofono();reconocimiento.start();}
+function detenerMicrofono(){if(reconocimiento)try{reconocimiento.stop();}catch(e){}grabando=false;microBtn.classList.remove('grabando');if(chatTexto.innerText==="🎙 ESCUCHANDO...")chatTexto.innerText="";}
+function toggleMicrofono(){grabando?detenerMicrofono():iniciarMicrofono();}
+
+function iniciarDeteccionMovimiento(){if(window.DeviceMotionEvent){window.addEventListener('devicemotion',(e)=>{let ahora=Date.now();if(ahora-ultimoAgite<800)return;let acc=e.accelerationIncludingGravity;if(!acc)return;let fuerza=Math.abs((acc.x||0)-ultimaX)+Math.abs((acc.y||0)-ultimaY)+Math.abs((acc.z||0)-ultimaZ);if(fuerza>25){ultimoAgite=ahora;respuestaAleatoria();}ultimaX=acc.x||0;ultimaY=acc.y||0;ultimaZ=acc.z||0;});}}
+function solicitarPermisoMovimiento(){if(typeof DeviceMotionEvent.requestPermission==='function'){DeviceMotionEvent.requestPermission().then(r=>{if(r==='granted')iniciarDeteccionMovimiento();});}else iniciarDeteccionMovimiento();}
+
+sceneEl.addEventListener('click',(e)=>{if(e.target===reproducirBtn||e.target===preguntarBtn||e.target===microBtn||reproducirBtn.contains(e.target)||preguntarBtn.contains(e.target)||microBtn.contains(e.target))return;toggleBola();});
+preguntarBtn.addEventListener('click',toggleReproduccionCitas);
+microBtn.addEventListener('click',toggleMicrofono);
+reproducirBtn.addEventListener('click',()=>{if(reproduciendoCitas)pausarReproduccion();leerTextoActual();});
+statsBtn.addEventListener('click',toggleStats);
+statsCerrar.addEventListener('click',toggleStats);
+btnModo.addEventListener('click',(e)=>{e.stopPropagation();modoPanel.classList.toggle('visible');vozPanel.classList.remove('visible');});
+document.querySelectorAll('.modo-opcion').forEach(btn=>{btn.addEventListener('click',()=>{if(reproduciendoCitas)pausarReproduccion();cambiarModo(btn.dataset.modo);});});
+btnVoz.addEventListener('click',(e)=>{e.stopPropagation();vozPanel.classList.toggle('visible');modoPanel.classList.remove('visible');});
+document.querySelectorAll('.voz-opcion').forEach(btn=>{btn.addEventListener('click',()=>{seleccionarVozPorEstilo(btn.dataset.voz);vozPanel.classList.remove('visible');});});
+document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!modoPanel.contains(e.target))modoPanel.classList.remove('visible');if(!btnVoz.contains(e.target)&&!vozPanel.contains(e.target))vozPanel.classList.remove('visible');});
+
+if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
+
+chatTexto.innerText="ESCRIBE TU PREGUNTA...";
+setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
 </script>
-
-<script>
-window.volumenGlobal = 0.8;
-window.muteado = false;
-
-document.addEventListener('DOMContentLoaded', function() {
-    const panel = document.querySelector('.panel-flotante');
-    if (!panel) return;
-    
-    const ctrl = document.createElement('div');
-    ctrl.id = 'ctrlVolumen';
-    ctrl.innerHTML = '<button id="btnMute" title="Silenciar">🔊</button><button id="btnVolDown" title="Bajar">🔉</button><button id="btnVolUp" title="Subir">🔊</button><span id="volDisplay">80%</span>';
-    ctrl.style.cssText = 'display:flex;align-items:center;gap:6px;justify-content:center;margin-top:8px;';
-    panel.appendChild(ctrl);
-    
-    const btnMute = document.getElementById('btnMute');
-    const volDisplay = document.getElementById('volDisplay');
-    
-    btnMute.addEventListener('click', () => {
-        window.muteado = !window.muteado;
-        btnMute.textContent = window.muteado ? '🔇' : '🔊';
-        volDisplay.textContent = window.muteado ? 'MUTE' : Math.round(window.volumenGlobal*100)+'%';
-    });
-    
-    document.getElementById('btnVolDown').addEventListener('click', () => {
-        window.volumenGlobal = Math.max(0, window.volumenGlobal - 0.1);
-        if (!window.muteado) volDisplay.textContent = Math.round(window.volumenGlobal*100)+'%';
-    });
-    
-    document.getElementById('btnVolUp').addEventListener('click', () => {
-        window.volumenGlobal = Math.min(1, window.volumenGlobal + 0.1);
-        if (!window.muteado) volDisplay.textContent = Math.round(window.volumenGlobal*100)+'%';
-    });
-    
-    // Reproduccion aleatoria 1-3 citas
-    const playBtn = document.getElementById('playBtn');
-    let interval = null;
-    let restantes = 0;
-    
-    function stop() {
-        clearInterval(interval);
-        interval = null;
-        restantes = 0;
-        if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
-    }
-    
-    function start() {
-        restantes = Math.floor(Math.random() * 3) + 1;
-        if (playBtn) { playBtn.textContent = '⏸'; playBtn.classList.add('playing'); }
-        if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
-        else if (typeof hacerPregunta === 'function') hacerPregunta();
-        restantes--;
-        interval = setInterval(function() {
-            if (restantes <= 0) { stop(); return; }
-            if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
-            else if (typeof hacerPregunta === 'function') hacerPregunta();
-            restantes--;
-        }, 4000);
-    }
-    
-    if (playBtn) {
-        const nuevo = playBtn.cloneNode(true);
-        playBtn.parentNode.replaceChild(nuevo, playBtn);
-        nuevo.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            interval ? stop() : start();
-        });
-    }
-});
-</script>
+</body>
+</html>
