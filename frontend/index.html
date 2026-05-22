@@ -198,35 +198,30 @@ const estilosVoz={auto:{preferencias:[]},grave:{preferencias:['grave','profunda'
 
 function mostrarToast(mensaje){const toast=document.getElementById('toast');toast.textContent=mensaje;toast.classList.add('visible');setTimeout(()=>toast.classList.remove('visible'),3000);}
 
-function cargarVoces() {
+async function cargarVoces() {
     return new Promise((resolve) => {
-        const voces = speechSynthesis.getVoices();
-        if (voces.length > 0) {
-            resolve(voces);
-            return;
-        }
+        const intentar = () => {
+            const voces = speechSynthesis.getVoices();
+            if (voces.length > 0) { resolve(voces); return; }
+            setTimeout(intentar, 300);
+        };
         speechSynthesis.onvoiceschanged = () => resolve(speechSynthesis.getVoices());
+        intentar();
     });
 }
 
 async function obtenerVozEspanola() {
     const voces = await cargarVoces();
-    
-    const ranking = [
-        "es-ES", "es_ES", "español españa", "spanish spain",
-        "es-MX", "es_MX", "español méxico", "spanish mexico",
-        "es-CO", "es_CO", "es-AR", "es_AR",
-        "es", "spanish", "español"
-    ];
-    
-    for (const termino of ranking) {
-        const voz = voces.find(v => 
-            v.lang.toLowerCase().includes(termino.toLowerCase()) && 
-            !v.name.toLowerCase().includes("english")
-        );
+    const nombresEspana = ["Monica", "Helena", "Paulina", "Laura", "Sara", "Microsoft Helena", "Microsoft Laura"];
+    for (const nombre of nombresEspana) {
+        const voz = voces.find(v => v.name.includes(nombre) && v.lang.includes("es"));
         if (voz) return voz;
     }
-    
+    const ranking = ["es-ES", "es_ES", "es-MX", "es_CO", "es-AR", "es"];
+    for (const term of ranking) {
+        const voz = voces.find(v => v.lang.includes(term));
+        if (voz) return voz;
+    }
     return voces.find(v => v.lang.startsWith("es")) || voces[0];
 }
 
@@ -236,9 +231,10 @@ async function hablarTexto(texto) {
     const voz = await obtenerVozEspanola();
     const utterance = new SpeechSynthesisUtterance(texto);
     utterance.voice = voz;
-    utterance.lang = voz.lang;
+    utterance.lang = "es-ES";
     utterance.rate = 0.95;
     utterance.pitch = 1;
+    utterance.volume = window.volumenGlobal || 0.8;
     window.speechSynthesis.speak(utterance);
 }
 
@@ -307,4 +303,75 @@ async function hablarTexto(texto) {
     utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
 }
+</script>
+
+<script>
+window.volumenGlobal = 0.8;
+window.muteado = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    const panel = document.querySelector('.panel-flotante');
+    if (!panel) return;
+    
+    const ctrl = document.createElement('div');
+    ctrl.id = 'ctrlVolumen';
+    ctrl.innerHTML = '<button id="btnMute" title="Silenciar">🔊</button><button id="btnVolDown" title="Bajar">🔉</button><button id="btnVolUp" title="Subir">🔊</button><span id="volDisplay">80%</span>';
+    ctrl.style.cssText = 'display:flex;align-items:center;gap:6px;justify-content:center;margin-top:8px;';
+    panel.appendChild(ctrl);
+    
+    const btnMute = document.getElementById('btnMute');
+    const volDisplay = document.getElementById('volDisplay');
+    
+    btnMute.addEventListener('click', () => {
+        window.muteado = !window.muteado;
+        btnMute.textContent = window.muteado ? '🔇' : '🔊';
+        volDisplay.textContent = window.muteado ? 'MUTE' : Math.round(window.volumenGlobal*100)+'%';
+    });
+    
+    document.getElementById('btnVolDown').addEventListener('click', () => {
+        window.volumenGlobal = Math.max(0, window.volumenGlobal - 0.1);
+        if (!window.muteado) volDisplay.textContent = Math.round(window.volumenGlobal*100)+'%';
+    });
+    
+    document.getElementById('btnVolUp').addEventListener('click', () => {
+        window.volumenGlobal = Math.min(1, window.volumenGlobal + 0.1);
+        if (!window.muteado) volDisplay.textContent = Math.round(window.volumenGlobal*100)+'%';
+    });
+    
+    // Reproduccion aleatoria 1-3 citas
+    const playBtn = document.getElementById('playBtn');
+    let interval = null;
+    let restantes = 0;
+    
+    function stop() {
+        clearInterval(interval);
+        interval = null;
+        restantes = 0;
+        if (playBtn) { playBtn.textContent = '▶'; playBtn.classList.remove('playing'); }
+    }
+    
+    function start() {
+        restantes = Math.floor(Math.random() * 3) + 1;
+        if (playBtn) { playBtn.textContent = '⏸'; playBtn.classList.add('playing'); }
+        if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
+        else if (typeof hacerPregunta === 'function') hacerPregunta();
+        restantes--;
+        interval = setInterval(function() {
+            if (restantes <= 0) { stop(); return; }
+            if (typeof obtenerCitaAleatoria === 'function') obtenerCitaAleatoria();
+            else if (typeof hacerPregunta === 'function') hacerPregunta();
+            restantes--;
+        }, 4000);
+    }
+    
+    if (playBtn) {
+        const nuevo = playBtn.cloneNode(true);
+        playBtn.parentNode.replaceChild(nuevo, playBtn);
+        nuevo.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            interval ? stop() : start();
+        });
+    }
+});
 </script>
