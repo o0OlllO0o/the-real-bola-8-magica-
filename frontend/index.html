@@ -247,6 +247,7 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 
 
+setTimeout(function(){var m="¿Sobre qué deseas hablar hoy?";chatTexto.innerText=m;if(typeof hablar==="function"){setTimeout(function(){hablar(m);},800);}},2000);
 </script>
 </body>
 </html>
