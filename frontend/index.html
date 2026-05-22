@@ -315,6 +315,5 @@ n.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();iv
 var _voz=null;setInterval(function(){var v=speechSynthesis.getVoices();if(!v.length)return;var nm=["Monica","Helena","Paulina","Microsoft Helena"];for(var i=0;i<nm.length;i++){var x=v.find(function(y){return y.name.includes(nm[i])&&y.lang.includes("es");});if(x){_voz=x;break;}}if(!_voz)_voz=v.find(function(y){return y.lang.startsWith("es");})||v[0];},1000);
 var _h=window.hablar||function(){};window.hablar=function(t){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);if(_voz){u.voice=_voz;u.lang="es-ES";}u.rate=0.95;speechSynthesis.speak(u);};
 </script>
-<script src="mejoras.js"></script>
 </body>
 </html>
