@@ -215,7 +215,7 @@ setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)'
 
 function mostrarRespuesta(respuesta,pregunta,leer=true){chatTexto.innerText=respuesta;ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
 
-function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];mostrarRespuesta(r,"[pregunta vacía]",leer);if(!girada)girarBola();agitarBola();return;}let respuesta=obtenerCitaPorContexto(texto);mostrarRespuesta(respuesta,texto,leer);if(!girada)girarBola();agitarBola();}
+function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];if(!girada)girarBola();agitarBola();setTimeout(function(){mostrarRespuesta(r,"[pregunta vacía]",leer);},600);return;}let respuesta=obtenerCitaPorContexto(texto);if(!girada)girarBola();agitarBola();setTimeout(function(){mostrarRespuesta(respuesta,texto,leer);},600);}
 
 function respuestaAleatoria(){if(reproduciendoCitas)pausarReproduccion();let r=modoActivo.citas.sabiduria[Math.floor(Math.random()*modoActivo.citas.sabiduria.length)];mostrarRespuesta(r,"[aleatorio]",true);if(!girada)girarBola();agitarBola();}
 
@@ -302,6 +302,18 @@ if (window.speechSynthesis) {
         speechSynthesis.speak(u);
     };
 }
+
+// === MEJORAS ===
+document.addEventListener("DOMContentLoaded",function(){
+var p=document.getElementById("playBtn");if(!p)return;
+var iv=null,r=0;
+function stop(){clearInterval(iv);iv=null;r=0;p.textContent="▶";}
+function go(){r=Math.floor(Math.random()*3)+1;p.textContent="⏸";if(typeof hacerPregunta==="function")hacerPregunta();r--;iv=setInterval(function(){if(r<=0){stop();return;}if(typeof hacerPregunta==="function")hacerPregunta();r--;},4000);}
+var n=p.cloneNode(true);p.parentNode.replaceChild(n,p);
+n.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();iv?stop():go();});
+});
+var _voz=null;setInterval(function(){var v=speechSynthesis.getVoices();if(!v.length)return;var nm=["Monica","Helena","Paulina","Microsoft Helena"];for(var i=0;i<nm.length;i++){var x=v.find(function(y){return y.name.includes(nm[i])&&y.lang.includes("es");});if(x){_voz=x;break;}}if(!_voz)_voz=v.find(function(y){return y.lang.startsWith("es");})||v[0];},1000);
+var _h=window.hablar||function(){};window.hablar=function(t){speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);if(_voz){u.voice=_voz;u.lang="es-ES";}u.rate=0.95;speechSynthesis.speak(u);};
 </script>
 <script src="mejoras.js"></script>
 </body>
