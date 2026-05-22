@@ -85,7 +85,8 @@
         
         .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
-    </style>
+    button{-webkit-appearance:none!important;appearance:none!important;background:transparent!important;border:none!important;color:inherit!important;font:inherit!important;cursor:pointer!important;padding:0!important;margin:0!important;outline:none!important;-webkit-tap-highlight-color:transparent!important;}button:focus,button:active{outline:none!important;box-shadow:none!important;}
+</style>
 </head>
 <body>
 <div class="container">
@@ -245,5 +246,6 @@ if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='funct
 chatTexto.innerText="ESCRIBE TU PREGUNTA...";
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
 </script>
+<script>document.addEventListener("DOMContentLoaded",function(){var p=document.getElementById("playBtn");if(!p)return;var i=null,r=0;function s(){clearInterval(i);i=null;r=0;p.textContent="▶";p.classList.remove("playing");}function t(){r=Math.floor(Math.random()*3)+1;p.textContent="⏸";p.classList.add("playing");if(typeof hacerPregunta==="function")hacerPregunta();r--;i=setInterval(function(){if(r<=0){s();return;}if(typeof hacerPregunta==="function")hacerPregunta();r--;},4000);}var n=p.cloneNode(true);p.parentNode.replaceChild(n,p);n.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();i?s():t();});});</script>
 </body>
 </html>
