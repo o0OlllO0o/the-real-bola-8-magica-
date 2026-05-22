@@ -213,7 +213,7 @@ const bola=document.getElementById('bola');const sceneEl=document.getElementById
 
 function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;panelFlotante.classList.add('visible');}
 function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;panelFlotante.classList.remove('visible');}
-function toggleBola(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv)msgDiv.classList.remove("visible");girada?regresarBola():girarBola();}
+function toggleBola(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.remove("visible");msgDiv.style.display="none";}girada?regresarBola():girarBola();}
 setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
 
 function mostrarRespuesta(respuesta,pregunta,leer=true){var c=document.getElementById("chatTexto");c.classList.add("vapor");setTimeout(function(){c.innerText=respuesta;c.classList.remove("vapor");},300);ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
@@ -250,7 +250,7 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 
 
-var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){msgDiv.classList.add("visible");},1500);chatTexto.innerText=_msgBienvenida;setTimeout(function(){if(typeof hablar==="function"){hablar(_msgBienvenida);}},2500);document.addEventListener("click",function _iniciarVoz(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv)msgDiv.classList.remove("visible");if(typeof hablar==="function"){hablar(_msgBienvenida);}document.removeEventListener("click",_iniciarVoz);},{once:true});
+var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){msgDiv.classList.add("visible");},1500);chatTexto.innerText=_msgBienvenida;setTimeout(function(){if(typeof hablar==="function"){hablar(_msgBienvenida);}},2500);document.addEventListener("click",function _iniciarVoz(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.remove("visible");msgDiv.style.display="none";}if(typeof hablar==="function"){hablar(_msgBienvenida);}document.removeEventListener("click",_iniciarVoz);},{once:true});
 </script>
 </body>
 </html>
