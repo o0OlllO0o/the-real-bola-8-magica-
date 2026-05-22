@@ -86,6 +86,7 @@
         .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
         .toast.visible{opacity:1;}
     #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
+#chatTexto{transition:opacity 0.4s,transform 0.4s,filter 0.4s;}#chatTexto.vapor{opacity:0!important;transform:scale(0.85)!important;filter:blur(6px)!important;}
 </style>
 </head>
 <body>
@@ -199,7 +200,7 @@ function obtenerTodasLasCitasDelModo(){let citas=[];for(let cat in modoActivo.ci
 function toggleReproduccionCitas(){if(reproduciendoCitas){pausarReproduccion();}else{iniciarReproduccion();}}
 var _citasMax=0,_citasCount=0,_iniciarOrig=iniciarReproduccion;iniciarReproduccion=function(){_citasMax=Math.floor(Math.random()*3)+1;_citasCount=0;_iniciarOrig();};var _reproOrig=reproducirSiguienteCita;reproducirSiguienteCita=function(){_citasCount++;if(_citasCount>_citasMax){pausarReproduccion();return;}_reproOrig();};function iniciarReproduccion(){if(reproduciendoCitas)return;reproduciendoCitas=true;todasLasCitas=obtenerTodasLasCitasDelModo();indiceCitaActual=0;document.getElementById('preguntarBtn').classList.add('reproduciendo');document.getElementById('playIcon').textContent='⏸';reproducirSiguienteCita();}
 function pausarReproduccion(){reproduciendoCitas=false;if(timeoutCita)clearTimeout(timeoutCita);if(synth&&synth.speaking)synth.cancel();document.getElementById('preguntarBtn').classList.remove('reproduciendo');document.getElementById('playIcon').textContent='▶';}
-function reproducirSiguienteCita(){if(!reproduciendoCitas)return;window.citasReproducidas = indiceCitaActual++;if(false){pausarReproduccion();return;}if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];chatTexto.innerText=cita;ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
+function reproducirSiguienteCita(){if(!reproduciendoCitas)return;window.citasReproducidas = indiceCitaActual++;if(false){pausarReproduccion();return;}if(indiceCitaActual>=todasLasCitas.length){indiceCitaActual=0;todasLasCitas=obtenerTodasLasCitasDelModo();}const cita=todasLasCitas[indiceCitaActual];var c=document.getElementById("chatTexto");c.classList.add("vapor");setTimeout(function(){c.innerText=cita;c.classList.remove("vapor");},300);ultimaRespuesta=cita;registrarInteraccion("[reproducción automática]",cita,obtenerCategoriaDeCita(cita));if(!girada)girarBola();agitarBola();setTimeout(()=>hablar(cita),500);indiceCitaActual++;timeoutCita=setTimeout(()=>{reproducirSiguienteCita();},10000);}
 
 // UI
 let reconocimiento=null,grabando=false,girada=false,ultimoAgite=0,ultimaX=0,ultimaY=0,ultimaZ=0;let ultimaRespuesta='';
@@ -214,7 +215,7 @@ function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;panelF
 function toggleBola(){girada?regresarBola():girarBola();}
 setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
 
-function mostrarRespuesta(respuesta,pregunta,leer=true){chatTexto.innerText=respuesta;ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
+function mostrarRespuesta(respuesta,pregunta,leer=true){var c=document.getElementById("chatTexto");c.classList.add("vapor");setTimeout(function(){c.innerText=respuesta;c.classList.remove("vapor");},300);ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer&&!reproduciendoCitas){setTimeout(()=>hablar(respuesta),500);}}
 
 function procesarPregunta(texto,leer=true){if(reproduciendoCitas)pausarReproduccion();if(!texto||!texto.trim()){let r=respuestasSurrealistas[Math.floor(Math.random()*respuestasSurrealistas.length)];if(!girada)girarBola();agitarBola();setTimeout(function(){mostrarRespuesta(r,"[pregunta vacía]",leer);},600);return;}let respuesta=obtenerCitaPorContexto(texto);if(!girada)girarBola();agitarBola();setTimeout(function(){mostrarRespuesta(respuesta,texto,leer);},600);}
 
