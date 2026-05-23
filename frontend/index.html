@@ -88,13 +88,14 @@
     #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
 #chatTexto{transition:opacity 0.5s,transform 0.5s,filter 0.5s;}#chatTexto.vapor{opacity:0!important;transform:scale(0.7)!important;filter:blur(12px)!important;}
 #mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;border-radius:0;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
-#btnEmpezar{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(2rem,10vw,4rem);color:#fff;text-shadow:0 0 20px rgba(0,0,0,0.9);background:rgba(255,255,255,0.1);border:3px solid rgba(255,255,255,0.6);border-radius:50%;width:clamp(60px,15vw,100px);height:clamp(60px,15vw,100px);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:20;transition:all 0.3s;line-height:1;}#btnEmpezar:hover{background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 30px rgba(255,255,255,0.5);}
+#btnEmpezar:hover{background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 30px rgba(255,255,255,0.5);}
+#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 </style>
 </head>
 <body>
 <div class="container">
     <div class="scene" id="scene">
-        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><button id="btnEmpezar">▶</button>
+        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
@@ -214,7 +215,7 @@ const bola=document.getElementById('bola');const sceneEl=document.getElementById
 
 function girarBola(){bola.style.transform='rotateY(180deg)';girada=true;panelFlotante.classList.add('visible');}
 function regresarBola(){bola.style.transform='rotateY(0deg)';girada=false;panelFlotante.classList.remove('visible');}
-function toggleBola(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.remove("visible");msgDiv.style.display="none";}if(chatTexto.innerText.indexOf("Sobre qué deseas")!==-1||chatTexto.innerText.indexOf("Puedes usar la voz")!==-1)chatTexto.innerText="";girada?regresarBola():girarBola();}
+function toggleBola(){var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.remove("visible");msgDiv.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.remove("visible");msgDiv.style.display="none";}if(chatTexto.innerText.indexOf("Sobre qué deseas")!==-1||chatTexto.innerText.indexOf("Puedes usar la voz")!==-1)chatTexto.innerText="";girada?regresarBola():girarBola();}
 setTimeout(()=>{bola.style.animation='none';bola.style.transform='rotateY(0deg)';},1000);
 
 function mostrarRespuesta(respuesta,pregunta,leer=true){var c=document.getElementById("chatTexto");c.classList.add("vapor");setTimeout(function(){c.innerText=respuesta;c.classList.remove("vapor");},300);ultimaRespuesta=respuesta;registrarInteraccion(pregunta,respuesta,obtenerCategoriaDeCita(respuesta));if(leer){setTimeout(()=>{hablar(respuesta);if(!reproduciendoCitas){setTimeout(()=>{document.getElementById("playIcon").textContent="▶";},1000);}},500);}}
@@ -246,7 +247,7 @@ document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!mo
 
 if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
 
-chatTexto.innerText="ESCRIBE TU PREGUNTA...";
+chatTexto.innerText="ESCRIBE TU PREGUNTA...";var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){var m="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta."+(/Mobi/i.test(navigator.userAgent)?" También puedes agitar el móvil.":"");msgDiv.innerText=m;setTimeout(function(){msgDiv.classList.add("visible");},1500);};
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
 
 
