@@ -94,7 +94,9 @@
 </head>
 <body>
 <div class="container">
-    <div class="scene" id="scene"></div>
+    <div class="scene" id="scene">
+        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
+            <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
     </div>
@@ -245,13 +247,12 @@ document.body.addEventListener('click',(e)=>{if(!btnModo.contains(e.target)&&!mo
 
 if(window.DeviceMotionEvent&&typeof DeviceMotionEvent.requestPermission==='function'){let btn=document.createElement('div');btn.innerText='🎯 ACTIVAR AGITADO';btn.style.cssText='position:fixed;bottom:55px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#ccf;padding:6px 12px;border-radius:30px;font-size:0.65rem;z-index:100;cursor:pointer;border:1px solid #3a5a7a';btn.onclick=solicitarPermisoMovimiento;document.body.appendChild(btn);}else if(window.DeviceMotionEvent)iniciarDeteccionMovimiento();
 
-const _ph=["ESCRIBE TU PREGUNTA...","¿QUÉ TE GUSTARÍA SABER?","PREGÚNTALE A LA BOLA...","EL UNIVERSO TE ESCUCHA...","CONSULTA TU DESTINO...","HAZ TU PREGUNTA...","LA BOLA TODO LO VE..."];chatTexto.innerText=_ph[Math.floor(Math.random()*_ph.length)];var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){var m="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta."+(/Mobi/i.test(navigator.userAgent)?" También puedes agitar el móvil.":"");msgDiv.innerText=m;setTimeout(function(){msgDiv.classList.add("visible");},1500);};
+chatTexto.innerText="ESCRIBE TU PREGUNTA...";var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){var m="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta."+(/Mobi/i.test(navigator.userAgent)?" También puedes agitar el móvil.":"");msgDiv.innerText=m;setTimeout(function(){msgDiv.classList.add("visible");},1500);};
 setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.innerText="";},2500);
 
 
 
 var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){},100);chatTexto.innerText="ESCRIBE TU PREGUNTA...";document.addEventListener("click",function _vozUnica(){var btn=document.getElementById("btnEmpezar");if(btn){btn.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.add("visible");setTimeout(function(){msgDiv.classList.remove("visible");msgDiv.style.display="none";},6000);}if(typeof hablar==="function"){hablar("Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta.");setTimeout(function(){hablar("ESCRIBE TU PREGUNTA...");},3000);}document.removeEventListener("click",_vozUnica);},{once:true});
 </script>
-<script type="module" src="bola3d.js"></script>
 </body>
 </html>
