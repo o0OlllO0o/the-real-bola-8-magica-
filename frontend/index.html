@@ -94,9 +94,7 @@
 </head>
 <body>
 <div class="container">
-    <div class="scene" id="scene">
-        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
-            <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
+    <div class="scene" id="scene"></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
     </div>
@@ -254,5 +252,6 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){},100);chatTexto.innerText="ESCRIBE TU PREGUNTA...";document.addEventListener("click",function _vozUnica(){var btn=document.getElementById("btnEmpezar");if(btn){btn.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.add("visible");setTimeout(function(){msgDiv.classList.remove("visible");msgDiv.style.display="none";},6000);}if(typeof hablar==="function"){hablar("Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta.");setTimeout(function(){hablar("ESCRIBE TU PREGUNTA...");},3000);}document.removeEventListener("click",_vozUnica);},{once:true});
 </script>
+<script type="module" src="bola3d.js"></script>
 </body>
 </html>
