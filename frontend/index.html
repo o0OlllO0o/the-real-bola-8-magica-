@@ -10,7 +10,7 @@
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;overflow-x:hidden;}
         body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%, rgba(80,100,150,0.12) 0%, transparent 60%);pointer-events:none;z-index:0;}
-        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;}
+        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;pointer-events:none;}
         .scene{width:min(85vw,85vh,420px);height:min(85vw,85vh,420px);position:relative;cursor:pointer;perspective:1200px;}
         .scene::after{content:'';position:absolute;bottom:-20px;left:15%;width:70%;height:20px;background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent);border-radius:50%;filter:blur(6px);z-index:-1;}
         .bola{width:100%;height:100%;position:relative;transition:transform 0.6s cubic-bezier(0.4,0.2,0.2,1);transform-style:preserve-3d;border-radius:50%;animation:rotateIn 1s ease-out;}
@@ -96,7 +96,7 @@
 <body>
 <div class="container">
     <div class="scene" id="scene"><canvas id="bola3d" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;"></canvas>
-        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
+        <div class="bola" id="bola" style="display:none;"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
@@ -255,6 +255,6 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){},100);chatTexto.innerText="ESCRIBE TU PREGUNTA...";document.addEventListener("click",function _vozUnica(){var btn=document.getElementById("btnEmpezar");if(btn){btn.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.add("visible");setTimeout(function(){msgDiv.classList.remove("visible");msgDiv.style.display="none";},6000);}if(typeof hablar==="function"){hablar("Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta.");setTimeout(function(){hablar("ESCRIBE TU PREGUNTA...");},3000);}document.removeEventListener("click",_vozUnica);},{once:true});
 </script>
-<script type="module">import * as THREE from "three";const c=document.getElementById("bola3d");const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(45,c.clientWidth/c.clientHeight,0.1,100);cam.position.z=5;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(c.clientWidth,c.clientHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));s.add(new THREE.DirectionalLight(0xffffff,2));s.add(new THREE.AmbientLight(0x444444));const b=new THREE.Mesh(new THREE.SphereGeometry(1.5,32,32),new THREE.MeshPhongMaterial({color:0x111111,specular:0x333333,shininess:80}));s.add(b);let gr=false;function animar(){requestAnimationFrame(animar);r.render(s,cam);}animar();c.addEventListener("click",()=>{gr=!gr;b.rotation.y=gr?Math.PI:0;});window.addEventListener("resize",()=>{cam.aspect=c.clientWidth/c.clientHeight;cam.updateProjectionMatrix();r.setSize(c.clientWidth,c.clientHeight);});</script>
+<script type="module">import * as THREE from "three";const c=document.getElementById("bola3d");const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(45,c.clientWidth/c.clientHeight,0.1,100);cam.position.z=5;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(c.clientWidth,c.clientHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));s.add(new THREE.DirectionalLight(0xffffff,2));s.add(new THREE.AmbientLight(0x444444));const b=new THREE.Mesh(new THREE.SphereGeometry(1.5,32,32),new THREE.MeshPhongMaterial({color:0x111111,specular:0x333333,shininess:80}));s.add(b);let gr=false;function animar(){requestAnimationFrame(animar);r.render(s,cam);}animar();c.addEventListener("click",(e)=>{if(e.target.closest(".panel-flotante"))return;if(typeof toggleBola==="function")toggleBola();gr=!gr;b.rotation.y=gr?Math.PI:0;});c.style.pointerEvents="auto";window.addEventListener("resize",()=>{cam.aspect=c.clientWidth/c.clientHeight;cam.updateProjectionMatrix();r.setSize(c.clientWidth,c.clientHeight);});</script>
 </body>
 </html>
