@@ -91,10 +91,11 @@
 #btnEmpezar:hover{background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 30px rgba(255,255,255,0.5);}
 #mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
 <div class="container">
-    <div class="scene" id="scene">
+    <div class="scene" id="scene"><canvas id="bola3d" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;"></canvas>
         <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
@@ -254,5 +255,6 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){},100);chatTexto.innerText="ESCRIBE TU PREGUNTA...";document.addEventListener("click",function _vozUnica(){var btn=document.getElementById("btnEmpezar");if(btn){btn.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.add("visible");setTimeout(function(){msgDiv.classList.remove("visible");msgDiv.style.display="none";},6000);}if(typeof hablar==="function"){hablar("Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta.");setTimeout(function(){hablar("ESCRIBE TU PREGUNTA...");},3000);}document.removeEventListener("click",_vozUnica);},{once:true});
 </script>
+<script type="module">import * as THREE from "three";const c=document.getElementById("bola3d");const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(45,c.clientWidth/c.clientHeight,0.1,100);cam.position.z=4;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(c.clientWidth,c.clientHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));s.add(new THREE.DirectionalLight(0xffffff,2));s.add(new THREE.AmbientLight(0x444444));const b=new THREE.Mesh(new THREE.SphereGeometry(1,32,32),new THREE.MeshPhongMaterial({color:0x111111,specular:0x333333,shininess:80}));s.add(b);let gr=false;function animar(){requestAnimationFrame(animar);r.render(s,cam);}animar();c.addEventListener("click",()=>{gr=!gr;b.rotation.y=gr?Math.PI:0;});window.addEventListener("resize",()=>{cam.aspect=c.clientWidth/c.clientHeight;cam.updateProjectionMatrix();r.setSize(c.clientWidth,c.clientHeight);});</script>
 </body>
 </html>
