@@ -6,98 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
     <title>🎱 Bola Mágica 8 - Sabiduría Ancestral</title>
-    <style>#mensajeBienvenida{position:absolute;top:50%;left:50%;width:90%;height:90%;transform:translate(-50%,-50%);pointer-events:none;z-index:5;}@keyframes girarTexto{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}#msgCircular{position:absolute;width:100%;height:100%;animation:girarTexto 20s linear infinite;transform-origin:center center;}#msgCircular span{position:absolute;left:50%;top:-2%;transform-origin:0 52%;font-size:clamp(0.5rem,2.5vw,0.8rem);color:#fff;text-shadow:0 0 6px rgba(0,0,0,0.9);white-space:nowrap;font-weight:bold;letter-spacing:1px;}
-        *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-        body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;overflow-x:hidden;}
-        body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%, rgba(80,100,150,0.12) 0%, transparent 60%);pointer-events:none;z-index:0;}
-        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;}
-        .scene{width:min(85vw,85vh,420px);height:min(85vw,85vh,420px);position:relative;cursor:pointer;perspective:1200px;}
-        .scene::after{content:'';position:absolute;bottom:-20px;left:15%;width:70%;height:20px;background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent);border-radius:50%;filter:blur(6px);z-index:-1;}
-        .bola{width:100%;height:100%;position:relative;transition:transform 0.6s cubic-bezier(0.4,0.2,0.2,1);transform-style:preserve-3d;border-radius:50%;animation:rotateIn 1s ease-out;}
-        @keyframes rotateIn{0%{transform:rotateY(0deg);}100%{transform:rotateY(360deg);}}
-        
-        @keyframes shakeBola{0%,100%{transform:rotateY(180deg) translateX(0);}10%{transform:rotateY(180deg) translateX(-8px) rotateZ(-2deg);}20%{transform:rotateY(180deg) translateX(8px) rotateZ(2deg);}30%{transform:rotateY(180deg) translateX(-6px) rotateZ(-1.5deg);}40%{transform:rotateY(180deg) translateX(6px) rotateZ(1.5deg);}50%{transform:rotateY(180deg) translateX(-4px) rotateZ(-1deg);}60%{transform:rotateY(180deg) translateX(4px) rotateZ(1deg);}70%{transform:rotateY(180deg) translateX(-2px) rotateZ(-0.5deg);}80%{transform:rotateY(180deg) translateX(2px) rotateZ(0.5deg);}90%{transform:rotateY(180deg) translateX(0) rotateZ(0deg);}}
-        .bola.shaking{animation:shakeBola 0.8s cubic-bezier(0.36,0.07,0.19,0.97) forwards;}
-        
-        @keyframes particula1{0%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(-30px,-40px) scale(1);}100%{opacity:0;transform:translate(-60px,-80px) scale(0);}}
-        @keyframes particula2{0%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(30px,-50px) scale(1);}100%{opacity:0;transform:translate(60px,-100px) scale(0);}}
-        @keyframes particula3{0%{opacity:0;transform:translate(0,0) scale(0);}50%{opacity:1;transform:translate(-20px,-60px) scale(1);}100%{opacity:0;transform:translate(-40px,-120px) scale(0);}}
-        .particula{position:absolute;width:6px;height:6px;border-radius:50%;pointer-events:none;z-index:300;}
-        .particula.p1{background:#8cf;animation:particula1 0.8s ease-out forwards;}
-        .particula.p2{background:#f8f;animation:particula2 0.8s ease-out forwards;}
-        .particula.p3{background:#8fc;animation:particula3 0.8s ease-out forwards;}
-        
-        .cara{position:absolute;width:100%;height:100%;border-radius:50%;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;}
-        .cara.front{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(0deg);box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);}
-        .cara.back{background:radial-gradient(circle at 35% 35%, #2a2a2a, #080808);transform:rotateY(180deg);box-shadow:inset 0 -25px 35px rgba(0,0,0,0.5),inset 0 25px 30px rgba(255,255,255,0.08),0 25px 35px rgba(0,0,0,0.6);}
-        
-        .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
-        .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
-        
-        .panel-flotante{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(68vw,68vh,340px);z-index:50;display:flex;flex-direction:column;gap:12px;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease;}
-        .panel-flotante.visible{opacity:1;visibility:visible;}
-        
-        .texto-multifuncional{width:100%;background:transparent;border:none;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.9rem,4.5vw,1.15rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:80px;height:auto;line-height:1.5;text-shadow:0 0 20px rgba(0,0,0,0.9),0 2px 4px rgba(0,0,0,0.7);}
-        .texto-multifuncional:focus{text-shadow:0 0 25px rgba(0,0,0,0.95),0 2px 6px rgba(0,0,0,0.8);}
-        
-        .iconos-barra{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:8px;}
-        .icono-accion{background:rgba(10,20,30,0.7);border:1px solid rgba(136,204,255,0.3);color:#cceeff;width:44px;height:44px;border-radius:44px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:pointer;transition:all 0.2s;position:relative;backdrop-filter:blur(4px);}
-        .icono-accion:active{transform:scale(0.95);background:rgba(30,50,70,0.9);}
-        .icono-accion.grabando{background:#e74c3c;border-color:#f88;animation:pulse 1s infinite;}
-        
-        .icono-accion.principal{width:52px;height:52px;font-size:1.4rem;background:rgba(10,20,30,0.8);border:2px solid rgba(136,204,255,0.6);box-shadow:0 0 15px rgba(100,160,255,0.2);overflow:hidden;}
-        .icono-accion.principal::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:linear-gradient(45deg,transparent 40%,rgba(136,204,255,0.15) 45%,rgba(136,204,255,0.3) 50%,rgba(136,204,255,0.15) 55%,transparent 60%);animation:shimmer 3s infinite;z-index:1;}
-        .icono-accion.principal::after{content:'';position:absolute;inset:-3px;border-radius:55px;background:transparent;border:1px solid rgba(136,204,255,0.25);animation:borderPulse 2.5s infinite;}
-        .icono-accion.principal span.play-icon{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;margin-left:2px;}
-        .icono-accion.principal:active{transform:scale(0.92);box-shadow:0 0 25px rgba(100,160,255,0.5);}
-        .icono-accion.principal.reproduciendo{background:rgba(20,40,60,0.9);border-color:#f8c;}
-        .icono-accion.principal.reproduciendo::before{animation-play-state:paused;}
-        .icono-accion.principal.reproduciendo::after{animation-play-state:paused;}
-        
-        @keyframes shimmer{0%{transform:translateX(-100%) rotate(45deg);}100%{transform:translateX(100%) rotate(45deg);}}
-        @keyframes borderPulse{0%,100%{opacity:0.3;transform:scale(1);}50%{opacity:0.8;transform:scale(1.06);}}
-        @keyframes pulse{0%{opacity:0.7;transform:scale(1);}100%{opacity:1;transform:scale(1.05);}}
-        
-        .btn-modo,.btn-voz{position:fixed;top:16px;left:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:44px;height:44px;border-radius:44px;font-size:1.3rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-        .btn-voz{left:68px;}
-        .btn-modo:active,.btn-voz:active{transform:scale(0.95);}
-        
-        .modo-panel,.voz-panel{position:fixed;top:70px;left:16px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateX(-120%);transition:transform 0.3s ease;display:flex;flex-wrap:wrap;gap:10px;max-width:280px;}
-        .voz-panel{max-width:320px;}
-        .modo-panel.visible,.voz-panel.visible{transform:translateX(0);}
-        .modo-opcion,.voz-opcion{background:#1a2a3a;border:1px solid #3a5a7a;border-radius:40px;padding:8px 12px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;font-size:0.7rem;color:#cceeff;}
-        .modo-opcion:hover,.voz-opcion:hover{background:#2a4a6a;}
-        .modo-opcion.activo,.voz-opcion.activo{background:#3a5a7a;border-color:#8cf;}
-        
-        .btn-stats{position:fixed;top:16px;right:16px;background:rgba(10,10,10,0.8);border:1px solid #3a5a7a;color:#cceeff;width:40px;height:40px;border-radius:40px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;z-index:200;backdrop-filter:blur(8px);}
-        .btn-stats:active{transform:scale(0.95);}
-        
-        .info-externa{position:fixed;bottom:15px;left:0;right:0;text-align:center;font-size:0.6rem;color:#668;background:rgba(0,0,0,0.8);padding:6px;backdrop-filter:blur(4px);z-index:100;}
-        .brillo{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 30% 30%,rgba(255,255,255,0.12),transparent 70%);pointer-events:none;}
-        
-        .stats-panel{position:fixed;bottom:120px;left:10px;right:10px;background:rgba(0,0,0,0.95);backdrop-filter:blur(12px);border-radius:20px;padding:12px;border:1px solid #3a5a7a;z-index:200;transform:translateY(calc(100% + 10px));transition:transform 0.3s ease;max-height:60vh;overflow-y:auto;visibility:hidden;opacity:0;}
-        .stats-panel.visible{transform:translateY(0);visibility:visible;opacity:1;}
-        .stats-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;color:#aaf;border-bottom:1px solid #3a5a7a;padding-bottom:8px;}
-        .stats-cerrar{background:none;border:none;color:#f88;font-size:1.2rem;cursor:pointer;padding:0 8px;}
-        .stats-resumen{margin-bottom:10px;padding:8px;background:#0a0a0a;border-radius:12px;font-size:0.7rem;color:#aaf;}
-        .stats-lista{font-size:0.7rem;color:#aaf;max-height:200px;overflow-y:auto;}
-        .stats-item{padding:5px;border-bottom:1px solid #1a3a4a;}
-        
-        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.9);color:#ccf;padding:8px 16px;border-radius:20px;font-size:0.7rem;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none;}
-        .toast.visible{opacity:1;}
-    #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
-#chatTexto{transition:opacity 0.5s,transform 0.5s,filter 0.5s;}#chatTexto.vapor{opacity:0!important;transform:scale(0.7)!important;filter:blur(12px)!important;}
-#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;border-radius:0;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
-#btnEmpezar:hover{background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 30px rgba(255,255,255,0.5);}
-#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
-#mensajeBienvenida{position:absolute;top:50%;left:50%;width:200px;height:200px;transform:translate(-50%,-50%);pointer-events:none;z-index:10;}@keyframes girarTexto{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}#msgCircular{position:absolute;width:100%;height:100%;animation:girarTexto 20s linear infinite;transform-origin:center center;}#msgCircular span{position:absolute;left:50%;top:0;transform-origin:0 100px;font-size:0.8rem;color:#fff;text-shadow:0 0 8px rgba(255,255,255,0.8);white-space:nowrap;}
-#mensajeBienvenida{position:absolute;top:50%;left:50%;width:300px;height:300px;transform:translate(-50%,-50%);pointer-events:none;z-index:10;}@keyframes girarTexto{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}#msgCircular{position:absolute;width:100%;height:100%;animation:girarTexto 25s linear infinite;transform-origin:center center;}#msgCircular span{position:absolute;left:50%;top:0;transform-origin:0 150px;font-size:0.9rem;color:#fff;text-shadow:0 0 10px rgba(0,0,0,0.9),0 0 20px rgba(0,0,0,0.7);white-space:nowrap;font-weight:bold;}
+    <style>#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(0.8rem,3.5vw,1.2rem);color:#fff;text-shadow:0 0 10px rgba(0,0,0,0.9);background:transparent;padding:15px;max-width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 </style>
 </head>
 <body>
 <div class="container">
     <div class="scene" id="scene">
-        <div class="bola" id="bola"><div id="mensajeBienvenida"><div id="msgCircular"><span style="transform:rotate(0deg);">¿</span><span style="transform:rotate(11.612903225806452deg);">S</span><span style="transform:rotate(23.225806451612904deg);">o</span><span style="transform:rotate(34.83870967741936deg);">b</span><span style="transform:rotate(46.45161290322581deg);">r</span><span style="transform:rotate(58.064516129032256deg);">e</span><span style="transform:rotate(69.67741935483872deg);"> </span><span style="transform:rotate(81.29032258064517deg);">q</span><span style="transform:rotate(92.90322580645162deg);">u</span><span style="transform:rotate(104.51612903225806deg);">é</span><span style="transform:rotate(116.12903225806451deg);"> </span><span style="transform:rotate(127.74193548387098deg);">d</span><span style="transform:rotate(139.35483870967744deg);">e</span><span style="transform:rotate(150.96774193548387deg);">s</span><span style="transform:rotate(162.58064516129033deg);">e</span><span style="transform:rotate(174.19354838709677deg);">a</span><span style="transform:rotate(185.80645161290323deg);">s</span><span style="transform:rotate(197.4193548387097deg);"> </span><span style="transform:rotate(209.03225806451613deg);">h</span><span style="transform:rotate(220.6451612903226deg);">a</span><span style="transform:rotate(232.25806451612902deg);">b</span><span style="transform:rotate(243.8709677419355deg);">l</span><span style="transform:rotate(255.48387096774195deg);">a</span><span style="transform:rotate(267.0967741935484deg);">r</span><span style="transform:rotate(278.7096774193549deg);"> </span><span style="transform:rotate(290.3225806451613deg);">h</span><span style="transform:rotate(301.93548387096774deg);">o</span><span style="transform:rotate(313.5483870967742deg);">y</span><span style="transform:rotate(325.16129032258067deg);">?</span><span style="transform:rotate(336.77419354838713deg);"> </span><span style="transform:rotate(348.38709677419354deg);"> </span></div></div><div id="mensajeBienvenida"></div>
+        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
