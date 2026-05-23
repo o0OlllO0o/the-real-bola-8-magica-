@@ -1,1 +1,0 @@
-[{"c":"«La lectura es a la mente lo que el ejercicio al cuerpo.» — Joseph Addison","t":[9,34,32]},{"c":"«Un libro es un amigo que nunca te falla.»" — Proverbio anónimo","t":[9,6,32]},{"c":"«Leer es viajar sin pagar equipaje.»" — Proverbio anónimo","t":[9,8,11]}]
