@@ -10,7 +10,7 @@
         *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
         body{min-height:100vh;background:radial-gradient(ellipse at center, #1a1a2e 0%, #000000 70%, #000000 100%);display:flex;justify-content:center;align-items:center;font-family:'Segoe UI','Helvetica Neue',sans-serif;padding:16px;position:relative;overflow-x:hidden;}
         body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:radial-gradient(ellipse at 50% 45%, rgba(80,100,150,0.12) 0%, transparent 60%);pointer-events:none;z-index:0;}
-        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;position:absolute;top:0;left:0;pointer-events:none;}
+        .container{width:100%;display:flex;justify-content:center;align-items:center;flex-direction:column;position:relative;z-index:1;}
         .scene{width:min(85vw,85vh,420px);height:min(85vw,85vh,420px);position:relative;cursor:pointer;perspective:1200px;}
         .scene::after{content:'';position:absolute;bottom:-20px;left:15%;width:70%;height:20px;background:radial-gradient(ellipse, rgba(0,0,0,0.5), transparent);border-radius:50%;filter:blur(6px);z-index:-1;}
         .bola{width:100%;height:100%;position:relative;transition:transform 0.6s cubic-bezier(0.4,0.2,0.2,1);transform-style:preserve-3d;border-radius:50%;animation:rotateIn 1s ease-out;}
@@ -34,7 +34,7 @@
         .numero-8{width:45%;height:45%;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(0,0,0,0.4);}
         .numero-8 span{font-size:clamp(2.5rem,12vw,5rem);font-weight:900;color:#111;font-family:'Impact','Arial Black',sans-serif;}
         
-        .panel-flotante{position:fixed;bottom:10%;left:50%;transform:translateX(-50%);z-index:100;position:relative;z-index:30;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(68vw,68vh,340px);z-index:50;display:flex;flex-direction:column;gap:12px;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease;}
+        .panel-flotante{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(68vw,68vh,340px);z-index:50;display:flex;flex-direction:column;gap:12px;opacity:0;visibility:hidden;transition:opacity 0.4s ease, visibility 0.4s ease;}
         .panel-flotante.visible{opacity:1;visibility:visible;}
         
         .texto-multifuncional{width:100%;background:transparent;border:none;padding:14px 12px;color:#e0f0ff;font-size:clamp(0.9rem,4.5vw,1.15rem);font-family:inherit;text-align:center;resize:none;outline:none;word-break:break-word;min-height:80px;height:auto;line-height:1.5;text-shadow:0 0 20px rgba(0,0,0,0.9),0 2px 4px rgba(0,0,0,0.7);}
@@ -87,23 +87,23 @@
         .toast.visible{opacity:1;}
     #chatTexto{transition:opacity 0.5s ease,transform 0.5s ease;}#chatTexto.vapor-out{opacity:0;transform:scale(0.8);filter:blur(8px);}#chatTexto.vapor-in{opacity:1;transform:scale(1);filter:blur(0);}
 #chatTexto{transition:opacity 0.5s,transform 0.5s,filter 0.5s;}#chatTexto.vapor{opacity:0!important;transform:scale(0.7)!important;filter:blur(12px)!important;}
-
+#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;border-radius:0;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 #btnEmpezar:hover{background:rgba(255,255,255,0.3);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 30px rgba(255,255,255,0.5);}
-#mensajeBienvenida{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 15px rgba(0,0,0,0.9);background:transparent;padding:20px;z-index:200;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
+#mensajeBienvenida{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;font-size:clamp(1rem,5vw,1.4rem);color:#fff;text-shadow:0 0 12px rgba(0,0,0,0.9),0 0 25px rgba(0,0,0,0.7);background:transparent;padding:20px 24px;max-width:95%;width:90%;z-index:10;pointer-events:none;opacity:0;transition:opacity 0.6s;}#mensajeBienvenida.visible{opacity:1;}
 </style>
-<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
 </head>
 <body>
 <div class="container">
-    <div class="scene" id="scene"><canvas id="bola3d" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;"></canvas>
-        <div class="bola" id="bola" style="display:none;">
+    <div class="scene" id="scene">
+        <div class="bola" id="bola"><div id="mensajeBienvenida"></div><div id="mensajeBienvenida"></div>
             <div class="cara front"><div class="numero-8"><span>8</span></div><div class="brillo"></div></div>
             <div class="cara back" id="caraBack"><div class="brillo"></div></div>
         </div>
     </div>
 </div>
 
-
+<div class="panel-flotante" id="panelFlotante">
+    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
     <div class="iconos-barra">
         <div class="icono-accion" id="reproducirBtn" title="Repetir última respuesta">⟳</div>
         <div class="icono-accion principal" id="preguntarBtn" title="Reproducir todas las citas del modo"><span class="play-icon" id="playIcon">▶</span></div>
@@ -254,9 +254,5 @@ setTimeout(()=>{if(chatTexto.innerText==="ESCRIBE TU PREGUNTA...")chatTexto.inne
 
 var _msgBienvenida="¿Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta." + (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) ? " También puedes agitar el móvil." : "");var msgDiv=document.getElementById("mensajeBienvenida");msgDiv.innerText=_msgBienvenida;setTimeout(function(){},100);chatTexto.innerText="ESCRIBE TU PREGUNTA...";document.addEventListener("click",function _vozUnica(){var btn=document.getElementById("btnEmpezar");if(btn){btn.style.display="none";}var msgDiv=document.getElementById("mensajeBienvenida");if(msgDiv){msgDiv.classList.add("visible");setTimeout(function(){msgDiv.classList.remove("visible");msgDiv.style.display="none";},6000);}if(typeof hablar==="function"){hablar("Sobre qué deseas hablar hoy? Puedes usar la voz o escribir tu pregunta.");setTimeout(function(){hablar("ESCRIBE TU PREGUNTA...");},3000);}document.removeEventListener("click",_vozUnica);},{once:true});
 </script>
-<script type="module">import * as THREE from "three";const c=document.getElementById("bola3d");const s=new THREE.Scene();const cam=new THREE.PerspectiveCamera(45,c.clientWidth/c.clientHeight,0.1,100);cam.position.z=5;const r=new THREE.WebGLRenderer({canvas:c,alpha:true,antialias:true});r.setSize(c.clientWidth,c.clientHeight);r.setPixelRatio(Math.min(devicePixelRatio,2));s.add(new THREE.DirectionalLight(0xffffff,2));s.add(new THREE.AmbientLight(0x444444));const b=new THREE.Mesh(new THREE.SphereGeometry(1.5,32,32),new THREE.MeshPhongMaterial({color:0x111111,specular:0x333333,shininess:80}));s.add(b);let gr=false;function animar(){requestAnimationFrame(animar);r.render(s,cam);}animar();c.addEventListener("click",(e)=>{if(e.target.closest(".panel-flotante"))return;if(typeof toggleBola==="function")toggleBola();gr=!gr;b.rotation.y=gr?Math.PI:0;});c.style.pointerEvents="auto";window.addEventListener("resize",()=>{cam.aspect=c.clientWidth/c.clientHeight;cam.updateProjectionMatrix();r.setSize(c.clientWidth,c.clientHeight);});</script>
-<div class="panel-flotante" id="panelFlotante">
-    <div class="texto-multifuncional" id="chatTexto" contenteditable="true" role="textbox" aria-multiline="true"></div>
-<div id="mensajeBienvenida"></div>
 </body>
 </html>
